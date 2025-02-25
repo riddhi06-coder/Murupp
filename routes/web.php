@@ -150,7 +150,7 @@ Route::resource('stock-details', StockDetailsController::class);
 Route::group(['prefix'=> '', 'middleware'=>[\App\Http\Middleware\PreventBackHistoryMiddleware::class]],function(){
 
     // ==== Home
-    Route::get('/', [HomeController::class, 'home'])->name('frontend.index');
+    Route::get('/home', [HomeController::class, 'home'])->name('frontend.index');
 
     //===== customize request form
     Route::post('/contact-submission', [ProductController::class, 'send_contact'])->name('contact.send');
