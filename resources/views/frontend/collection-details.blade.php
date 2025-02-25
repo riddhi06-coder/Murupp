@@ -23,7 +23,7 @@
                                 <i class="icon-arrRight"></i>
                             </li>
                             <li>
-                                <a class="link" href="#">Shop by Category</a>
+                                <a class="link" href="#">Shop by Collection</a>
                             </li>
                             <li>
                                 <i class="icon-arrRight"></i>
