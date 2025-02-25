@@ -34,6 +34,7 @@ use App\Http\Controllers\Frontend\ProductController;
 use App\Http\Controllers\Frontend\WishlistController;
 use App\Http\Controllers\Frontend\CartController;
 use App\Http\Controllers\Frontend\CollectionController;
+use App\Http\Controllers\Frontend\CheckoutController;
 
 
 // =========================================================================== Backend Routes
@@ -140,11 +141,11 @@ Route::resource('stock-details', StockDetailsController::class);
 
 // ======================= Frontend
 
-    Route::get('/wishlist/add/{id}', [WishlistController::class, 'add'])->name('wishlist.add');
+    // Route::get('/wishlist/add/{id}', [WishlistController::class, 'add'])->name('wishlist.add');
         
-    Route::get('/cart/add/{id}', [CartController::class, 'add'])->name('cart.add');
+    // Route::get('/cart/add/{id}', [CartController::class, 'add'])->name('cart.add');
 
-    Route::post('/delete-cart-item', [CartController::class, 'deleteCartItem'])->name('delete.cart.item');
+    // Route::post('/delete-cart-item', [CartController::class, 'deleteCartItem'])->name('delete.cart.item');
 
 
 Route::group(['prefix'=> '', 'middleware'=>[\App\Http\Middleware\PreventBackHistoryMiddleware::class]],function(){
@@ -155,6 +156,9 @@ Route::group(['prefix'=> '', 'middleware'=>[\App\Http\Middleware\PreventBackHist
     //===== customize request form
     Route::post('/contact-submission', [ProductController::class, 'send_contact'])->name('contact.send');
 
+    //===== Checkout Page
+    Route::get('/checkout', [CheckoutController::class, 'checkout'])->name('checkout.details');
+
     //===== Category Page
     Route::get('/category/{slug}', [CategoryDetailsController::class, 'category_details'])->name('product.category');
 
@@ -164,7 +168,14 @@ Route::group(['prefix'=> '', 'middleware'=>[\App\Http\Middleware\PreventBackHist
     //===== Detailed Product Page
     Route::get('/product-detail/{slug}', [ProductController::class, 'show'])->name('product.show');
 
-  
+    //==== Wishlist Functionality
+    Route::get('/wishlist/add/{id}', [WishlistController::class, 'add'])->name('wishlist.add');
+
+    //==== Cart Functionality    
+    Route::get('/cart/add/{id}', [CartController::class, 'add'])->name('cart.add');
+
+    //==== Remove Item Cart Functionality
+    Route::post('/delete-cart-item', [CartController::class, 'deleteCartItem'])->name('delete.cart.item');
 
 });
 
