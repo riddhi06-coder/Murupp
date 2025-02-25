@@ -38,9 +38,9 @@ use App\Http\Controllers\Frontend\CollectionController;
 
 // =========================================================================== Backend Routes
 
-Route::get('/', function () {
-    return reidrect()->route('frontend.index');
-});
+// Route::get('/', function () {
+//     return view('frontend.index');
+// });
   
 // Authentication Routes
 Route::get('/login', [LoginController::class, 'login'])->name('admin.login');
