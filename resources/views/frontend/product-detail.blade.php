@@ -54,7 +54,7 @@
                                             @foreach($galleryImages as $image)
                                             <div class="swiper-slide stagger-item" data-color="gray">
                                                 <div class="item">
-                                                    <img class="lazyload" data-src="{{ asset('murupp/product/gallery/' . $image) }}" 
+                                                    <img data-src="{{ asset('murupp/product/gallery/' . $image) }}" 
                                                         src="{{ asset('murupp/product/gallery/' . $image) }}" alt="">
                                                 </div>
                                             </div>
@@ -67,7 +67,7 @@
                                             <div class="swiper-slide" data-color="gray">
                                                 <a href="{{ asset('murupp/product/gallery/' . $image) }}" target="_blank" class="item" 
                                                     data-pswp-width="600px" data-pswp-height="800px">
-                                                    <img class="tf-image-zoom lazyload" 
+                                                    <img class="tf-image-zoom  
                                                         data-zoom="{{ asset('murupp/product/gallery/' . $image) }}" 
                                                         data-src="{{ asset('murupp/product/gallery/' . $image) }}" 
                                                         src="{{ asset('murupp/product/gallery/' . $image) }}" alt="">
@@ -134,7 +134,7 @@
                                                     <input id="print_{{ $index }}" type="radio" name="print_option" value="{{ $print['name'] }}" 
                                                         {{ $loop->first ? 'checked' : '' }} onchange="updateSelectedPrint(this)">
                                                     <label for="print_{{ $index }}" class="style-image hover-tooltip tooltip-bot color-btn {{ $loop->first ? 'active' : '' }}">
-                                                        <img class="lazyload" 
+                                                        <img
                                                             data-src="{{ asset('/murupp/product/prints/' . $print['image']) }}" 
                                                             src="{{ asset('/murupp/product/prints/' . $print['image']) }}" 
                                                             alt="{{ $print['name'] }}">
@@ -442,8 +442,8 @@
                                                 $images = json_decode($related->thumbnail_image, true) ?? [];
                                                 $thumbnail = count($images) > 0 ? asset('/murupp/product/thumbnails/' . $images[0]) : asset('images/default-product.jpg');
                                             @endphp
-                                            <img class="lazyload img-product" data-src="{{ $thumbnail }}" src="{{ $thumbnail }}" alt="{{ $related->name }}">
-                                            <img class="lazyload img-hover" data-src="{{ $thumbnail }}" src="{{ $thumbnail }}" alt="{{ $related->name }}">
+                                            <img class="img-product" data-src="{{ $thumbnail }}" src="{{ $thumbnail }}" alt="{{ $related->name }}">
+                                            <img class="img-hover" data-src="{{ $thumbnail }}" src="{{ $thumbnail }}" alt="{{ $related->name }}">
                                         </a>
                                         <div class="variant-wrap size-list">
                                         @php

@@ -176,12 +176,12 @@
                             <div class="card-product card-product-size wow fadeInUp" data-wow-delay="0s">
                                 <div class="card-product-wrapper">
                                     <a href="{{ route('product.show', ['slug' => $product->product_slug]) }}" class="product-img">
-                                        <img class="lazyload img-product" 
+                                        <img class="img-product" 
                                             data-src="{{ asset('murupp/home/new-arrivals/' . $product->product_image) }}" 
                                             src="{{ asset('murupp/home/new-arrivals/' . $product->product_image) }}" 
                                             alt="{{ $product->product_name }}">
 
-                                        <img class="lazyload img-hover" 
+                                        <img class="img-hover" 
                                             data-src="{{ asset('murupp/home/new-arrivals/' . $product->product_image) }}" 
                                             src="{{ asset('murupp/home/new-arrivals/' . $product->product_image) }}" 
                                             alt="{{ $product->product_name }}">
@@ -221,7 +221,7 @@
                     <!-- Image Section -->
                     <div class="col-lg-5 col-md-6">
                         <div class="about-us-features wow fadeInLeft">
-                            <img class="lazyload" 
+                            <img class=" 
                                 data-src="{{ asset('murupp/home/collection-details/' . $collectionDetail->image) }}" 
                                 alt="{{ $collectionDetail->heading }}">
                         </div>
@@ -252,7 +252,7 @@
                     @foreach ($shopCategories as $category)
                         <div class="item{{ $loop->iteration }} collection-position-2 hover-img">
                             <a class="img-style">
-                                <img class="lazyload" 
+                                <img class=" 
                                     data-src="{{ asset('murupp/home/shop_categories/' . $category->product_image) }}" 
                                     src="{{ asset('murupp/home/shop_categories/' . $category->product_image) }}" 
                                     alt="{{ $category->image_title }}">
