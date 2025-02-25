@@ -38,9 +38,9 @@ use App\Http\Controllers\Frontend\CollectionController;
 
 // =========================================================================== Backend Routes
 
-// Route::get('/', function () {
-//     return view('frontend.index');
-// });
+Route::get('/', function () {
+    return reidrect()->route('frontend.index');
+});
   
 // Authentication Routes
 Route::get('/login', [LoginController::class, 'login'])->name('admin.login');
@@ -150,7 +150,7 @@ Route::resource('stock-details', StockDetailsController::class);
 Route::group(['prefix'=> '', 'middleware'=>[\App\Http\Middleware\PreventBackHistoryMiddleware::class]],function(){
 
     // ==== Home
-    Route::get('/home', [HomeController::class, 'home'])->name('frontend.index');
+    Route::get('/', [HomeController::class, 'home'])->name('frontend.index');
 
     //===== customize request form
     Route::post('/contact-submission', [ProductController::class, 'send_contact'])->name('contact.send');
