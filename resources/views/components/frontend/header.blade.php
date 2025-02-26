@@ -118,7 +118,8 @@
                                 </a>
                             </li>
                             @php
-                                $cartCount = \App\Models\Carts::where('user_id', auth()->id())->whereNull('deleted_by')->count();
+                                use Illuminate\Support\Facades\Auth;
+                                $cartCount = \App\Models\Carts::where('user_id', Auth::id())->whereNull('deleted_by')->count();
                             @endphp
 
                             <li class="nav-cart" aria-label="Shopping-Cart">
