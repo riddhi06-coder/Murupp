@@ -266,7 +266,7 @@
                                             </a>
                                         </div>
                                         <div class="text-center">
-                                            <a class="link text-btn-uppercase" href="#">Or continue shopping</a>
+                                            <a class="link text-btn-uppercase" href="{{ route('frontend.index')}}">Or continue shopping</a>
                                         </div>
                                     </div>
                                 </div>

@@ -171,32 +171,36 @@
                             <div class="sidebar-checkout-content">
                                 <h5 class="title">Shopping Cart</h5>
                                 <div class="list-product">
-                                    <div class="item-product">
-                                        <a href="product-detail.html" class="img-product">
-                                            <img src="images/New-Arrivals/3_4_11zon.webp" alt="img-product">
-                                        </a>
-                                        <div class="content-box">
-                                            <div class="info">
-                                                <a href="product-detail.html" class="name-product link text-title">RI Bowknot Dress</a>
-                                                <div class="variant text-caption-1 text-secondary"><span class="size">XL</span>/<span class="color">Blue</span></div>
+                                    @forelse ($cartItems as $cartItem)
+                                        <div class="item-product">
+                                            <a href="{{ route('product.show', $cartItem->slug) }}" class="img-product">
+                                            <img src="{{ asset($cartItem->product_image) }}" alt="">
+
+                                            </a>
+                                            <div class="content-box">
+                                                <div class="info">
+                                                    <a href="{{ route('product.show', $cartItem->slug) }}" class="name-product link text-title">
+                                                        {{ $cartItem->product_name }}
+                                                    </a>
+                                                    <div class="variant text-caption-1 text-secondary">
+                                                        <span class="size">{{ $cartItem->size }}</span>
+                                                        @if ($cartItem->colors)
+                                                            / <span class="color">{{ $cartItem->colors }}</span>
+                                                        @endif
+                                                    </div>
+                                                </div>
+                                                <div class="total-price text-button">
+                                                    <span class="price"><i class="fa fa-inr" aria-hidden="true"></i> 
+                                                        {{ number_format($cartItem->product_total_price) }}
+                                                    </span>
+                                                </div>
                                             </div>
-                                            <div class="total-price text-button"><span class="price"><i class="fa fa-inr" aria-hidden="true"></i> 6,000</span></div>
                                         </div>
-                                    </div>
-                                    <div class="item-product">
-                                        <a href="product-detail.html" class="img-product">
-                                            <img src="images/New-Arrivals/2_3_11zon.webp" alt="img-product">
-                                        </a>
-                                        <div class="content-box">
-                                            <div class="info">
-                                                <a href="product-detail.html" class="name-product link text-title">PUTIT Short Bubble-Hem Dress</a>
-                                                <div class="variant text-caption-1 text-secondary"><span class="size">XL</span>/<span class="color">Blue</span></div>
-                                            </div>
-                                            <div class="total-price text-button"><span class="price"><i class="fa fa-inr" aria-hidden="true"></i> 9,500</span></div>
-                                        </div>
-                                    </div>
+                                    @empty
+                                        <p class="text-center">No items in your cart.</p>
+                                    @endforelse
                                 </div>
-                                
+
                                 <div class="sec-total-price">
                                     <div class="top">
                                         <div class="item d-flex align-items-center justify-content-between text-button">
@@ -205,15 +209,24 @@
                                         </div>
                                     </div>
                                     <div class="bottom">
+                                        @php
+                                            $taxAmount = $total * 0.18; 
+                                        @endphp
                                         <h5 class="d-flex justify-content-between">
                                             <span>Total</span>
-                                            <span class="total-price-checkout"><i class="fa fa-inr" aria-hidden="true"></i> 20,000</span>
+                                            <span class="total-price-checkout">
+                                                <i class="fa fa-inr" aria-hidden="true"></i> {{ number_format($total) }}
+                                            </span>
                                         </h5>
+                                        <small class="d-flex justify-content-between text-muted">
+                                            <span>Including ₹ {{ number_format($taxAmount, 2) }} in taxes</span>
+                                        </small>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
+
                 </div>
             </div>
         </section>
