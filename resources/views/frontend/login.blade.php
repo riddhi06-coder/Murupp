@@ -95,41 +95,41 @@
 
         @include('components.frontend.main-js')
 
-        <script>
-    function validateLoginForm() {
-        let isValid = true;
+    <script>
+        function validateLoginForm() {
+            let isValid = true;
 
-        // Get input values
-        let email = document.getElementById("email").value.trim();
-        let password = document.getElementById("password").value.trim();
+            // Get input values
+            let email = document.getElementById("email").value.trim();
+            let password = document.getElementById("password").value.trim();
 
-        // Error message elements
-        let emailError = document.getElementById("emailError");
-        let passwordError = document.getElementById("passwordError");
+            // Error message elements
+            let emailError = document.getElementById("emailError");
+            let passwordError = document.getElementById("passwordError");
 
-        // Reset errors
-        emailError.innerText = "";
-        passwordError.innerText = "";
+            // Reset errors
+            emailError.innerText = "";
+            passwordError.innerText = "";
 
-        // Email Validation (Basic email pattern)
-        let emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-        if (email === "") {
-            emailError.innerText = "The email field is required.";
-            isValid = false;
-        } else if (!emailRegex.test(email)) {
-            emailError.innerText = "Please enter a valid email address.";
-            isValid = false;
+            // Email Validation (Basic email pattern)
+            let emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (email === "") {
+                emailError.innerText = "The email field is required.";
+                isValid = false;
+            } else if (!emailRegex.test(email)) {
+                emailError.innerText = "Please enter a valid email address.";
+                isValid = false;
+            }
+
+            // Password Validation (Cannot be empty)
+            if (password === "") {
+                passwordError.innerText = "The password field is required.";
+                isValid = false;
+            }
+
+            return isValid;
         }
-
-        // Password Validation (Cannot be empty)
-        if (password === "") {
-            passwordError.innerText = "The password field is required.";
-            isValid = false;
-        }
-
-        return isValid;
-    }
-</script>
+    </script>
 
 
 </body>

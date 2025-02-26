@@ -97,7 +97,7 @@
                                             I agree to the&nbsp;
                                         </label>
                                     </div>
-                                    <a href="term-of-use.html" title="Terms of Service"> Terms of User</a>
+                                    <a href="term-of-use.html" title="Terms of Service"> Terms of Use</a>
                                 </div>
                                 @error('agree_checkbox')
                                     <div class="text-danger mt-1">{{ $message }}</div>
