@@ -47,7 +47,7 @@
     </div>
 
     <p>Hello,</p>
-    <p>You requested to reset your password. Click the link below:</p><br>
+    <p>We received a request to reset your password. If you made this request, please click the button below to set a new password:</p><br>
     <div style="text-align: center;">
         <form action="{{ url('/reset-password/' . $token) }}" method="GET">
             <button class="tf-btn btn-fill reset-btn">
@@ -56,7 +56,12 @@
         </form>
     </div><br>
 
-    <p>If you did not request this, please ignore this email.</p><br>
+    <p>If you didn’t request a password reset, please ignore this email. Your account is still secure.</p>
+
+    <p>For any assistance, feel free to contact our support team.</p><br>
+
+    <p>Best regards,<br> Murupp Team</p>
+
 
     <br>
     <hr>
