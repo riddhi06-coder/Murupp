@@ -35,7 +35,7 @@ use App\Http\Controllers\Frontend\WishlistController;
 use App\Http\Controllers\Frontend\CartController;
 use App\Http\Controllers\Frontend\CollectionController;
 use App\Http\Controllers\Frontend\CheckoutController;
-
+use App\Http\Controllers\Frontend\RegistrationController;
 
 // =========================================================================== Backend Routes
 
@@ -141,13 +141,6 @@ Route::resource('stock-details', StockDetailsController::class);
 
 // ======================= Frontend
 
-    // Route::get('/wishlist/add/{id}', [WishlistController::class, 'add'])->name('wishlist.add');
-        
-    // Route::get('/cart/add/{id}', [CartController::class, 'add'])->name('cart.add');
-
-    // Route::post('/delete-cart-item', [CartController::class, 'deleteCartItem'])->name('delete.cart.item');
-
-
 Route::group(['prefix'=> '', 'middleware'=>[\App\Http\Middleware\PreventBackHistoryMiddleware::class]],function(){
 
     // ==== Home
@@ -158,6 +151,10 @@ Route::group(['prefix'=> '', 'middleware'=>[\App\Http\Middleware\PreventBackHist
 
     //===== Checkout Page
     Route::get('/checkout', [CheckoutController::class, 'checkout'])->name('checkout.details');
+
+    //===== Registration Page
+    Route::get('/registration', [RegistrationController::class, 'register'])->name('user.registration');
+
 
     //===== Category Page
     Route::get('/category/{slug}', [CategoryDetailsController::class, 'category_details'])->name('product.category');
