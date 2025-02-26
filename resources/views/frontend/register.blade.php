@@ -44,30 +44,45 @@
                         <div class="heading">
                             <h4>Register</h4>
                         </div>
-                        <form action="#" class="form-login form-has-password">
+                        <form action="{{ route('registration.store') }}" method="POST" class="form-login form-has-password" onsubmit="return validateForm()">
+                            @csrf
                             <div class="wrap">
+                                <!-- Email Field -->
                                 <fieldset class="">
-                                    <input class="" type="email" placeholder="Username or email address*" name="email" tabindex="2" value="" aria-required="true" required="">
+                                    <input class="" type="email" placeholder="Username or email address*" name="email" value="{{ old('email') }}" required>
+                                    @error('email')
+                                        <div class="text-danger mt-1">{{ $message }}</div>
+                                    @enderror
                                 </fieldset>
+
+                                <!-- Password Field -->
                                 <fieldset class="position-relative password-item">
-                                    <input class="input-password" type="password" placeholder="Password*" name="password" tabindex="2" value="" aria-required="true" required="">
+                                    <input class="input-password" type="password" placeholder="Password*" name="password" required>
                                     <span class="toggle-password unshow">
                                         <i class="icon-eye-hide-line"></i>
                                     </span>
+                                    @error('password')
+                                        <div class="text-danger mt-1">{{ $message }}</div>
+                                    @enderror
                                 </fieldset>
+
+                                <!-- Confirm Password Field -->
                                 <fieldset class="position-relative password-item">
-                                    <input class="input-password" type="password" placeholder="Confirm Password*" name="password" tabindex="2" value="" aria-required="true" required="">
+                                    <input class="input-password" type="password" placeholder="Confirm Password*" name="password_confirmation" required>
                                     <span class="toggle-password unshow">
                                         <i class="icon-eye-hide-line"></i>
                                     </span>
+                                    @error('password_confirmation')
+                                        <div class="text-danger mt-1">{{ $message }}</div>
+                                    @enderror
                                 </fieldset>
+
+                                <!-- Terms & Conditions Checkbox -->
                                 <div class="d-flex align-items-center">
                                     <div class="tf-cart-checkbox">
                                         <div class="tf-checkbox-wrapp">
-                                            <input checked class="" type="checkbox" id="login-form_agree" name="agree_checkbox">
-                                            <div>
-                                                <i class="icon-check"></i>
-                                            </div>
+                                            <input type="checkbox" id="login-form_agree" name="agree_checkbox">
+                                            <div><i class="icon-check"></i></div>
                                         </div>
                                         <label class="text-secondary-2" for="login-form_agree">
                                             I agree to the&nbsp;
@@ -75,13 +90,19 @@
                                     </div>
                                     <a href="term-of-use.html" title="Terms of Service"> Terms of User</a>
                                 </div>
+                                @error('agree_checkbox')
+                                    <div class="text-danger mt-1">{{ $message }}</div>
+                                @enderror
                             </div>
+
+                            <!-- Submit Button -->
                             <div class="button-submit">
                                 <button class="tf-btn btn-fill" type="submit">
                                     <span class="text text-button">Register</span>
                                 </button>
                             </div>
                         </form>
+
                     </div>
                     <div class="right">
                         <h4 class="mb_8">Already have an account?</h4>
@@ -99,6 +120,70 @@
 
 
         @include('components.frontend.main-js')
+
+
+    <script>
+        function validateForm() {
+            let isValid = true;
+
+            // Get input values
+            let email = document.getElementById("email").value.trim();
+            let password = document.getElementById("password").value.trim();
+            let confirmPassword = document.getElementById("confirm_password").value.trim();
+            let agreeCheckbox = document.getElementById("agree_checkbox").checked;
+
+            // Error message elements
+            let emailError = document.getElementById("emailError");
+            let passwordError = document.getElementById("passwordError");
+            let confirmPasswordError = document.getElementById("confirmPasswordError");
+            let agreeError = document.getElementById("agreeError");
+
+            // Reset errors
+            nameError.innerText = "";
+            emailError.innerText = "";
+            passwordError.innerText = "";
+            confirmPasswordError.innerText = "";
+            agreeError.innerText = "";
+
+
+            // Email Validation (Basic email pattern)
+            let emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (email === "") {
+                emailError.innerText = "The email field is required.";
+                isValid = false;
+            } else if (!emailRegex.test(email)) {
+                emailError.innerText = "Please enter a valid email address.";
+                isValid = false;
+            }
+
+            // Password Validation (Min 8 characters)
+            if (password === "") {
+                passwordError.innerText = "The password field is required.";
+                isValid = false;
+            } else if (password.length < 8) {
+                passwordError.innerText = "Password must be at least 8 characters.";
+                isValid = false;
+            }
+
+            // Confirm Password Validation
+            if (confirmPassword === "") {
+                confirmPasswordError.innerText = "Please confirm your password.";
+                isValid = false;
+            } else if (password !== confirmPassword) {
+                confirmPasswordError.innerText = "Passwords do not match.";
+                isValid = false;
+            }
+
+            // Checkbox Validation
+            if (!agreeCheckbox) {
+                agreeError.innerText = "You must agree to the Terms & Conditions.";
+                isValid = false;
+            }
+
+            return isValid;
+        }
+    </script>
+    
 </body>
 
 </html>

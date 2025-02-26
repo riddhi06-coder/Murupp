@@ -11,7 +11,9 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Facades\Hash;
 
+use App\Models\User;
 use App\Models\ProductDetails;
 use App\Models\Carts;
 
@@ -23,4 +25,34 @@ class RegistrationController extends Controller
     {
         return view('frontend.register');
     }
+
+    public function authenticate_register(Request $request)
+    {
+        $messages = [
+            'email.required' => 'The email field is required.',
+            'email.email' => 'The email must be a valid email address.',
+            'email.unique' => 'The email is already taken.',
+            'password.required' => 'The password field is required.',
+            'password.string' => 'The password must be a string.',
+            'password.min' => 'The password must be at least 8 characters.',
+            'password.confirmed' => 'The password confirmation does not match.',
+            'agree_checkbox.accepted' => 'You must agree to the terms and conditions.',
+        ];
+
+        $validated = $request->validate([
+            'email' => 'required|email|unique:users,email',
+            'password' => 'required|string|min:8|confirmed',
+            'agree_checkbox' => 'accepted',
+        ], $messages);
+
+        $user = new User();
+        $user->email = $validated['email']; 
+        $user->password = Hash::make($validated['password']);
+        $user->status = 1;
+        $user->save();
+
+        return redirect()->route('frontend.index')->with('message', 'Account created successfully! Please log in.');
+    }
+
+
 }

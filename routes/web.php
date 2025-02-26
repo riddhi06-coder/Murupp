@@ -154,6 +154,11 @@ Route::group(['prefix'=> '', 'middleware'=>[\App\Http\Middleware\PreventBackHist
 
     //===== Registration Page
     Route::get('/registration', [RegistrationController::class, 'register'])->name('user.registration');
+    Route::post('/registration', [RegistrationController::class, 'authenticate_register'])->name('registration.store');
+
+    //===== Login Page
+    Route::get('/user-login', [RegistrationController::class, 'login'])->name('user.login');
+    Route::post('/user-login', [RegistrationController::class, 'authenticate_login'])->name('login.store');
 
 
     //===== Category Page
