@@ -162,34 +162,40 @@
                                 <div class="tf-mini-cart-main">
                                     <div class="tf-mini-cart-sroll">
                                         <div class="tf-mini-cart-items">
-                                            @php
-                                                $cartItems = DB::table('carts')
-                                                    ->join('product_details', 'carts.product_id', '=', 'product_details.id')
-                                                    ->where('carts.user_id', Auth::id())
-                                                    ->select('carts.*', 'product_details.product_name', 'product_details.slug')
-                                                    ->whereNull('carts.deleted_at')
-                                                    ->get();
-                                                
-                                                $subtotal = 0;
-                                            @endphp
+                                        @php
+                                            $userId = Auth::id();
+                                            $sessionId = Session::getId();
+                      
+                                            $cartItems = DB::table('carts')
+                                                        ->join('product_details', 'carts.product_id', '=', 'product_details.id')
+                                                        ->where(function ($query) use ($userId, $sessionId) {
+                                                            if ($userId) {
+                                                                $query->where('carts.user_id', $userId);
+                                                            } else {
+                                                                $query->where('carts.session_id', $sessionId); // Directly use session_id
+                                                            }
+                                                        })
+                                                        ->select('carts.*', 'product_details.product_name', 'product_details.slug')
+                                                        ->whereNull('carts.deleted_at')
+                                                        ->get();
+                                            $subtotal = 0;
 
-                                            @php
-                                                function number_format_indian($num) {
-                                                    $num = round($num); // Remove decimal points
-                                                    $num = (string) $num;
-                                                    $len = strlen($num);
-                                                    
-                                                    if ($len <= 3) {
-                                                        return $num;
-                                                    }
-                                                    
-                                                    $lastThree = substr($num, -3);
-                                                    $remaining = substr($num, 0, -3);
-                                                    $remaining = preg_replace('/\B(?=(\d{2})+(?!\d))/', ',', $remaining);
-                                                    
-                                                    return $remaining . ',' . $lastThree;
+                                            function number_format_indian($num) {
+                                                $num = round($num); // Remove decimal points
+                                                $num = (string) $num;
+                                                $len = strlen($num);
+                                                
+                                                if ($len <= 3) {
+                                                    return $num;
                                                 }
-                                            @endphp
+                                                
+                                                $lastThree = substr($num, -3);
+                                                $remaining = substr($num, 0, -3);
+                                                $remaining = preg_replace('/\B(?=(\d{2})+(?!\d))/', ',', $remaining);
+                                                
+                                                return $remaining . ',' . $lastThree;
+                                            }
+                                        @endphp
 
                                             @forelse($cartItems as $cartItem)
                                                 @php
