@@ -140,6 +140,9 @@ class RegistrationController extends Controller
         // Delete guest session record AFTER updating carts
         GuestSession::where('session_id', $sessionId)->delete();
     
+        Session::regenerate();
+
+        
         return response()->json([
             'success' => true,
             'message' => 'Account created successfully! Please log in.',

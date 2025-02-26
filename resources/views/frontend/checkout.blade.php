@@ -33,23 +33,25 @@
                 <div class="row">
                     <div class="col-xl-6">
                         <div class="flat-spacing tf-page-checkout">
-                            <div class="wrap">
-                                <div class="title-login">
-                                    <p>Already have an account?</p>
-                                    <a href="{{ route('user.login') }}" class="text-button">Login here</a>
-                                </div>
-                                <form id="loginForm" class="login-box">
-                                    @csrf
-                                    <div class="grid-2">
-                                        <input type="email" name="email" placeholder="Your Email" required>
-                                        <input type="password" name="password" placeholder="Password" required>
+                            @if(!Auth::check())
+                                <div class="wrap">
+                                    <div class="title-login">
+                                        <p>Already have an account?</p>
+                                        <a href="{{ route('user.login') }}" class="text-button">Login here</a>
                                     </div>
-                                    <button class="tf-btn" type="submit"><span class="text">Register</span></button>
-                                </form>
+                                    <form id="loginForm" class="login-box">
+                                        @csrf
+                                        <div class="grid-2">
+                                            <input type="email" name="email" placeholder="Your Email" required>
+                                            <input type="password" name="password" placeholder="Password" required>
+                                        </div>
+                                        <button class="tf-btn" type="submit"><span class="text">Register</span></button>
+                                    </form>
 
-                                <div id="loginMessage"></div>
-
-                            </div>
+                                    <div id="loginMessage"></div>
+                            
+                                </div>
+                            @endif
                             <div class="wrap">
                                 <h5 class="title">Information</h5>
                                 <form class="info-box">
@@ -240,38 +242,40 @@
 
         @include('components.frontend.main-js')
 
+     
         <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script>
 
-$(document).ready(function () {
-    $("#loginForm").submit(function (event) {
-        event.preventDefault(); // Prevent page reload
+    <script>
 
-        $.ajax({
-            url: "{{ route('login.authenticate') }}", // Adjust route accordingly
-            method: "POST",
-            data: $(this).serialize(),
-            dataType: "json",
-            success: function (response) {
-                if (response.success) {
-                    $("#loginMessage").html("<p style='color: green;'>" + response.message + "</p>");
-                    window.location.href = response.redirect; 
-                } else {
-                    $("#loginMessage").html("<p style='color: red;'>" + response.message + "</p>");
+    $(document).ready(function () {
+        $("#loginForm").submit(function (event) {
+            event.preventDefault(); // Prevent page reload
+
+            $.ajax({
+                url: "{{ route('login.authenticate') }}", // Adjust route accordingly
+                method: "POST",
+                data: $(this).serialize(),
+                dataType: "json",
+                success: function (response) {
+                    if (response.success) {
+                        $("#loginMessage").html("<p style='color: green;'>" + response.message + "</p>");
+                        window.location.href = response.redirect; 
+                    } else {
+                        $("#loginMessage").html("<p style='color: red;'>" + response.message + "</p>");
+                    }
+                },
+                error: function (xhr) {
+                    let errors = xhr.responseJSON.errors;
+                    let errorMsg = "<ul style='color: red;'>";
+                    $.each(errors, function (key, value) {
+                        errorMsg += "<li>" + value[0] + "</li>";
+                    });
+                    errorMsg += "</ul>";
+                    $("#loginMessage").html(errorMsg);
                 }
-            },
-            error: function (xhr) {
-                let errors = xhr.responseJSON.errors;
-                let errorMsg = "<ul style='color: red;'>";
-                $.each(errors, function (key, value) {
-                    errorMsg += "<li>" + value[0] + "</li>";
-                });
-                errorMsg += "</ul>";
-                $("#loginMessage").html(errorMsg);
-            }
+            });
         });
     });
-});
 
     </script>
         

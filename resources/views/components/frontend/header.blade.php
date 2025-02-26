@@ -131,8 +131,10 @@
                                     </svg>
                                 </a>
 
+
                                 <div class="dropdown-account dropdown-login">
                                     @if(Auth::check())  
+                                        
                                         <!-- If user is logged in -->
                                         <div class="sub-top">
                                             <p class="text-center text-secondary-2" style="font-size: 18px; font-weight: bold;">
