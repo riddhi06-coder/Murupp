@@ -54,5 +54,39 @@ class RegistrationController extends Controller
         return redirect()->route('frontend.index')->with('message', 'Account created successfully! Please log in.');
     }
 
+    public function login(Request $request)
+    {
+        return view('frontend.login');
+    }
+
+
+    public function authenticate_login(Request $request)
+    {
+        $request->validate([
+            'email' => 'required|string|email|max:255|regex:/^([a-z0-9\+_\-]+)(\.[a-z0-9\+_\-]+)*@([a-z0-9\-]+\.)+[a-z]{2,6}$/ix',
+            'password' => 'required|string',
+        ],[
+            'email.required' => 'Email Id is required',
+            'password.required' => 'Password is required',
+        ]);
+
+        $credentials = $request->only('email', 'password');
+        $remember_me = $request->has('remember_me'); 
+
+        if (Auth::attempt($credentials, $remember_me)) {
+            $request->session()->regenerate();
+
+            if ($remember_me) {
+                $user = Auth::user();
+                $user->setRememberToken(Str::random(60)); 
+                $user->save();
+            }
+
+            return redirect()->route('frontend.index')->with('message', 'You are logged in Successfully.');
+        }
+
+        return redirect()->route('frontend.login')->with(['message' => 'Credentials do not match our records!']);
+    }
+
 
 }

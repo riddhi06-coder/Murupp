@@ -19,7 +19,7 @@ return [
     */
 
     'driver' => env('SESSION_DRIVER', 'database'),
-
+    'expire_on_close' => false,
     /*
     |--------------------------------------------------------------------------
     | Session Lifetime

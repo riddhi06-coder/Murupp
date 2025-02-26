@@ -107,7 +107,7 @@
                     <div class="right">
                         <h4 class="mb_8">Already have an account?</h4>
                         <p class="text-secondary">Welcome back. Sign in to access your personalized experience, saved preferences, and more. We're thrilled to have you with us again!</p>
-                        <a href="login.html" class="tf-btn btn-fill"><span class="text text-button">Login</span></a>
+                        <a href="{{ route('user.login') }}" class="tf-btn btn-fill"><span class="text text-button">Login</span></a>
                     </div>
                 </div>
             </div>

@@ -103,7 +103,7 @@
                                 </a>
                                 <div class="dropdown-account dropdown-login" >
                                     <div class="sub-top">
-                                        <a href="#" class="tf-btn btn-reset">Login</a>
+                                        <a href="{{ route('user.login') }}" class="tf-btn btn-reset">Login</a>
                                         <p class="text-center text-secondary-2">Don’t have an account? <a href="{{ route('user.registration') }}">Register</a></p>
                                     </div>
                                     <div class="sub-bot">
