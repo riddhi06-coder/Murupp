@@ -36,6 +36,7 @@ use App\Http\Controllers\Frontend\CartController;
 use App\Http\Controllers\Frontend\CollectionController;
 use App\Http\Controllers\Frontend\CheckoutController;
 use App\Http\Controllers\Frontend\RegistrationController;
+use App\Http\Controllers\Frontend\ForgotPasswordController;
 
 // =========================================================================== Backend Routes
 
@@ -166,6 +167,13 @@ Route::group(['prefix'=> '', 'middleware'=>[\App\Http\Middleware\PreventBackHist
     //===== Checkout Page Login Functionality
     Route::post('/checkout-register', [RegistrationController::class, 'authenticate_checkout_register'])->name('login.authenticate');
 
+   // Forgot Password: Show form & handle email submission
+    Route::get('/forgot-password', [ForgotPasswordController::class, 'forgot_password'])->name('user.forgotpassword');
+    Route::post('/update-forgot-password', [ForgotPasswordController::class, 'update_password'])->name('user.updatepassword');
+
+    // Reset Password: Show form & handle password reset
+    Route::get('/reset-password/{token}', [ForgotPasswordController::class, 'reset_password'])->name('user.resetpassword');
+    Route::post('/update-reset-password', [ForgotPasswordController::class, 'update_reset_password'])->name('user.updatepassword.reset');
 
     //===== Category Page
     Route::get('/category/{slug}', [CategoryDetailsController::class, 'category_details'])->name('product.category');

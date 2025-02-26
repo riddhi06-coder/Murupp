@@ -16,7 +16,7 @@
             <div class="container">
                 <h3 class="heading text-center">Check Out</h3>
                 <ul class="breadcrumbs d-flex align-items-center">
-                    <li><a class="link" href="index.html">Home</a></li>
+                    <li><a class="link" href="{{ route('frontend.index') }}">Home</a></li>
                     <li><i class="icon-arrRight"></i></li>
                     <li><a class="link" href="shop-default-grid.html">Shop</a></li>
                     <li><i class="icon-arrRight"></i></li>

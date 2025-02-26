@@ -142,7 +142,7 @@ class RegistrationController extends Controller
     
         Session::regenerate();
 
-        
+
         return response()->json([
             'success' => true,
             'message' => 'Account created successfully! Please log in.',
@@ -150,8 +150,8 @@ class RegistrationController extends Controller
         ]);
     }
     
+  
     
     
-    
-    
+
 }

@@ -69,7 +69,7 @@
                                             Remember me
                                         </label>
                                     </div>
-                                    <a href="#" class="font-2 text-button forget-password link">Forgot Your Password?</a>
+                                    <a href="{{ route('user.forgotpassword') }}" class="font-2 text-button forget-password link">Forgot Your Password?</a>
                                 </div>
                             </div>
                             <div class="button-submit">
