@@ -16,6 +16,7 @@ use Illuminate\Support\Facades\Hash;
 use App\Models\User;
 use App\Models\ProductDetails;
 use App\Models\Carts;
+use App\Models\GuestSession;
 
 
 class RegistrationController extends Controller
@@ -55,14 +56,13 @@ class RegistrationController extends Controller
         $user->status = 1;
         $user->save();
 
-        return redirect()->route('frontend.index')->with('message', 'Account created successfully! Please log in.');
+        return redirect()->route('user.login')->with('message', 'Account created successfully! Please log in.');
     }
 
     public function login(Request $request)
     {
         return view('frontend.login');
     }
-
 
     public function authenticate_login(Request $request)
     {
@@ -86,11 +86,79 @@ class RegistrationController extends Controller
                 $user->save();
             }
 
-            return redirect()->route('frontend.index')->with('message', 'You are logged in Successfully.');
+            return redirect()->route('frontend.index')->with('message', 'Login Successfully!');
         }
 
-        return redirect()->route('frontend.login')->with(['message' => 'Credentials do not match our records!']);
+        return redirect()->route('user.login')->with(['message' => 'Credentials do not match our records!']);
     }
 
+    public function logout(Request $request) {
+        Session::flush();
+        Auth::logout();
+        $request->session()->invalidate();
+        $request->session()->regenerateToken();
 
+        return redirect()->route('user.login')->with('message', 'Logout Successfully!');
+    }
+    
+
+
+    // public function authenticate_checkout_login(Request $request)
+    // {
+    //     $request->validate([
+    //         'email' => 'required|string|email|max:255|regex:/^([a-z0-9\+_\-]+)(\.[a-z0-9\+_\-]+)*@([a-z0-9\-]+\.)+[a-z]{2,6}$/ix',
+    //         'password' => 'required|string',
+    //     ], [
+    //         'email.required' => 'Email Id is required',
+    //         'password.required' => 'Password is required',
+    //     ]);
+    
+    //     // Find user by email
+    //     $user = User::where('email', $request->email)->first();
+    
+    //     // Check if user exists and password matches
+    //     if ($user && Hash::check($request->password, $user->password)) {
+    //         return redirect()->route('checkout.details')->with('message', 'Login Successfully!');
+    //     }
+    
+    //     return redirect()->route('checkout.details')->with(['message' => 'Credentials do not match our records!']);
+    // }
+    
+
+    
+    public function authenticate_checkout_login(Request $request)
+    {
+        $request->validate([
+            'email' => 'required|string|email|max:255|regex:/^([a-z0-9\+_\-]+)(\.[a-z0-9\+_\-]+)*@([a-z0-9\-]+\.)+[a-z]{2,6}$/ix',
+            'password' => 'required|string',
+        ], [
+            'email.required' => 'Email Id is required',
+            'password.required' => 'Password is required',
+        ]);
+    
+        // Find user by email
+        $user = User::where('email', $request->email)->first();
+    
+        // Check if user exists and password matches
+        if ($user && Hash::check($request->password, $user->password)) {
+            Auth::login($user);
+    
+            $sessionId = Session::getId();
+            $userId = Auth::id();
+    
+            // Update the session ID for existing cart items
+            Carts::where('session_id', $sessionId)->update([
+                'user_id' => $userId,
+                'session_id' => null // Prevent foreign key constraint issues
+            ]);
+    
+            // Delete guest session record AFTER updating carts
+            GuestSession::where('session_id', $sessionId)->delete();
+    
+            return redirect()->route('checkout.details')->with('message', 'Login Successfully!');
+        }
+    
+        return redirect()->route('checkout.details')->with(['message' => 'Credentials do not match our records!']);
+    }
+    
 }

@@ -36,14 +36,15 @@
                             <div class="wrap">
                                 <div class="title-login">
                                     <p>Already have an account?</p>
-                                    <a href="login.html" class="text-button">Login here</a>
+                                    <a href="{{ route('user.login') }}" class="text-button">Login here</a>
                                 </div>
-                                <form class="login-box">
+                                <form action="{{ route('login.authenticate') }}" method="POST" class="login-box">
+                                    @csrf
                                     <div class="grid-2">
-                                        <input type="text" placeholder="Your name/Email">
-                                        <input type="password" placeholder="Password">
+                                        <input type="text" name="email" placeholder="Your Email" required>
+                                        <input type="password" name="password" placeholder="Password" required>
                                     </div>
-                                    <button class="tf-btn" type="submit"><span class="text">Login</span></button>
+                                    <button class="tf-btn" type="submit"><span class="text">Register</span></button>
                                 </form>
                             </div>
                             <div class="wrap">

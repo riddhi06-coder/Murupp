@@ -16,7 +16,7 @@
     <link rel="stylesheet" href="{{ asset('frontend/assets/css/animate.css') }}" type="text/css" media="all">
     <link rel="stylesheet" href="{{ asset('frontend/assets/css/styles.css') }}" type="text/css" media="all">
     
-    <!-- Preload Critical Resources-->
+    <!-- Preload Critical Resources test-->
     <link rel="preload" as="image" href="{{ asset('frontend/assets/images/home-bg.webp') }}" type="image/webp">
     <link rel="preload" href="{{ asset('frontend/assets/css/styles.css') }}" as="style" type="text/css" media="all">
     <link rel="preload" href="{{ asset('frontend/assets/fonts/font-icons.css') }}" as="style" type="text/css" media="all">

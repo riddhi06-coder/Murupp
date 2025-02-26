@@ -160,6 +160,12 @@ Route::group(['prefix'=> '', 'middleware'=>[\App\Http\Middleware\PreventBackHist
     Route::get('/user-login', [RegistrationController::class, 'login'])->name('user.login');
     Route::post('/user-login', [RegistrationController::class, 'authenticate_login'])->name('login.store');
 
+    //===== Logout Page
+    Route::get('/user-logout', [RegistrationController::class, 'logout'])->name('user.logout');
+
+    //===== Checkout Page Login Functionality
+    Route::post('/checkout-login', [RegistrationController::class, 'authenticate_checkout_login'])->name('login.authenticate');
+
 
     //===== Category Page
     Route::get('/category/{slug}', [CategoryDetailsController::class, 'category_details'])->name('product.category');

@@ -67,7 +67,7 @@
                                             <div class="swiper-slide" data-color="gray">
                                                 <a href="{{ asset('murupp/product/gallery/' . $image) }}" target="_blank" class="item" 
                                                     data-pswp-width="600px" data-pswp-height="800px">
-                                                    <img class="tf-image-zoom  
+                                                    <img class="tf-image-zoom"  
                                                         data-zoom="{{ asset('murupp/product/gallery/' . $image) }}" 
                                                         data-src="{{ asset('murupp/product/gallery/' . $image) }}" 
                                                         src="{{ asset('murupp/product/gallery/' . $image) }}" alt="">
@@ -550,13 +550,15 @@
 
 
         @include('components.frontend.footer')
-
+ 
         @include('components.frontend.main-js')
 
+    
         <script src="{{ asset('frontend/assets/js/drift.min.js') }}" defer></script>
         <script type="module" src="{{ asset('frontend/assets/js/model-viewer.min.js') }}"></script>
         <script type="module" src="{{ asset('frontend/assets/js/zoom.js') }}"></script>
 
+        
 
 
 <!--- for form validation--->
