@@ -119,7 +119,14 @@
                             </li>
                             @php
                                 use Illuminate\Support\Facades\Auth;
-                                $cartCount = \App\Models\Carts::where('user_id', Auth::id())->whereNull('deleted_by')->count();
+                                use Illuminate\Support\Facades\Session;
+                                use App\Models\Carts;
+
+                                if (Auth::check()) {
+                                    $cartCount = Carts::where('user_id', Auth::id())->whereNull('deleted_by')->count();
+                                } else {
+                                    $cartCount = Carts::where('session_id', Session::getId())->whereNull('deleted_by')->count();
+                                }
                             @endphp
 
                             <li class="nav-cart" aria-label="Shopping-Cart">
