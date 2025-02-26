@@ -164,7 +164,7 @@ Route::group(['prefix'=> '', 'middleware'=>[\App\Http\Middleware\PreventBackHist
     Route::get('/user-logout', [RegistrationController::class, 'logout'])->name('user.logout');
 
     //===== Checkout Page Login Functionality
-    Route::post('/checkout-login', [RegistrationController::class, 'authenticate_checkout_login'])->name('login.authenticate');
+    Route::post('/checkout-register', [RegistrationController::class, 'authenticate_checkout_register'])->name('login.authenticate');
 
 
     //===== Category Page
