@@ -260,11 +260,14 @@
                                                 <a href="#" title="Terms of Service">Terms & Conditions</a>
                                             </label>
                                         </div>
+                                        
                                         <div class="tf-mini-cart-view-checkout">
-                                            <a href="{{ route('checkout.details')}}" class="tf-btn w-100 btn-fill radius-4">
+                                            
+                                            <a href="{{ route('checkout.details')}}" class="tf-btn w-100 btn-fill radius-4 checkout-btn">
                                                 <span class="text">Check Out</span>
                                             </a>
                                         </div>
+                                        
                                         <div class="text-center">
                                             <a class="link text-btn-uppercase" href="{{ route('frontend.index')}}">Or continue shopping</a>
                                         </div>
@@ -551,5 +554,3 @@
         }
 
     </script>
-
-
