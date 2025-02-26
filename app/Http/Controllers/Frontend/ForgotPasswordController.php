@@ -24,11 +24,11 @@ class ForgotPasswordController extends Controller
 {
 
 
-   // Show Forgot Password Page
-   public function forgot_password()
-   {
-       return view('frontend.forgot-password');
-   }
+    // Show Forgot Password Page
+    public function forgot_password()
+    {
+        return view('frontend.forgot-password');
+    }
 
     // Handle Forgot Password Form Submission
     public function update_password(Request $request)
