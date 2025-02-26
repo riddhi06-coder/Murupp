@@ -47,6 +47,15 @@
                         <form action="{{ route('registration.store') }}" method="POST" class="form-login form-has-password" onsubmit="return validateForm()">
                             @csrf
                             <div class="wrap">
+
+                                <!-- Name Field -->
+                                <fieldset class="">
+                                    <input class="" type="text" placeholder="Name*" name="name" value="{{ old('name') }}" required>
+                                    @error('name')
+                                        <div class="text-danger mt-1">{{ $message }}</div>
+                                    @enderror
+                                </fieldset>
+
                                 <!-- Email Field -->
                                 <fieldset class="">
                                     <input class="" type="email" placeholder="Username or email address*" name="email" value="{{ old('email') }}" required>
@@ -127,12 +136,14 @@
             let isValid = true;
 
             // Get input values
+            let name = document.getElementById("name").value.trim();
             let email = document.getElementById("email").value.trim();
             let password = document.getElementById("password").value.trim();
             let confirmPassword = document.getElementById("confirm_password").value.trim();
             let agreeCheckbox = document.getElementById("agree_checkbox").checked;
 
             // Error message elements
+            let nameError = document.getElementById("nameError");
             let emailError = document.getElementById("emailError");
             let passwordError = document.getElementById("passwordError");
             let confirmPasswordError = document.getElementById("confirmPasswordError");
@@ -145,6 +156,15 @@
             confirmPasswordError.innerText = "";
             agreeError.innerText = "";
 
+            // Name Validation (Only alphabets and spaces)
+            let nameRegex = /^[A-Za-z\s]+$/;
+            if (name === "") {
+                nameError.innerText = "The name field is required.";
+                isValid = false;
+            } else if (!nameRegex.test(name)) {
+                nameError.innerText = "Name must contain only alphabets and spaces.";
+                isValid = false;
+            }
 
             // Email Validation (Basic email pattern)
             let emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -183,7 +203,6 @@
             return isValid;
         }
     </script>
-    
 </body>
 
 </html>

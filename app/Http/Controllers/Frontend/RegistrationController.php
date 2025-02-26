@@ -29,6 +29,8 @@ class RegistrationController extends Controller
     public function authenticate_register(Request $request)
     {
         $messages = [
+            'name.required' => 'Name is required',
+            'name.regex' => 'Name should not contain numbers or special characters',
             'email.required' => 'The email field is required.',
             'email.email' => 'The email must be a valid email address.',
             'email.unique' => 'The email is already taken.',
@@ -40,12 +42,14 @@ class RegistrationController extends Controller
         ];
 
         $validated = $request->validate([
+            'name' => ['required', 'string', 'regex:/^[A-Za-z\s]+$/'],
             'email' => 'required|email|unique:users,email',
             'password' => 'required|string|min:8|confirmed',
             'agree_checkbox' => 'accepted',
         ], $messages);
 
         $user = new User();
+        $user->name = $validated['name'];
         $user->email = $validated['email']; 
         $user->password = Hash::make($validated['password']);
         $user->status = 1;

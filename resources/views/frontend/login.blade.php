@@ -19,7 +19,7 @@
                         <h3 class="heading text-center">Login</h3>
                         <ul class="breadcrumbs d-flex align-items-center">
                             <li>
-                                <a class="link" href="#">Home</a>
+                                <a class="link" href="{{ route('frontend.index') }}">Home</a>
                             </li>
                             <li>
                                 <i class="icon-arrRight"></i>
