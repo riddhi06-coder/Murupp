@@ -220,11 +220,14 @@
                 <div class="row flat-img-with-text-v2 align-items-center">
                     <!-- Image Section -->
                     <div class="col-lg-5 col-md-6">
-                        <div class="about-us-features wow fadeInLeft">
-                            <img class=" 
-                                data-src="{{ asset('murupp/home/collection-details/' . $collectionDetail->image) }}" 
-                                alt="{{ $collectionDetail->heading }}">
-                        </div>
+                    <div class="about-us-features wow fadeInLeft">
+                        <img class="lazyload"
+                            data-src="{{ asset('murupp/home/collection-details/' . $collectionDetail->image) }}"
+                            src="{{ asset('murupp/home/collection-details/default-placeholder.jpg') }}" 
+                            alt="{{ $collectionDetail->heading }}" 
+                            loading="lazy">
+                    </div>
+
                     </div>
                     <!-- Text Section -->
                     <div class="col-lg-7 col-md-6">
@@ -252,7 +255,7 @@
                     @foreach ($shopCategories as $category)
                         <div class="item{{ $loop->iteration }} collection-position-2 hover-img">
                             <a class="img-style">
-                                <img class=" 
+                                <img class="lzyload"
                                     data-src="{{ asset('murupp/home/shop_categories/' . $category->product_image) }}" 
                                     src="{{ asset('murupp/home/shop_categories/' . $category->product_image) }}" 
                                     alt="{{ $category->image_title }}">
