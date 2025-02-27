@@ -39,6 +39,7 @@ use App\Http\Controllers\Frontend\CollectionController;
 use App\Http\Controllers\Frontend\CheckoutController;
 use App\Http\Controllers\Frontend\RegistrationController;
 use App\Http\Controllers\Frontend\ForgotPasswordController;
+use App\Http\Controllers\Frontend\PoliciesController;
 
 // =========================================================================== Backend Routes
 
@@ -180,6 +181,10 @@ Route::group(['prefix'=> '', 'middleware'=>[\App\Http\Middleware\PreventBackHist
     //====== Reset Password: Show form & handle password reset
     Route::get('/reset-password/{token}', [ForgotPasswordController::class, 'reset_password'])->name('user.resetpassword');
     Route::post('/update-reset-password', [ForgotPasswordController::class, 'update_reset_password'])->name('user.updatepassword.reset');
+
+    //===== Logout Page
+    Route::get('/terms-and-conditions', [PoliciesController::class, 'terms'])->name('terms.condition');
+
 
     //===== Category Page
     Route::get('/category/{slug}', [CategoryDetailsController::class, 'category_details'])->name('product.category');
