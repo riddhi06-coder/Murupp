@@ -283,7 +283,8 @@
                                                             </div>
 
                                                             <div class="text-button price">
-                                                                <i class="fa fa-inr" aria-hidden="true"></i> <span class="item-price">{{ number_format_indian($cartItem->product_total_price) }}</span>
+                                                                <i class="fa fa-inr" aria-hidden="true"></i> 
+                                                                <span class="item-price">{{ number_format_indian($cartItem->product_total_price) }}</span>
                                                             </div>
 
                                                         </div>
@@ -473,138 +474,114 @@
         <!-- /mobile menu -->
 
 
-    <!--- to manage the price based on the quantity--->
-    <script>
-        function updateQuantity(element, change) {
-            let input = element.parentElement.querySelector(".quantity-product");
-            let quantity = parseInt(input.value) + change;
-            let unitPrice = parseFloat(input.getAttribute("data-price"));
-            let cartItemId = input.getAttribute("data-id"); // Get cart item ID
-            let cartElement = input.closest(".tf-mini-cart-item"); // Get cart item element
+        <!--- to manage the price based on the quantity--->
+        <script>
+            function updateQuantity(element, change) {
+                let input = $(element).siblings('.quantity-product');
+                let newQty = parseInt(input.val()) + change;
 
-            if (!cartItemId) {
-                console.error("cart_item_id is missing");
-                return;
-            }
-
-            if (isNaN(quantity) || quantity < 1) {
-                removeItemFromCart(cartItemId, cartElement);
-                return;
-            }
-
-            input.value = quantity;
-            let newTotal = unitPrice * quantity;
-            input.setAttribute("data-total", newTotal);
-
-            // Update item price
-            let priceElement = cartElement.querySelector(".item-price");
-            if (priceElement) {
-                priceElement.innerText = formatIndianCurrency(newTotal);
-            }
-
-            // Update the total price inside the ".text-button.price" div
-            let priceContainer = cartElement.querySelector(".text-button.price .item-price");
-            if (priceContainer) {
-                priceContainer.innerText = formatIndianCurrency(newTotal);
-            }
-
-            // Update subtotal
-            updateSubtotal();
-        }
-
-        function manualUpdate(input) {
-            let quantity = parseInt(input.value);
-            let unitPrice = parseFloat(input.getAttribute("data-price"));
-            let cartItemId = input.getAttribute("data-id"); // Get cart item ID
-            let cartElement = input.closest(".tf-mini-cart-item"); // Get cart item element
-
-            if (!cartItemId) {
-                console.error("cart_item_id is missing");
-                return;
-            }
-
-            if (isNaN(quantity) || quantity < 1) {
-                removeItemFromCart(cartItemId, cartElement);
-                return;
-            }
-
-            let newTotal = unitPrice * quantity;
-            input.setAttribute("data-total", newTotal);
-
-            // Update item price
-            let priceElement = cartElement.querySelector(".item-price");
-            if (priceElement) {
-                priceElement.innerText = formatIndianCurrency(newTotal);
-            }
-
-            // Update the total price inside the ".text-button.price" div
-            let priceContainer = cartElement.querySelector(".text-button.price .item-price");
-            if (priceContainer) {
-                priceContainer.innerText = formatIndianCurrency(newTotal);
-            }
-
-            // Update subtotal
-            updateSubtotal();
-        }
-
-        function updateSubtotal() {
-            let items = document.querySelectorAll(".quantity-product");
-            let subtotal = 0;
-
-            items.forEach(item => {
-                let itemTotal = parseFloat(item.getAttribute("data-total"));
-                if (!isNaN(itemTotal)) {
-                    subtotal += itemTotal;
+                if (newQty < 0) {
+                    newQty = 0; // Allow 0 so we can remove the item
                 }
-            });
 
-            let subtotalElement = document.querySelector(".tf-totals-total-value");
-
-            if (subtotalElement) {
-                subtotalElement.innerHTML =
-                    '<i class="fa fa-inr" aria-hidden="true"></i> ' + formatIndianCurrency(subtotal);
-            } else {
-                console.error("Subtotal element not found.");
+                input.val(newQty);
+                updateCart(input);
             }
-        }
 
-        function formatIndianCurrency(num) {
-            num = Math.round(num).toString();
-            let lastThree = num.slice(-3);
-            let otherNumbers = num.slice(0, -3);
-            if (otherNumbers) {
-                lastThree = "," + lastThree;
+            function manualUpdate(element) {
+                let input = $(element);
+                let newQty = parseInt(input.val());
+
+                if (isNaN(newQty)) {
+                    input.val(1);
+                    newQty = 1;
+                }
+
+                updateCart(input);
             }
-            return otherNumbers.replace(/\B(?=(\d{2})+(?!\d))/g, ",") + lastThree;
-        }
 
-        function removeItemFromCart(cartItemId, cartElement) {
-            fetch("{{ route('delete.cart.item') }}", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                    "X-CSRF-TOKEN": document.querySelector('meta[name="csrf-token"]').content
-                },
-                body: JSON.stringify({ cart_item_id: cartItemId })
-            })
-            .then(response => response.json())
-            .then(data => {
-                console.log("Item deleted:", data);
-                if (data.success) {
-                    cartElement.remove(); // Remove item from UI
-                    updateSubtotal(); // Recalculate subtotal
+            function updateCart(input) {
+                let cartId = input.data('id');
+                let pricePerItem = parseFloat(input.data('price')); // Get price from data attribute
+                let newQty = parseInt(input.val());
 
-                    // Check if cart is empty after removal
-                    if (document.querySelectorAll(".tf-mini-cart-item").length === 0) {
-                        document.querySelector(".tf-mini-cart-items").innerHTML = `
-                            <div class="text-center py-4">No items found in your cart.</div>
-                        `;
+                if (newQty === 0) {
+                    // Remove item if quantity is 0
+                    removeItemFromCart(cartId, input.closest('.tf-mini-cart-item'));
+                    return;
+                }
+
+                if (isNaN(pricePerItem)) {
+                    console.error("Price is not defined");
+                    return;
+                }
+
+                let newTotal = pricePerItem * newQty;
+                input.closest('.tf-mini-cart-item').find('.item-price').text(newTotal.toLocaleString('en-IN'));
+
+                updateSubtotal();
+
+                $.ajax({
+                    url: "{{ route('cart.update') }}",
+                    type: "POST",
+                    data: {
+                        _token: "{{ csrf_token() }}",
+                        cart_id: cartId,
+                        quantity: newQty,
+                        price: pricePerItem 
+                    },
+                    success: function(response) {
+                        if (response.success) {
+                            console.log("Cart updated successfully!");
+                        }
                     }
-                } else {
-                    console.error("Failed to delete:", data.message);
-                }
-            })
-            .catch(error => console.error("Error deleting cart item:", error));
-        }
+                });
+            }
 
-    </script>
+            function removeItemFromCart(cartItemId, cartElement) {
+                fetch("{{ route('delete.cart.item') }}", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                        "X-CSRF-TOKEN": document.querySelector('meta[name="csrf-token"]').content
+                    },
+                    body: JSON.stringify({ cart_item_id: cartItemId })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    console.log("Item deleted:", data);
+                    if (data.success) {
+                        cartElement.remove(); // Remove item from UI
+                        updateSubtotal(); // Recalculate subtotal after deletion
+
+                        // Check if cart is empty after removal
+                        if (document.querySelectorAll(".tf-mini-cart-item").length === 0) {
+                            document.querySelector(".tf-mini-cart-items").innerHTML = `
+                                <div class="text-center py-4">No items found in your cart.</div>
+                            `;
+                            document.querySelector(".tf-totals-total-value").innerHTML = `<i class="fa fa-inr" aria-hidden="true"></i> 0`;
+                        }
+                    } else {
+                        console.error("Failed to delete:", data.message);
+                    }
+                })
+                .catch(error => console.error("Error deleting cart item:", error));
+            }
+
+            // Function to update subtotal dynamically
+            function updateSubtotal() {
+                console.log("Updating subtotal..."); // Debugging
+                let total = 0;
+                document.querySelectorAll(".quantity-product").forEach(input => {
+                    let pricePerItem = parseFloat(input.dataset.price) || 0;
+                    let quantity = parseInt(input.value) || 0;
+                    total += pricePerItem * quantity;
+                });
+
+                console.log("Calculated Subtotal:", total); // Debugging
+
+                document.querySelector(".tf-totals-total-value").innerHTML = 
+                    `<i class="fa fa-inr" aria-hidden="true"></i> ` + total.toLocaleString('en-IN');
+            }
+
+        </script>

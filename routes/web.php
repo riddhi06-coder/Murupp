@@ -167,11 +167,11 @@ Route::group(['prefix'=> '', 'middleware'=>[\App\Http\Middleware\PreventBackHist
     //===== Checkout Page Login Functionality
     Route::post('/checkout-register', [RegistrationController::class, 'authenticate_checkout_register'])->name('login.authenticate');
 
-   // Forgot Password: Show form & handle email submission
+   //======Forgot Password: Show form & handle email submission
     Route::get('/forgot-password', [ForgotPasswordController::class, 'forgot_password'])->name('user.forgotpassword');
     Route::post('/update-forgot-password', [ForgotPasswordController::class, 'update_password'])->name('user.updatepassword');
 
-    // Reset Password: Show form & handle password reset
+    //====== Reset Password: Show form & handle password reset
     Route::get('/reset-password/{token}', [ForgotPasswordController::class, 'reset_password'])->name('user.resetpassword');
     Route::post('/update-reset-password', [ForgotPasswordController::class, 'update_reset_password'])->name('user.updatepassword.reset');
 
@@ -192,6 +192,10 @@ Route::group(['prefix'=> '', 'middleware'=>[\App\Http\Middleware\PreventBackHist
 
     //==== Remove Item Cart Functionality
     Route::post('/delete-cart-item', [CartController::class, 'deleteCartItem'])->name('delete.cart.item');
+
+    //====== Update Cart Count Dynamically
+    Route::post('/cart/update', [CartController::class, 'updateCart'])->name('cart.update');
+
 
 });
 
