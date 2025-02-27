@@ -82,7 +82,7 @@
                                     <a href="{{ route('return.refunds') }}" class="footer-menu_item">Return & Refunds</a>
                                 </li>
                                 <li class="text-caption-1">
-                                    <a href="#" class="footer-menu_item">Privacy Policy</a>
+                                    <a href="{{ route('privacy.policy') }}" class="footer-menu_item">Privacy Policy</a>
                                 </li>
                                 <li class="text-caption-1">
                                     <a href="{{ route('terms.condition') }}" class="footer-menu_item">Terms & Conditions</a>

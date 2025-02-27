@@ -201,6 +201,8 @@ Route::group(['prefix'=> '', 'middleware'=>[\App\Http\Middleware\PreventBackHist
     //===== Return & Exchange
     Route::get('/return-and-refunds', [PoliciesController::class, 'return'])->name('return.refunds');
 
+    //===== Privacy Policy
+    Route::get('/privacy-policy', [PoliciesController::class, 'privacy'])->name('privacy.policy');
 
     //===== Category Page
     Route::get('/category/{slug}', [CategoryDetailsController::class, 'category_details'])->name('product.category');

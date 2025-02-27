@@ -38,4 +38,9 @@ class PoliciesController extends Controller
         return view('frontend.refund', compact('terms'));
     }
     
+    public function privacy(Request $request)
+    { 
+        $terms = Returns::all();
+        return view('frontend.privacy', compact('terms'));
+    }
 }
