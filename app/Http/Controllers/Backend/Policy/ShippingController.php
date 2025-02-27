@@ -11,22 +11,21 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
 
 use Carbon\Carbon;
-use App\Models\User;
-use App\Models\Terms;
+use App\Models\Shipping;
 
 
-class TermsController extends Controller
+class ShippingController extends Controller
 {
 
     public function index()
     {
-        $terms = Terms::whereNull('deleted_at')->get(); 
-        return view('backend.policies.terms.index', compact('terms'));
+        $terms = Shipping::whereNull('deleted_at')->get(); 
+        return view('backend.policies.shipping.index', compact('terms'));
     }
     
     public function create(Request $request)
     { 
-        return view('backend.policies.terms.create');
+        return view('backend.policies.shipping.create');
     }
 
     public function store(Request $request)
@@ -47,7 +46,7 @@ class TermsController extends Controller
             'description.string' => 'The description must be a valid string.'
         ]);
     
-        $term = new Terms();
+        $term = new Shipping();
         $term->heading = $request->heading;
         $term->introduction = $request->introduction;
         $term->title = $request->title;
@@ -56,13 +55,13 @@ class TermsController extends Controller
         $term->inserted_at = Carbon::now();
         $term->save();
     
-        return redirect()->route('terms.index')->with('message', 'Terms & Conditions added successfully!');
+        return redirect()->route('shipping.index')->with('message', 'Shipping details added successfully!');
     }
 
     public function edit($id)
     {
-        $term = Terms::findOrFail($id);
-        return view('backend.policies.terms.edit', compact('term'));
+        $term = Shipping::findOrFail($id);
+        return view('backend.policies.shipping.edit', compact('term'));
     }
 
     public function update(Request $request, $id)
@@ -78,7 +77,7 @@ class TermsController extends Controller
             'description.string' => 'The description must be a valid string.'
         ]);
 
-        $term = Terms::findOrFail($id);
+        $term = Shipping::findOrFail($id);
         $term->heading = $request->heading;
         $term->introduction = $request->introduction;
         $term->title = $request->title;
@@ -87,19 +86,18 @@ class TermsController extends Controller
         $term->modified_at = Carbon::now();
         $term->save();
 
-        return redirect()->route('terms.index')->with('message', 'Terms & Conditions updated successfully!');
+        return redirect()->route('shipping.index')->with('message', 'Shipping details updated successfully!');
     }
-
 
     public function destroy(string $id)
     {
         $data['deleted_by'] =  Auth::user()->id;
         $data['deleted_at'] =  Carbon::now();
         try {
-            $industries = Terms::findOrFail($id);
+            $industries = Shipping::findOrFail($id);
             $industries->update($data);
 
-            return redirect()->route('terms.index')->with('message', 'Terms & Conditions deleted successfully!');
+            return redirect()->route('shipping.index')->with('message', 'Shipping details deleted successfully!');
         } catch (Exception $ex) {
             return redirect()->back()->with('error', 'Something Went Wrong - ' . $ex->getMessage());
         }
