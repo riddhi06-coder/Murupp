@@ -49,12 +49,13 @@
     <p>Hello,</p>
     <p>We received a request to reset your password. If you made this request, please click the button below to set a new password:</p><br>
     <div style="text-align: center;">
-        <form action="{{ url('/reset-password/' . $token) }}" method="GET">
-            <button class="tf-btn btn-fill reset-btn">
-                Reset Password
+        <a href="{{ route('user.resetpassword', ['token' => $token]) }}" style="text-decoration: none;">
+            <button class="tf-btn btn-fill reset-btn" style="background-color: #000; color: #fff; padding: 12px 24px; border-radius: 30px; font-size: 16px; border: none; cursor: pointer;">
+                Reset Your Password
             </button>
-        </form>
-    </div><br>
+        </a>
+    </div>
+
 
     <p>If you didn’t request a password reset, please ignore this email. Your account is still secure.</p>
 

@@ -83,7 +83,7 @@ class ForgotPasswordController extends Controller
             ->first();
 
         if (!$resetRecord) {
-            return back()->withErrors(['email' => 'Invalid token or email!']);
+            return back()->withErrors(['email' => 'Invalid Email!']);
         }
 
         // Update password
