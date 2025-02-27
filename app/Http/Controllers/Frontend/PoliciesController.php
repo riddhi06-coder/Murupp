@@ -14,6 +14,7 @@ use Carbon\Carbon;
 
 use App\Models\Terms;
 use App\Models\Shipping;
+use App\Models\Returns;
 
 
 
@@ -29,6 +30,12 @@ class PoliciesController extends Controller
     { 
         $terms = Shipping::all();
         return view('frontend.shipping', compact('terms'));
+    }
+
+    public function return(Request $request)
+    { 
+        $terms = Returns::all();
+        return view('frontend.refund', compact('terms'));
     }
     
 }

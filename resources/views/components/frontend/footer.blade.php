@@ -79,7 +79,7 @@
                                     <a href="{{ route('shipping.delivery') }}" class="footer-menu_item">Shipping & Delivery</a>
                                 </li>
                                 <li class="text-caption-1">
-                                    <a href="#" class="footer-menu_item">Return & Refunds</a>
+                                    <a href="{{ route('return.refunds') }}" class="footer-menu_item">Return & Refunds</a>
                                 </li>
                                 <li class="text-caption-1">
                                     <a href="#" class="footer-menu_item">Privacy Policy</a>

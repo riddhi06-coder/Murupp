@@ -196,6 +196,9 @@ Route::group(['prefix'=> '', 'middleware'=>[\App\Http\Middleware\PreventBackHist
     //===== Shipping & Delivery
     Route::get('/shipping-and-delivery', [PoliciesController::class, 'shipping'])->name('shipping.delivery');
 
+    //===== Return & Exchange
+    Route::get('/return-and-refunds', [PoliciesController::class, 'return'])->name('return.refunds');
+
 
     //===== Category Page
     Route::get('/category/{slug}', [CategoryDetailsController::class, 'category_details'])->name('product.category');
