@@ -105,25 +105,6 @@ class CartController extends Controller
     }
 
 
-    // public function deleteCartItem(Request $request)
-    // {
-    //     Log::info("Delete Request Received", $request->all());
-
-    //     $cartItem = Carts::find($request->cart_item_id);
-
-    //     if (!$cartItem) {
-    //         Log::error("Cart Item Not Found: " . $request->cart_item_id);
-    //         return response()->json(['success' => false, 'message' => 'Item not found'], 404);
-    //     }
-
-    //     $cartItem->deleted_at = now();  // Soft delete
-    //     $cartItem->deleted_by = auth()->id();
-    //     $cartItem->save();
-
-    //     return response()->json(['success' => true, 'message' => 'Item deleted']);
-    // }
-
-
     public function deleteCartItem(Request $request)
     {
         Log::info("Delete Request Received", $request->all());
@@ -135,9 +116,8 @@ class CartController extends Controller
             return response()->json(['success' => false, 'message' => 'Item not found'], 404);
         }
 
-        $cartItem->delete(); // Soft delete
+        $cartItem->delete();
 
-        // Recalculate subtotal dynamically
         $userId = Auth::id();
         $sessionId = Session::getId();
 
@@ -160,10 +140,8 @@ class CartController extends Controller
     }
 
 
-
     public function updateCart(Request $request)
     {
-        // dd($request);
         $request->validate([
             'cart_id' => 'required|exists:carts,id',
             'quantity' => 'required|integer|min:1',

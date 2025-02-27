@@ -225,7 +225,7 @@
                                             </span>
                                         </h5>
                                         <small class="d-flex justify-content-between text-muted">
-                                            <span>Including ₹ {{ number_format($taxAmount, 2) }} in taxes</span>
+                                            <span>Including ₹ {{ number_format($taxAmount) }} in taxes</span>
                                         </small>
                                     </div>
                                 </div>

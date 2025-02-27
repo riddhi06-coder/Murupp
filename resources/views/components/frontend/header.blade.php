@@ -1,14 +1,3 @@
-<!-- <style>
-.btn-small {
-    padding: 4px 8px !important; /* Slightly increased padding */
-    font-size: 11px !important; /* A bit larger font */
-    line-height: 1.2 !important;
-    min-width: auto !important;
-    display: inline-block !important;
-    text-align: center !important;
-}
-
-</style> -->
 <meta name="csrf-token" content="{{ csrf_token() }}">
         <!-- Scroll Top -->
     <button id="scroll-top">
@@ -105,24 +94,7 @@
                                     <path d="M21.35 21.0004L17 16.6504" stroke="#181818" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
                                 </svg>    
                             </a></li>
-                            <!-- <li class="nav-account" aria-label="Login">
-                                <a href="#" class="nav-icon-item" >
-                                    <svg class="icon" width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                        <path d="M20 21V19C20 17.9391 19.5786 16.9217 18.8284 16.1716C18.0783 15.4214 17.0609 15 16 15H8C6.93913 15 5.92172 15.4214 5.17157 16.1716C4.42143 16.9217 4 17.9391 4 19V21" stroke="#181818" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                                        <path d="M12 11C14.2091 11 16 9.20914 16 7C16 4.79086 14.2091 3 12 3C9.79086 3 8 4.79086 8 7C8 9.20914 9.79086 11 12 11Z" stroke="#181818" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                                    </svg>
-                                </a>
-                                <div class="dropdown-account dropdown-login" >
-                                    <div class="sub-top">
-                                        <a href="{{ route('user.login') }}" class="tf-btn btn-reset">Login</a>
-                                        <p class="text-center text-secondary-2">Don’t have an account? <a href="{{ route('user.registration') }}">Register</a></p>
-                                    </div>
-                                    <div class="sub-bot">
-                                        <span class="body-text-">Support</span>
-                                    </div>
-                                </div>
-                            </li> -->
-
+                           
                             <li class="nav-account" aria-label="Account">
                                 <a href="#" class="nav-icon-item">
                                     <svg class="icon" width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -199,8 +171,6 @@
             </div>
         </header>
         <!-- /Header -->
-
-
 
         <!-- shoppingCart -->
         <div class="modal fullRight fade modal-shopping-cart" id="shoppingCart">
@@ -360,7 +330,6 @@
         </div>
         <!-- /search -->
       
-
         <!-- mobile menu -->
         <div class="offcanvas offcanvas-start canvas-mb" id="mobileMenu">
             <span class="icon-close icon-close-popup" data-bs-dismiss="offcanvas" aria-label="Close"></span>
@@ -520,6 +489,7 @@
                 input.closest('.tf-mini-cart-item').find('.item-price').text(newTotal.toLocaleString('en-IN'));
 
                 updateSubtotal();
+                updateCartCount();
 
                 $.ajax({
                     url: "{{ route('cart.update') }}",
@@ -553,6 +523,7 @@
                     if (data.success) {
                         cartElement.remove(); // Remove item from UI
                         updateSubtotal(); // Recalculate subtotal after deletion
+                        updateCartCount();
 
                         // Check if cart is empty after removal
                         if (document.querySelectorAll(".tf-mini-cart-item").length === 0) {
@@ -584,4 +555,9 @@
                     `<i class="fa fa-inr" aria-hidden="true"></i> ` + total.toLocaleString('en-IN');
             }
 
+            // Function to update cart count dynamically
+            function updateCartCount() {
+                let count = document.querySelectorAll(".tf-mini-cart-item").length;
+                document.querySelector(".count-box").textContent = count;
+            }
         </script>
