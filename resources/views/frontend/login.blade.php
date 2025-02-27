@@ -82,7 +82,7 @@
                     <div class="right">
                         <h4 class="mb_8">New Customer</h4>
                         <p class="text-secondary">Be part of our growing family of new customers! Join us today and unlock a world of exclusive benefits, offers, and personalized experiences.</p>
-                        <a href="#" class="tf-btn btn-fill"><span class="text text-button">Register</span></a>
+                        <a href="{{ route('user.registration') }}" class="tf-btn btn-fill"><span class="text text-button">Register</span></a>
                     </div>
                 </div>
             </div>
