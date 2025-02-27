@@ -76,7 +76,7 @@
                                     <a href="#" class="footer-menu_item">Contact us</a>
                                 </li>
                                 <li class="text-caption-1">
-                                    <a href="#" class="footer-menu_item">Shipping & Delivery</a>
+                                    <a href="{{ route('shipping.delivery') }}" class="footer-menu_item">Shipping & Delivery</a>
                                 </li>
                                 <li class="text-caption-1">
                                     <a href="#" class="footer-menu_item">Return & Refunds</a>

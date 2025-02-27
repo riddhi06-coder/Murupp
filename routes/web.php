@@ -186,8 +186,11 @@ Route::group(['prefix'=> '', 'middleware'=>[\App\Http\Middleware\PreventBackHist
     Route::get('/reset-password/{token}', [ForgotPasswordController::class, 'reset_password'])->name('user.resetpassword');
     Route::post('/update-reset-password', [ForgotPasswordController::class, 'update_reset_password'])->name('user.updatepassword.reset');
 
-    //===== Logout Page
+    //===== Terms & Condition
     Route::get('/terms-and-conditions', [PoliciesController::class, 'terms'])->name('terms.condition');
+
+    //===== Shipping & Delivery
+    Route::get('/shipping-and-delivery', [PoliciesController::class, 'shipping'])->name('shipping.delivery');
 
 
     //===== Category Page

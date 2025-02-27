@@ -13,15 +13,22 @@ use Illuminate\Support\Facades\Session;
 use Carbon\Carbon;
 
 use App\Models\Terms;
+use App\Models\Shipping;
+
 
 
 class PoliciesController extends Controller
 {
     public function terms(Request $request)
     { 
-        $term = Terms::first(); 
         $terms = Terms::all();
-        return view('frontend.terms', compact('term','terms'));
+        return view('frontend.terms', compact('terms'));
+    }
+
+    public function shipping(Request $request)
+    { 
+        $terms = Shipping::all();
+        return view('frontend.shipping', compact('terms'));
     }
     
 }
