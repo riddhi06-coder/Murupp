@@ -146,7 +146,7 @@ class RegistrationController extends Controller
         return response()->json([
             'success' => true,
             'message' => 'Account created successfully! Please log in.',
-            'redirect' => route('checkout.details')
+            'redirect' => route('user.login')
         ]);
     }
     
