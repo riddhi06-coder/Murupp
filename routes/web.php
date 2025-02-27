@@ -26,6 +26,8 @@ use App\Http\Controllers\Backend\Category\TopsController;
 use App\Http\Controllers\Backend\Category\BottomsController;
 use App\Http\Controllers\Backend\Category\CoordsController;
 use App\Http\Controllers\Backend\Category\JacketsController;
+use App\Http\Controllers\Backend\Policy\TermsController;
+
 
 
 use App\Http\Controllers\Frontend\HomeController;
@@ -131,6 +133,10 @@ Route::resource('co-ords', CoordsController::class);
 
 // ==== Manage Blazers/Jackets in Category Page
 Route::resource('jackets', JacketsController::class);
+
+
+// ==== Manage Terms of Use
+Route::resource('terms', TermsController::class);
 
 
 // ==== Manage Add SEO Tags in SEO

@@ -129,6 +129,19 @@
                   </ul>
                 </li> -->
 
+                <li class="sidebar-list {{ request()->routeIs('terms.index') ? 'active' : '' }}">
+                  <i class="fa fa-thumb-tack"></i>
+                  <a class="sidebar-link" href="{{ route('terms.index') }}">
+                    <svg class="stroke-icon"> 
+                      <use href="{{ asset('admin/assets/svg/icon-sprite.svg#stroke-learning') }}"></use>
+                    </svg>
+                    <svg class="fill-icon">
+                      <use href="{{ asset('admin/assets/svg/icon-sprite.svg#stroke-learning') }}"></use>
+                    </svg>
+                    <span>Terms & Condition</span>
+                  </a>
+                </li>
+
 
                 <li class="sidebar-list {{ request()->routeIs('seo-tags.index') ? 'active' : '' }}">
                   <i class="fa fa-thumb-tack"></i>
