@@ -155,6 +155,19 @@
                   </a>
                 </li>
 
+                <li class="sidebar-list {{ request()->routeIs('return.index') ? 'active' : '' }}">
+                  <i class="fa fa-thumb-tack"></i>
+                  <a class="sidebar-link" href="{{ route('return.index') }}">
+                    <svg class="stroke-icon"> 
+                      <use href="{{ asset('admin/assets/svg/icon-sprite.svg#return-box') }}"></use>
+                    </svg>
+                    <svg class="fill-icon">
+                      <use href="{{ asset('admin/assets/svg/icon-sprite.svg#return-box') }}"></use>
+                    </svg>
+                    <span>Return & Exchange</span>
+                  </a>
+                </li>
+
 
 
                 <li class="sidebar-list {{ request()->routeIs('seo-tags.index') ? 'active' : '' }}">

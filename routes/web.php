@@ -28,6 +28,7 @@ use App\Http\Controllers\Backend\Category\CoordsController;
 use App\Http\Controllers\Backend\Category\JacketsController;
 use App\Http\Controllers\Backend\Policy\TermsController;
 use App\Http\Controllers\Backend\Policy\ShippingController;
+use App\Http\Controllers\Backend\Policy\ReturnController;
 
 
 use App\Http\Controllers\Frontend\HomeController;
@@ -139,8 +140,11 @@ Route::resource('jackets', JacketsController::class);
 // ==== Manage Terms of Use
 Route::resource('terms', TermsController::class);
 
-// ==== Manage Terms of Use
+// ==== Manage Shipping
 Route::resource('shipping', ShippingController::class);
+
+// ==== Manage Return
+Route::resource('return', ReturnController::class);
 
 
 
