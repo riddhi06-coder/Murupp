@@ -34,7 +34,7 @@ class CheckoutController extends Controller
                 $query->where('carts.session_id', $sessionId);
             }
         })
-        ->select('carts.*', 'product_details.product_name', 'product_details.slug') // Remove 'product_details.product_image'
+        ->select('carts.*', 'product_details.product_name', 'product_details.slug') 
         ->whereNull('carts.deleted_at')
         ->get();
 

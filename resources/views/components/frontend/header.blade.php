@@ -275,7 +275,7 @@
                                                 <i class="fa fa-inr" aria-hidden="true"></i> {{ number_format_indian($subtotal) }}
                                             </h5>
                                         </div>
-                                        <div class="tf-cart-checkbox">
+                                        <!-- <div class="tf-cart-checkbox">
                                             <div class="tf-checkbox-wrapp">
                                                 <input type="checkbox" id="CartDrawer-Form_agree" name="agree_checkbox">
                                                 <div><i class="icon-check"></i></div>
@@ -285,14 +285,35 @@
                                                 <a href="#" title="Terms of Service">Terms & Conditions</a>
                                             </label>
                                         </div>
-                                        
+                                   
                                         <div class="tf-mini-cart-view-checkout">
-                                            
-                                            <a href="{{ route('checkout.details')}}" class="tf-btn w-100 btn-fill radius-4 checkout-btn">
+                                            <a href="{{ route('checkout.details')}}" 
+                                            class="tf-btn w-100 btn-fill radius-4 checkout-btn {{ $cartItems->isEmpty() ? 'disabled' : '' }}" 
+                                            style="{{ $cartItems->isEmpty() ? 'pointer-events: none; opacity: 0.5;' : '' }}">
+                                                <span class="text">Check Out</span>
+                                            </a>
+                                        </div> -->
+
+                                        <div class="tf-cart-checkbox">
+                                            <div class="tf-checkbox-wrapp">
+                                                <input type="checkbox" id="agreeCheckbox" name="agree_checkbox">
+                                                <div><i class="icon-check"></i></div>
+                                            </div>
+                                            <label for="agreeCheckbox">
+                                                I agree with 
+                                                <a href="#" title="Terms of Service">Terms & Conditions</a>
+                                            </label>
+                                        </div>
+
+                                        <div class="tf-mini-cart-view-checkout">
+                                            <a href="{{ route('checkout.details')}}" 
+                                            class="tf-btn w-100 btn-fill radius-4 checkout-btn disabled" 
+                                            id="checkoutButton"
+                                            style="pointer-events: none; opacity: 0.5;">
                                                 <span class="text">Check Out</span>
                                             </a>
                                         </div>
-                                        
+
                                         <div class="text-center">
                                             <a class="link text-btn-uppercase" href="{{ route('frontend.index')}}">Or continue shopping</a>
                                         </div>
@@ -560,4 +581,28 @@
                 let count = document.querySelectorAll(".tf-mini-cart-item").length;
                 document.querySelector(".count-box").textContent = count;
             }
+        </script>
+
+        <!--- for checkout button validation--->
+        <script>
+            function updateCheckoutButton() {
+                let checkoutBtn = document.getElementById('checkoutButton');
+                let agreeCheckbox = document.getElementById('agreeCheckbox');
+                let cartIsEmpty = {{ $cartItems->isEmpty() ? 'true' : 'false' }}; // Check if cart is empty
+
+                if (!cartIsEmpty && agreeCheckbox.checked) {
+                    checkoutBtn.classList.remove('disabled');
+                    checkoutBtn.style.pointerEvents = "auto";
+                    checkoutBtn.style.opacity = "1";
+                } else {
+                    checkoutBtn.classList.add('disabled');
+                    checkoutBtn.style.pointerEvents = "none";
+                    checkoutBtn.style.opacity = "0.5";
+                }
+            }
+
+            document.getElementById('agreeCheckbox').addEventListener('change', updateCheckoutButton);
+
+            // Run function initially to ensure button is set correctly
+            updateCheckoutButton();
         </script>
