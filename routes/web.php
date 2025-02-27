@@ -29,6 +29,7 @@ use App\Http\Controllers\Backend\Category\JacketsController;
 use App\Http\Controllers\Backend\Policy\TermsController;
 use App\Http\Controllers\Backend\Policy\ShippingController;
 use App\Http\Controllers\Backend\Policy\ReturnController;
+use App\Http\Controllers\Backend\Policy\PrivacyController;
 
 
 use App\Http\Controllers\Frontend\HomeController;
@@ -146,7 +147,8 @@ Route::resource('shipping', ShippingController::class);
 // ==== Manage Return
 Route::resource('return', ReturnController::class);
 
-
+// ==== Manage Privacy Policy
+Route::resource('privacy', PrivacyController::class);
 
 // ==== Manage Add SEO Tags in SEO
 Route::resource('seo-tags', SEOController::class);
