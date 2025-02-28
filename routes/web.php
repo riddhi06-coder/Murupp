@@ -42,6 +42,7 @@ use App\Http\Controllers\Frontend\CheckoutController;
 use App\Http\Controllers\Frontend\RegistrationController;
 use App\Http\Controllers\Frontend\ForgotPasswordController;
 use App\Http\Controllers\Frontend\PoliciesController;
+use App\Http\Controllers\Frontend\PaymentController;
 
 // =========================================================================== Backend Routes
 
@@ -163,6 +164,9 @@ Route::group(['prefix'=> '', 'middleware'=>[\App\Http\Middleware\PreventBackHist
 
     // ==== Home
     Route::get('/', [HomeController::class, 'home'])->name('frontend.index');
+    
+    //===== Thankyou Page
+    Route::get('/thank-you', [HomeController::class, 'thankyou'])->name('thank.you');
 
     //===== customize request form
     Route::post('/contact-submission', [ProductController::class, 'send_contact'])->name('contact.send');
@@ -203,6 +207,10 @@ Route::group(['prefix'=> '', 'middleware'=>[\App\Http\Middleware\PreventBackHist
 
     //===== Privacy Policy
     Route::get('/privacy-policy', [PoliciesController::class, 'privacy'])->name('privacy.policy');
+
+    //========== Payment Integration URL
+    Route::post('/process-payment', [PaymentController::class, 'processPayment']);
+    Route::post('/verify-payment', [PaymentController::class, 'verifyPayment']);
 
     //===== Category Page
     Route::get('/category/{slug}', [CategoryDetailsController::class, 'category_details'])->name('product.category');

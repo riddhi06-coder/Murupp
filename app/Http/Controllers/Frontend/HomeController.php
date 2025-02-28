@@ -57,5 +57,14 @@ class HomeController extends Controller
     
         return view('frontend.index', compact('banners','newArrivals','collectionDetail','shopCategories','productPolicies','testimonials','socialMedia'));
     }
+
+
+
+        // === Thank you
+        public function thankyou(Request $request)
+        {
+         
+            return view('frontend.thankyou');
+        }
     
 }

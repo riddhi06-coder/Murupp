@@ -3,6 +3,8 @@
     
 <head>
     @include('components.frontend.head')
+    <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+    <meta name="csrf-token" content="{{ csrf_token() }}">
 </head>
 	   
 
@@ -111,60 +113,14 @@
                                 <h5 class="title">Choose payment Option:</h5>
                                 <form class="form-payment">
                                     <div class="payment-box" id="payment-box">
-                                        <div class="payment-item payment-choose-card active">
-                                            <label for="credit-card-method" class="payment-header" data-bs-toggle="collapse" data-bs-target="#credit-card-payment" aria-controls="credit-card-payment">
+                                        <div class="payment-item">
+                                            <label for="credit-card-method" class="payment-header" >
                                                 <input type="radio" name="payment-method" class="tf-check-rounded" id="credit-card-method" checked>
-                                                <span class="text-title">Credit Card</span>
+                                                <span class="text-title">Online Pyament</span>
                                             </label>
-                                            <div id="credit-card-payment" class="collapse show" data-bs-parent="#payment-box">
-                                                <div class="payment-body">
-                                                    <p class="text-secondary">Make your payment directly into our bank account. Your order will not be shipped until the funds have cleared in our account.</p>
-                                                    <div class="input-payment-box">
-                                                        <input type="text" placeholder="Name On Card*">
-                                                        <div class="ip-card">
-                                                            <input type="text" placeholder="Card Numbers*">
-                                                            <div class="list-card">
-                                                                <img src="images/payment/img-7.png" width="48" height="16" alt="card">
-                                                                <img src="images/payment/img-8.png" width="21" height="16" alt="card">
-                                                                <img src="images/payment/img-9.png" width="22" height="16" alt="card">
-                                                                <img src="images/payment/img-10.png" width="24" height="16" alt="card">
-                                                            </div>
-                                                        </div>
-                                                        <div class="grid-2">
-                                                            <input type="date" >
-                                                            <input type="text" placeholder="CVV*">
-                                                        </div>
-                                                    </div>
-                                                    <div class="check-save">
-                                                        <input type="checkbox" class="tf-check" id="check-card" checked>
-                                                        <label for="check-card">Save Card Details</label>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="payment-item">
-                                            <label for="delivery-method" class="payment-header collapsed" data-bs-toggle="collapse" data-bs-target="#delivery-payment" aria-controls="delivery-payment">
-                                                <input type="radio" name="payment-method" class="tf-check-rounded" id="delivery-method">
-                                                <span class="text-title">Cash on delivery</span>
-                                            </label>
-                                            <div id="delivery-payment" class="collapse" data-bs-parent="#payment-box"></div>
-                                        </div>
-                                        <div class="payment-item">
-                                            <label for="apple-method" class="payment-header collapsed" data-bs-toggle="collapse" data-bs-target="#apple-payment" aria-controls="apple-payment">
-                                                <input type="radio" name="payment-method" class="tf-check-rounded" id="apple-method">
-                                                <span class="text-title apple-pay-title"><img src="images/payment/applePay.png" alt="apple"> Apple Pay</span>
-                                            </label>
-                                            <div id="apple-payment" class="collapse" data-bs-parent="#payment-box"></div>
-                                        </div>
-                                        <div class="payment-item paypal-item">
-                                            <label for="paypal-method" class="payment-header collapsed" data-bs-toggle="collapse" data-bs-target="#paypal-method-payment" aria-controls="paypal-method-payment">
-                                                <input type="radio" name="payment-method" class="tf-check-rounded" id="paypal-method">
-                                                <span class="paypal-title"><img src="images/payment/paypal.png" alt="apple"></span>
-                                            </label>
-                                            <div id="paypal-method-payment" class="collapse" data-bs-parent="#payment-box"></div>
                                         </div>
                                     </div>
-                                    <button class="tf-btn btn-reset">Payment</button>
+                                    <button class="tf-btn btn-reset"  id="payNowButton">Pay Now</button>
                                 </form>
                             </div>
                         </div>
@@ -245,40 +201,106 @@
      
         <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
+
+    <!----- Guest User Login AJax---->
     <script>
+        $(document).ready(function () {
+            $("#loginForm").submit(function (event) {
+                event.preventDefault(); // Prevent page reload
 
-    $(document).ready(function () {
-        $("#loginForm").submit(function (event) {
-            event.preventDefault(); // Prevent page reload
-
-            $.ajax({
-                url: "{{ route('login.authenticate') }}", // Adjust route accordingly
-                method: "POST",
-                data: $(this).serialize(),
-                dataType: "json",
-                success: function (response) {
-                    if (response.success) {
-                        $("#loginMessage").html("<p style='color: green;'>" + response.message + "</p>");
-                        window.location.href = response.redirect; 
-                    } else {
-                        $("#loginMessage").html("<p style='color: red;'>" + response.message + "</p>");
+                $.ajax({
+                    url: "{{ route('login.authenticate') }}", // Adjust route accordingly
+                    method: "POST",
+                    data: $(this).serialize(),
+                    dataType: "json",
+                    success: function (response) {
+                        if (response.success) {
+                            $("#loginMessage").html("<p style='color: green;'>" + response.message + "</p>");
+                            window.location.href = response.redirect; 
+                        } else {
+                            $("#loginMessage").html("<p style='color: red;'>" + response.message + "</p>");
+                        }
+                    },
+                    error: function (xhr) {
+                        let errors = xhr.responseJSON.errors;
+                        let errorMsg = "<ul style='color: red;'>";
+                        $.each(errors, function (key, value) {
+                            errorMsg += "<li>" + value[0] + "</li>";
+                        });
+                        errorMsg += "</ul>";
+                        $("#loginMessage").html(errorMsg);
                     }
-                },
-                error: function (xhr) {
-                    let errors = xhr.responseJSON.errors;
-                    let errorMsg = "<ul style='color: red;'>";
-                    $.each(errors, function (key, value) {
-                        errorMsg += "<li>" + value[0] + "</li>";
-                    });
-                    errorMsg += "</ul>";
-                    $("#loginMessage").html(errorMsg);
-                }
+                });
             });
         });
-    });
-
     </script>
         
+    <!----- Payment Gateway Js---->
+    <script>
+        document.getElementById("payNowButton").addEventListener("click", async function (event) {
+            event.preventDefault(); 
+
+            let amount = {{ $total }}; 
+
+            if (amount <= 0) {
+                alert("Your cart is empty!");
+                return;
+            }
+
+            try {
+                // Create Razorpay Order
+                let response = await fetch("/process-payment", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                        "X-CSRF-TOKEN": document.querySelector('meta[name="csrf-token"]').getAttribute("content")
+                    },
+                    body: JSON.stringify({ amount: amount })
+                });
+
+                let data = await response.json();
+
+                if (!data.order_id) {
+                    alert("Error creating payment order!");
+                    return;
+                }
+
+                var options = {
+                    key: data.razorpay_key,
+                    amount: data.amount * 100, 
+                    currency: data.currency,
+                    order_id: data.order_id,
+                    name: "Your Store Name",
+                    description: "Purchase from your store",
+                    handler: async function (response) {
+                        let verifyResponse = await fetch("/verify-payment", {
+                            method: "POST",
+                            headers: {
+                                "Content-Type": "application/json",
+                                "X-CSRF-TOKEN": document.querySelector('meta[name="csrf-token"]').getAttribute("content")
+                            },
+                            body: JSON.stringify(response)
+                        });
+
+                        let verifyData = await verifyResponse.json();
+                        if (verifyData.status === "Payment Successful") {
+                            window.location.href = "/thank-you"; 
+                        }
+                    },
+                    theme: {
+                        color: "#3399cc"
+                    }
+                };
+                var rzp = new Razorpay(options);
+                rzp.open();
+
+            } catch (error) {
+                console.error("Payment Error:", error);
+            }
+        });
+    </script>
+
+
 </body>
 
 </html>
