@@ -10,6 +10,9 @@ use Illuminate\Support\Facades\Log;
 use Razorpay\Api\Api;
 use Session;
 use Exception;
+use Carbon\Carbon;
+
+use App\Models\Payment;
 
 
 class PaymentController extends Controller
@@ -21,9 +24,9 @@ class PaymentController extends Controller
 
         $orderData = [
             'receipt'         => 'test_order_' . rand(),
-            'amount'          => $request->amount * 100, // Convert to paise
+            'amount'          => $request->amount * 100, 
             'currency'        => 'INR',
-            'payment_capture' => 1 // Auto capture
+            'payment_capture' => 1 
         ];
 
         try {
@@ -61,12 +64,12 @@ class PaymentController extends Controller
     
             // Compare expected signature with received signature
             if ($expectedSignature === $request->razorpay_signature) {
-                // Payment is verified, update database if needed
-                DB::table('payments')->insert([
-                    'order_id' => $request->razorpay_order_id,
+                // Payment is verified, update database 
+                Payment::create([
+                    'order_id'   => $request->razorpay_order_id,
                     'payment_id' => $request->razorpay_payment_id,
-                    'status' => 'success',
-                    'created_at' => now()
+                    'status'     => 1,
+                    'created_at' => Carbon::now(),
                 ]);
     
                 return response()->json(['status' => 'Payment Successful']);

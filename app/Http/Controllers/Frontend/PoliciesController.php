@@ -15,6 +15,7 @@ use Carbon\Carbon;
 use App\Models\Terms;
 use App\Models\Shipping;
 use App\Models\Returns;
+use App\Models\Privacy;
 
 
 
@@ -40,7 +41,7 @@ class PoliciesController extends Controller
     
     public function privacy(Request $request)
     { 
-        $terms = Returns::all();
+        $terms = Privacy::all();
         return view('frontend.privacy', compact('terms'));
     }
 }
