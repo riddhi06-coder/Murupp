@@ -15,6 +15,7 @@ use App\Models\ProductPolicy;
 use App\Models\Testimonial;
 use App\Models\SocialMedia;
 use App\Models\Footer;
+use App\Models\Wishlist;
 
 
 class HomeController extends Controller
@@ -54,8 +55,11 @@ class HomeController extends Controller
                         )
                         ->orderBy('home_shop_category.created_at', 'asc')
                         ->get();
-    
-        return view('frontend.index', compact('banners','newArrivals','collectionDetail','shopCategories','productPolicies','testimonials','socialMedia'));
+
+        $user = auth()->user();
+        $wishlistItems = Wishlist::where('user_id', $user->id)->pluck('product_id');
+
+        return view('frontend.index', compact('banners','newArrivals','collectionDetail','shopCategories','productPolicies','testimonials','socialMedia','wishlistItems'));
     }
 
 
