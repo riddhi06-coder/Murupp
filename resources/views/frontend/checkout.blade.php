@@ -58,24 +58,47 @@
                                 <h5 class="title">Information</h5>
                                 <form class="info-box">
                                     <div class="grid-2">
-                                        <input type="text" placeholder="First Name*">
-                                        <input type="text" placeholder="Last Name*">
+                                        <div>
+                                            <input type="text" id="first-name" placeholder="First Name*">
+                                            <small class="error-message"></small>
+                                        </div>
+                                        <div>
+                                            <input type="text" id="last-name" placeholder="Last Name*">
+                                            <small class="error-message"></small>
+                                        </div>
                                     </div>
                                     <div class="grid-2">
-                                        <input type="text" placeholder="Email Address*">
-                                        <input type="text" placeholder="Phone Number*">
+                                        <div>
+                                            <input type="text" id="email" placeholder="Email Address*">
+                                            <small class="error-message"></small>
+                                        </div>
+                                        <div>
+                                            <input type="text" id="phone" placeholder="Phone Number*">
+                                            <small class="error-message"></small>
+                                        </div>
                                     </div>
-                                   
                                     <div class="grid-2">
-                                        <input type="text" placeholder="Street*">
-                                        <input type="text" placeholder="Town/City*">
+                                        <div>
+                                            <input type="text" id="street" placeholder="Street*">
+                                            <small class="error-message"></small>
+                                        </div>
+                                        <div>
+                                            <input type="text" id="city" placeholder="Town/City*">
+                                            <small class="error-message"></small>
+                                        </div>
                                     </div>
                                     <div class="grid-2">
-                                        <input type="text" placeholder="State*">
-                                        <input type="text" placeholder="Postal Code*">
+                                        <div>
+                                            <input type="text" id="state" placeholder="State*">
+                                            <small class="error-message"></small>
+                                        </div>
+                                        <div>
+                                            <input type="text" id="postal-code" placeholder="Postal Code*">
+                                            <small class="error-message"></small>
+                                        </div>
                                     </div>
                                     <div class="tf-select">
-                                    <input type="text" placeholder="Country*" value="India" readonly>
+                                        <input type="text" placeholder="Country*" value="India" readonly>
                                     </div>
                                     <textarea placeholder="Write note..."></textarea>
                                 </form>
@@ -217,6 +240,10 @@
         document.getElementById("payNowButton").addEventListener("click", function(e) {
             e.preventDefault();
 
+            if (!validateForm()) {
+                return; 
+            }
+
             let orderData = {
                 customer_info: {
                     first_name: document.querySelector("input[placeholder='First Name*']").value,
@@ -224,6 +251,7 @@
                     email: document.querySelector("input[placeholder='Email Address*']").value,
                     phone: document.querySelector("input[placeholder='Phone Number*']").value
                 },
+                address: `${document.getElementById("street").value}, ${document.getElementById("city").value}, ${document.getElementById("state").value} - ${document.getElementById("postal-code").value}, India`,
                 cart_items: []
             };
 
@@ -268,11 +296,18 @@
                                     razorpay_order_id: response.razorpay_order_id,
                                     razorpay_payment_id: response.razorpay_payment_id,
                                     razorpay_signature: response.razorpay_signature,
-                                    order_data: orderData // Send order details for verification
+                                    order_data: orderData 
                                 })
                             })
                             .then(response => response.json())
-                            .then(data => alert(data.status));
+                            .then(data => {
+                                if (data.status === 1) {
+                                    window.location.href = "{{ route('thank.you') }}";
+                                } else {
+                                    alert("Payment verification failed. Please try again.");
+                                }
+                            });
+
                         }
                     };
                     var rzp1 = new Razorpay(options);
@@ -281,81 +316,98 @@
             });
         });
 
+        // Form Validation Function
+        function validateForm() {
+            let isValid = true;
+
+            function showError(input, message) {
+                const errorElement = input.nextElementSibling;
+                errorElement.innerText = message;
+                errorElement.style.color = "red";
+                input.style.borderColor = "red";
+            }
+
+            function clearError(input) {
+                const errorElement = input.nextElementSibling;
+                errorElement.innerText = "";
+                input.style.borderColor = "";
+            }
+
+            const firstName = document.getElementById("first-name");
+            const lastName = document.getElementById("last-name");
+            const email = document.getElementById("email");
+            const phone = document.getElementById("phone");
+            const street = document.getElementById("street");
+            const city = document.getElementById("city");
+            const state = document.getElementById("state");
+            const postalCode = document.getElementById("postal-code");
+
+            const nameRegex = /^[A-Za-z\s]+$/;
+            if (!nameRegex.test(firstName.value.trim())) {
+                showError(firstName, "First Name should only contain letters.");
+                isValid = false;
+            } else {
+                clearError(firstName);
+            }
+
+            if (!nameRegex.test(lastName.value.trim())) {
+                showError(lastName, "Last Name should only contain letters.");
+                isValid = false;
+            } else {
+                clearError(lastName);
+            }
+
+            const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+            if (!emailRegex.test(email.value.trim())) {
+                showError(email, "Enter a valid Email Address.");
+                isValid = false;
+            } else {
+                clearError(email);
+            }
+
+            const phoneRegex = /^\d{10}$/;
+            if (!phoneRegex.test(phone.value.trim())) {
+                showError(phone, "Phone Number should be exactly 10 digits.");
+                isValid = false;
+            } else {
+                clearError(phone);
+            }
+
+            if (street.value.trim() === "") {
+                showError(street, "Street is required.");
+                isValid = false;
+            } else {
+                clearError(street);
+            }
+
+            if (city.value.trim() === "") {
+                showError(city, "Town/City is required.");
+                isValid = false;
+            } else {
+                clearError(city);
+            }
+
+            if (state.value.trim() === "") {
+                showError(state, "State is required.");
+                isValid = false;
+            } else {
+                clearError(state);
+            }
+
+            const postalCodeRegex = /^\d{6}$/;
+            if (!postalCodeRegex.test(postalCode.value.trim())) {
+                showError(postalCode, "Postal Code must be exactly 6 digits.");
+                isValid = false;
+            } else {
+                clearError(postalCode);
+            }
+
+            return isValid;
+        }
+
     </script>
 
 
-
-<script>
-document.addEventListener("DOMContentLoaded", function () {
-    const form = document.querySelector(".info-box");
-
-    form.addEventListener("submit", function (event) {
-        let isValid = true;
-        let errorMessages = [];
-
-        const firstName = form.querySelector("input[placeholder='First Name*']");
-        const lastName = form.querySelector("input[placeholder='Last Name*']");
-        const email = form.querySelector("input[placeholder='Email Address*']");
-        const phone = form.querySelector("input[placeholder='Phone Number*']");
-        const street = form.querySelector("input[placeholder='Street*']");
-        const city = form.querySelector("input[placeholder='Town/City*']");
-        const state = form.querySelector("input[placeholder='State*']");
-        const postalCode = form.querySelector("input[placeholder='Postal Code*']");
-
-        // Name validation (No numbers or special characters)
-        const nameRegex = /^[A-Za-z\s]+$/;
-        if (!nameRegex.test(firstName.value.trim())) {
-            isValid = false;
-            errorMessages.push("First Name should only contain letters.");
-        }
-        if (!nameRegex.test(lastName.value.trim())) {
-            isValid = false;
-            errorMessages.push("Last Name should only contain letters.");
-        }
-
-        // Email validation
-        const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
-        if (!emailRegex.test(email.value.trim())) {
-            isValid = false;
-            errorMessages.push("Enter a valid Email Address.");
-        }
-
-        // Phone number validation (10 digits only)
-        const phoneRegex = /^\d{10}$/;
-        if (!phoneRegex.test(phone.value.trim())) {
-            isValid = false;
-            errorMessages.push("Phone Number should be exactly 10 digits.");
-        }
-
-        // Required field validation
-        if (street.value.trim() === "") {
-            isValid = false;
-            errorMessages.push("Street is required.");
-        }
-        if (city.value.trim() === "") {
-            isValid = false;
-            errorMessages.push("Town/City is required.");
-        }
-        if (state.value.trim() === "") {
-            isValid = false;
-            errorMessages.push("State is required.");
-        }
-
-        // Postal Code validation (numeric and 6 digits)
-        const postalCodeRegex = /^\d{6}$/;
-        if (!postalCodeRegex.test(postalCode.value.trim())) {
-            isValid = false;
-            errorMessages.push("Postal Code must be exactly 6 digits.");
-        }
-
-        // Display error messages if any
-        if (!isValid) {
-            event.preventDefault();
-            alert(errorMessages.join("\n"));
-        }
-    });
-});
-</script>
 
 
 

@@ -13,11 +13,13 @@ class OrderDetail extends Model
     public $timestamps = false;
 
     protected $fillable = [
+        'user_id',
         'order_id',
         'payment_id',
         'customer_name',
         'customer_email',
         'customer_phone',
+        'address',
         'total_price',
         'status',
         'product_ids',

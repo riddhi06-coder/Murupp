@@ -59,6 +59,7 @@ class PaymentController extends Controller
             $status = ($expectedSignature === $request->razorpay_signature) ? 1 : 2;
     
             $orderData = $request->order_data; 
+
             if (!empty($orderData) && isset($orderData['cart_items'])) {
                 $productIds   = [];
                 $productNames = [];
@@ -82,6 +83,7 @@ class PaymentController extends Controller
             
                 try {
                     $order = OrderDetail::create([
+                        'user_id'       => Auth::check() ? Auth::id() : null,
                         'order_id'       => $request->razorpay_order_id,
                         'payment_id'     => $request->razorpay_payment_id,
                         'customer_name'  => $orderData['customer_info']['first_name'] . ' ' . $orderData['customer_info']['last_name'],
@@ -93,6 +95,7 @@ class PaymentController extends Controller
                         'product_names'  => json_encode($productNames, JSON_UNESCAPED_UNICODE),
                         'quantities'     => json_encode($quantities, JSON_UNESCAPED_UNICODE),
                         'prices'         => json_encode($prices, JSON_UNESCAPED_UNICODE),
+                        'address'        => $orderData['address'],
                         'created_at'     => Carbon::now(),
                         'created_by'     => Auth::check() ? Auth::id() : null,
                     ]);
