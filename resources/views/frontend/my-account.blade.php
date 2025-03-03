@@ -43,15 +43,17 @@
                     <div class="wrap-sidebar-account">
                         <div class="sidebar-account">
                             <div class="account-avatar">
-                                <div class="image">
-                                    <img src="{{ asset('frontend/assets/images/user-account.png') }}" alt="">
-                                </div>
+                            <div class="image">
+                                <img src="{{ $user->image ? asset('uploads/profile_pictures/' . $user->image) : asset('frontend/assets/images/user-account.png') }}" 
+                                    alt="Profile Picture">
+                            </div>
+
                                 @if(Auth::check())
-                                    <h6 class="mb_4">{{ $user->name }}</h6>
+                                    <h6 class="mb_4">{{ $user->name }} {{ $user->last_name }}</h6>
                                     <div class="body-text-1">{{ $user->email }}</div>
                                 @endif
                             </div>
-                            <ul class="my-account-nav">
+                            <ul href="{{ route('my.account') }}" class="my-account-nav">
                                 <li>
                                     <span class="my-account-nav-item active">
                                         <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -62,7 +64,7 @@
                                     </span>
                                 </li>
                                 <li>
-                                    <a href="my-account-orders.html" class="my-account-nav-item">
+                                    <a href="{{ route('my.account.orders') }}" class="my-account-nav-item">
                                         <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                                             <path d="M16.5078 10.8734V6.36686C16.5078 5.17166 16.033 4.02541 15.1879 3.18028C14.3428 2.33514 13.1965 1.86035 12.0013 1.86035C10.8061 1.86035 9.65985 2.33514 8.81472 3.18028C7.96958 4.02541 7.49479 5.17166 7.49479 6.36686V10.8734M4.11491 8.62012H19.8877L21.0143 22.1396H2.98828L4.11491 8.62012Z" stroke="#181818" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
                                         </svg>
@@ -70,7 +72,7 @@
                                     </a>
                                 </li>
                                 <li>
-                                    <a href="login.html" class="my-account-nav-item">
+                                    <a href="{{ route('user.logout') }}" class="my-account-nav-item">
                                         <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                                             <path d="M9 21H5C4.46957 21 3.96086 20.7893 3.58579 20.4142C3.21071 20.0391 3 19.5304 3 19V5C3 4.46957 3.21071 3.96086 3.58579 3.58579C3.96086 3.21071 4.46957 3 5 3H9" stroke="#181818" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
                                             <path d="M16 17L21 12L16 7" stroke="#181818" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
@@ -84,7 +86,7 @@
                     </div>
                     <div class="my-account-content">
                         <div class="account-details">
-                        <form action="{{ route('user.account.update') }}" method="POST" class="form-account-details form-has-password">
+                        <form action="{{ route('user.account.update') }}" method="POST" class="form-account-details form-has-password" enctype="multipart/form-data">
                             @csrf
 
                             <div class="account-info">
@@ -107,7 +109,33 @@
                                 </div>
                                 <div class="tf-select">
                                     <input type="text" class="text-title" name="country" value="India" readonly>
+                                </div><br>
+
+                                <div class="cols mb_20">
+                                    <fieldset style="border: 1px solid #ccc; padding: 10px; border-radius: 5px; position: relative;">
+                                        <label for="profile_picture" class="profile-label" style="font-weight: 600;">Upload Profile Picture</label>
+                                        <input type="file" name="profile_picture" id="profile_picture" accept="image/*" onchange="previewProfileImage()" 
+                                            style="display: block; width: 100%; padding: 5px; border: 1px solid #ccc; border-radius: 5px; margin-top: 5px;">
+                                        
+                                        <!-- Error Message -->
+                                        <div class="invalid-feedback" id="profile_error" style="color: red; font-size: 12px; margin-top: 5px;"></div>
+                                        
+                                        <!-- Info Text Below Input -->
+                                        <small class="text-secondary" style="display: block; margin-top: 5px;">
+                                            <b>Note: The file size should be less than 2MB.</b>
+                                        </small>
+                                        <small class="text-secondary" style="display: block;">
+                                            <b>Note: Only images (.jpg, .jpeg, .png, .webp) are allowed.</b>
+                                        </small>
+
+                                        <!-- Profile Picture Preview -->
+                                        <div class="preview-container" style="margin-top: 10px; text-align: center;">
+                                            <img id="profilePreview" src="#" alt="Profile Preview" 
+                                                style="display: none; max-width: 100px; border-radius: 50%; border: 2px solid #ccc; padding: 5px;">
+                                        </div>
+                                    </fieldset>
                                 </div>
+
                             </div>
 
 
@@ -229,6 +257,50 @@
                 }
             });
         </script>
+
+        <!---- Image PReiview and validation--->
+        <script>
+            function previewProfileImage() {
+                const input = document.getElementById("profile_picture");
+                const preview = document.getElementById("profilePreview");
+                const errorDiv = document.getElementById("profile_error");
+
+                // Reset error message
+                errorDiv.textContent = "";
+
+                // Check if a file is selected
+                if (input.files && input.files[0]) {
+                    const file = input.files[0];
+                    const fileSize = file.size / 1024 / 1024; // Convert bytes to MB
+
+                    // Validate file size (2MB max)
+                    if (fileSize > 2) {
+                        errorDiv.textContent = "File size should be less than 2MB.";
+                        input.value = "";
+                        preview.style.display = "none";
+                        return;
+                    }
+
+                    // Validate file type
+                    const allowedExtensions = ["image/jpeg", "image/png", "image/webp"];
+                    if (!allowedExtensions.includes(file.type)) {
+                        errorDiv.textContent = "Only JPG, JPEG, PNG, and WEBP files are allowed.";
+                        input.value = "";
+                        preview.style.display = "none";
+                        return;
+                    }
+
+                    // Preview image
+                    const reader = new FileReader();
+                    reader.onload = function (e) {
+                        preview.src = e.target.result;
+                        preview.style.display = "block";
+                    };
+                    reader.readAsDataURL(file);
+                }
+            }
+        </script>
+
 
 </body>
 

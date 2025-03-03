@@ -217,6 +217,11 @@ Route::group(['prefix'=> '', 'middleware'=>[\App\Http\Middleware\PreventBackHist
     Route::get('/my-account', [AccountController::class, 'account'])->name('my.account');
     Route::post('/my-account/update', [AccountController::class, 'updateAccount'])->name('user.account.update');
 
+    //===== My account orders
+    Route::get('/my-account-orders', [AccountController::class, 'account_orders'])->name('my.account.orders');
+    // Route::post('/my-account/update', [AccountController::class, 'updateAccount'])->name('user.account.update');
+    
+
     //===== Category Page
     Route::get('/category/{slug}', [CategoryDetailsController::class, 'category_details'])->name('product.category');
 

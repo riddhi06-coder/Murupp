@@ -23,9 +23,10 @@
             return view('frontend.my-account', compact('user'));
         }
 
-
+        // === My account update
         public function updateAccount(Request $request)
         {
+            // dd($request);
             $user = Auth::user();
     
             $request->validate([
@@ -35,6 +36,7 @@
                 'phone' => 'nullable|string|max:20',
                 'current_password' => 'nullable|string|min:8',
                 'new_password' => 'nullable|string|min:8|confirmed',
+                'profile_picture' => 'nullable|mimes:jpg,jpeg,png,webp|max:2048',
             ], [
                 'first_name.required' => 'First name is required.',
                 'first_name.string' => 'First name must be a valid string.',
@@ -54,6 +56,9 @@
         
                 'new_password.min' => 'New password must be at least 8 characters.',
                 'new_password.confirmed' => 'New password and confirmation do not match.',
+
+                'profile_picture.mimes' => 'Only JPG, JPEG, PNG, and WEBP formats are allowed.',
+                'profile_picture.max' => 'Profile picture must not exceed 2MB.',
             ]);
     
             $user->name = $request->first_name;
@@ -67,10 +72,46 @@
                 }
                 $user->password = Hash::make($request->new_password);
             }
-    
+
+            // Handle Profile Picture Upload
+            if ($request->hasFile('profile_picture')) {
+                $profileImage = $request->file('profile_picture');
+                $profileImageName = time() . '.' . $profileImage->getClientOriginalExtension();
+                
+                // Move the uploaded file to public/uploads/profile_pictures
+                $profileImage->move(public_path('uploads/profile_pictures'), $profileImageName);
+
+                // Delete old profile picture if exists
+                if (!empty($user->image)) {  // Ensure old image exists
+                    $oldImagePath = public_path('uploads/profile_pictures/' . $user->image);
+                    if (file_exists($oldImagePath)) {
+                        unlink($oldImagePath);
+                    }
+                }
+
+                // Save new profile picture path to the database
+                $user->image = $profileImageName;
+            }
+
             $user->save();
     
             return back()->with('message', 'Account updated!!');
         }
+
+
+       // === My Account Orders
+        public function account_orders(Request $request)
+        {
+            $user = Auth::user();
+
+            // Fetch orders for the logged-in user
+            $orders = DB::table('order_details')
+                ->where('user_id', $user->id)
+                ->orderBy('created_at', 'desc')
+                ->get();
+
+            return view('frontend.my-account-orders', compact('user', 'orders'));
+        }
+
         
     }
