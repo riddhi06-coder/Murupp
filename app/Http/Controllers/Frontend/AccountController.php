@@ -100,7 +100,7 @@
         }
 
 
-       // === My Account Orders
+        // === My Account Orders
         public function account_orders(Request $request)
         {
             $user = Auth::user();
@@ -114,7 +114,7 @@
             return view('frontend.my-account-orders', compact('user', 'orders'));
         }
 
-
+        // === My Account Order Detailed Page
         public function account_orders_details($order_id)
         {
             $order = OrderDetail::where('order_id', $order_id)->firstOrFail();

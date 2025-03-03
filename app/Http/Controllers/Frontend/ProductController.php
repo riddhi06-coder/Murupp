@@ -16,6 +16,7 @@ use App\Models\DressesDetails;
 use App\Models\ProductSizes;
 use App\Models\ProductFabrics;
 use App\Models\FabricsComposition;
+use App\Models\Wishlist;
 
 
 class ProductController extends Controller
@@ -117,6 +118,26 @@ class ProductController extends Controller
         return back()->with('success', 'Your message has been sent successfully!');
     }
     
+    // Wishlist Pages
+    public function wish_list(Request $request)
+    {
+        $userId = auth()->id(); // Get logged-in user's ID
+
+        // Fetch wishlist items for the user
+        $wishlistItems = DB::table('wishlists')
+            ->where('user_id', $userId)
+            ->get();
+
+        // Fetch product details for the wishlist items
+        $productIds = $wishlistItems->pluck('product_id')->toArray();
+
+        $products = DB::table('product_details')
+            ->whereIn('id', $productIds)
+            ->get();
+        // dd($products);
+        return view('frontend.wishlist', compact('products'));
+    }
+
     
 
 }

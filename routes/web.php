@@ -223,6 +223,10 @@ Route::group(['prefix'=> '', 'middleware'=>[\App\Http\Middleware\PreventBackHist
     //===== My account orders details
     Route::get('/my-account-order-details/{order_id}', [AccountController::class, 'account_orders_details'])->name('my.account.order.details');
 
+    //===== Wishlist Page
+    Route::get('/wish-list', [ProductController::class, 'wish_list'])->name('wish.list');
+
+
     //===== Category Page
     Route::get('/category/{slug}', [CategoryDetailsController::class, 'category_details'])->name('product.category');
 
