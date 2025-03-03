@@ -54,54 +54,71 @@
                             
                                 </div>
                             @endif
+                            @php
+                                use App\Models\OrderDetail;
+
+                                $user = Auth::user();
+                                $order = OrderDetail::where('user_id', $user->id ?? null)->latest()->first();
+                            @endphp
                             <div class="wrap">
                                 <h5 class="title">Information</h5>
                                 <form class="info-box">
-                                    <div class="grid-2">
-                                        <div>
-                                            <input type="text" id="first-name" placeholder="First Name*">
-                                            <small class="error-message"></small>
-                                        </div>
-                                        <div>
-                                            <input type="text" id="last-name" placeholder="Last Name*">
-                                            <small class="error-message"></small>
-                                        </div>
+                                <div class="grid-2">
+                                    <input type="hidden" id="full-address" value="{{ $order->address ?? '' }}">
+
+                                    <div>
+                                        <input type="text" id="first-name" placeholder="First Name*" 
+                                            value="{{ old('first_name', $order->customer_name ? explode(' ', $order->customer_name)[0] : ($user->first_name ?? '')) }}">
+                                        <small class="error-message"></small>
                                     </div>
-                                    <div class="grid-2">
-                                        <div>
-                                            <input type="text" id="email" placeholder="Email Address*">
-                                            <small class="error-message"></small>
-                                        </div>
-                                        <div>
-                                            <input type="text" id="phone" placeholder="Phone Number*">
-                                            <small class="error-message"></small>
-                                        </div>
+                                    <div>
+                                        <input type="text" id="last-name" placeholder="Last Name*" 
+                                            value="{{ old('last_name', $order->customer_name ? explode(' ', $order->customer_name)[1] ?? '' : ($user->last_name ?? '')) }}">
+                                        <small class="error-message"></small>
                                     </div>
-                                    <div class="grid-2">
-                                        <div>
-                                            <input type="text" id="street" placeholder="Street*">
-                                            <small class="error-message"></small>
-                                        </div>
-                                        <div>
-                                            <input type="text" id="city" placeholder="Town/City*">
-                                            <small class="error-message"></small>
-                                        </div>
+                                </div>
+                                <div class="grid-2">
+                                    <div>
+                                        <input type="text" id="email" placeholder="Email Address*" 
+                                            value="{{ old('email', $order->customer_email ?? $user->email ?? '') }}">
+                                        <small class="error-message"></small>
                                     </div>
-                                    <div class="grid-2">
-                                        <div>
-                                            <input type="text" id="state" placeholder="State*">
-                                            <small class="error-message"></small>
-                                        </div>
-                                        <div>
-                                            <input type="text" id="postal-code" placeholder="Postal Code*">
-                                            <small class="error-message"></small>
-                                        </div>
+                                    <div>
+                                        <input type="text" id="phone" placeholder="Phone Number*" 
+                                            value="{{ old('phone', $order->customer_phone ?? $user->phone ?? '') }}">
+                                        <small class="error-message"></small>
                                     </div>
-                                    <div class="tf-select">
-                                        <input type="text" placeholder="Country*" value="India" readonly>
+                                </div>
+                                <div class="grid-2">
+                                    <div>
+                                        <input type="text" id="street" placeholder="Street*" 
+                                            value="{{ old('street', $order->street ?? '') }}">
+                                        <small class="error-message"></small>
                                     </div>
-                                    <textarea placeholder="Write note..."></textarea>
-                                </form>
+                                    <div>
+                                        <input type="text" id="city" placeholder="Town/City*" 
+                                            value="{{ old('city', $order->city ?? '') }}">
+                                        <small class="error-message"></small>
+                                    </div>
+                                </div>
+                                <div class="grid-2">
+                                    <div>
+                                        <input type="text" id="state" placeholder="State*" 
+                                            value="{{ old('state', $order->state ?? '') }}">
+                                        <small class="error-message"></small>
+                                    </div>
+                                    <div>
+                                        <input type="text" id="postal-code" placeholder="Postal Code*" 
+                                            value="{{ old('postal_code', $order->postal_code ?? '') }}">
+                                        <small class="error-message"></small>
+                                    </div>
+                                </div>
+                                <div class="tf-select">
+                                    <input type="text" placeholder="Country*" value="India" readonly>
+                                </div>
+                                <textarea placeholder="Write note...">{{ old('note', $order->note ?? '') }}</textarea>
+                            </form>
+
                             </div>
                             <div class="wrap">
                                 <h5 class="title">Choose payment Option:</h5>
@@ -235,7 +252,7 @@
         });
     </script>
 
-    <!----- heckput and Payment form details and integration---->
+    <!----- checkput and Payment form details and integration---->
     <script>
         document.getElementById("payNowButton").addEventListener("click", function(e) {
             e.preventDefault();
@@ -404,6 +421,24 @@
 
             return isValid;
         }
+
+    </script>
+
+    <!-----Auto fetch the user details for checkout---->
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            let address = document.getElementById("full-address").value;
+            if (address) {
+                let addressParts = address.split(", ");
+                
+                document.getElementById("street").value = addressParts[0] || "";
+                document.getElementById("city").value = addressParts[1] || "";
+
+                let stateAndPostal = addressParts[2]?.split(" - "); // Correct handling of state and postal
+                document.getElementById("state").value = stateAndPostal?.[0] || "";
+                document.getElementById("postal-code").value = stateAndPostal?.[1] || "";
+            }
+        });
 
     </script>
 
