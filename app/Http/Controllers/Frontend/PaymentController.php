@@ -21,11 +21,9 @@ class PaymentController extends Controller
 {
 
     public function processPayment(Request $request) {
-        // dd($request);
-        $api = new \Razorpay\Api\Api(env('RAZORPAY_KEY'), env('RAZORPAY_SECRET'));
-        $api->setBaseUrl('https://api.razorpay.com/v1/');
-        // dd($api->getBaseUrl());
 
+        $api = new Api(env('RAZORPAY_KEY'), env('RAZORPAY_SECRET'));
+    
         $orderData = [
             'receipt'         => 'test_order_' . rand(),
             'amount'          => intval(str_replace(',', '', $request->amount)) * 100,
