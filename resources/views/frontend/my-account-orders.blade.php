@@ -167,38 +167,152 @@
                     <div class="my-account-content">
                         <div class="account-orders">
                             <div class="wrap-account-order">
-                            <table id="ordersTable" class="display nowrap table table-striped" style="width:100%">
+                                <table id="ordersTable" class="display nowrap table table-striped" style="width:100%">
+                                    <thead>
+                                        <tr>
+                                            <th>Order</th>
+                                            <th>Date</th>
+                                            <!-- <th>Status</th> -->
+                                            <th>Total</th>
+                                            <th>Actions</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach ($orders as $order)
+                                            <tr>
+                                                <td>{{ $order->order_id }}</td>
+                                                <td>{{ \Carbon\Carbon::parse($order->created_at)->format('d F, Y') }}</td>
+                                                <!-- <td>{{ ucfirst($order->status) }}</td> -->
+                                                <td>
+                                                    <i class="fa fa-inr" aria-hidden="true"></i> {{ number_format($order->total_price) }} for {{ collect(json_decode($order->quantities, true))->sum() }}
+                                                    items
+                                                </td>
+                                                <td>
+                                                    <a href="{{ route('my.account.order.details', ['order_id' => $order->order_id]) }}" class="tf-btn btn-fill radius-4">
+                                                        <span class="text">View</span>
+                                                    </a>
+                                                </td>
+
+                                            </tr>
+                                        @endforeach
+                                    </tbody>
+                                </table>
+
+
+                                <!-- <div class="accordion" id="ordersAccordion">
+                                    @foreach ($orders as $index => $order)
+                                        <div class="accordion-item">
+                                            <h2 class="accordion-header" id="heading{{ $index }}">
+                                                <button class="accordion-button {{ $index == 0 ? '' : 'collapsed' }}" type="button" data-bs-toggle="collapse" data-bs-target="#collapse{{ $index }}" aria-expanded="{{ $index == 0 ? 'true' : 'false' }}" aria-controls="collapse{{ $index }}">
+                                                    <strong>Order #{{ $order->order_id }}</strong> - Placed on {{ \Carbon\Carbon::parse($order->created_at)->format('d F, Y') }} - Status: <span style="text-transform: capitalize;">{{ $order->status }}</span>
+                                                </button>
+                                            </h2>
+                                            <div id="collapse{{ $index }}" class="accordion-collapse collapse {{ $index == 0 ? 'show' : '' }}" aria-labelledby="heading{{ $index }}" data-bs-parent="#ordersAccordion">
+                                                <div class="accordion-body">
+                                                    <table class="table table-bordered">
+                                                        <thead>
+                                                            <tr class="table-light">
+                                                                <th>Product Name</th>
+                                                                <th class="text-center">Quantity</th>
+                                                                <th class="text-center">Price</th>
+                                                                <th class="text-center">Actions</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                            @php
+                                                                $productNames = json_decode($order->product_names, true);
+                                                                $quantities = json_decode($order->quantities, true);
+                                                                $prices = json_decode($order->prices, true);
+                                                            @endphp
+                                                            @foreach ($productNames as $index => $productName)
+                                                                <tr>
+                                                                    <td>{{ $productName }}</td>
+                                                                    <td class="text-center">{{ $quantities[$index] }} pcs</td>
+                                                                    <td class="text-center">
+                                                                        <i class="fa fa-inr" aria-hidden="true"></i> {{ number_format($prices[$index], 2) }}
+                                                                    </td>
+                                                                    <td class="text-center">
+                                                                        <a href="{{ route('my.account.order.details', ['order_id' => $order->order_id]) }}" class="btn btn-primary btn-sm">
+                                                                            View
+                                                                        </a>
+                                                                    </td>
+                                                                </tr>
+                                                            @endforeach
+                                                            <tr>
+                                                                <td colspan="2" class="text-end fw-bold">Total:</td>
+                                                                <td class="text-center fw-bold">
+                                                                    <i class="fa fa-inr" aria-hidden="true"></i> {{ number_format($order->total_price, 2) }}
+                                                                </td>
+                                                                <td></td>
+                                                            </tr>
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    @endforeach
+                                </div> -->
+
+
+                                <!-- <table id="ordersTable" class="display nowrap table table-striped" style="width:100%">
                                 <thead>
                                     <tr>
-                                        <th>Order</th>
-                                        <th>Date</th>
-                                        <th>Status</th>
+                                        <th>Order ID</th>
+                                        <th>Products</th>
                                         <th>Total</th>
-                                        <th>Actions</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     @foreach ($orders as $order)
                                         <tr>
-                                            <td>{{ $order->order_id }}</td>
-                                            <td>{{ \Carbon\Carbon::parse($order->created_at)->format('d F, Y') }}</td>
-                                            <td>{{ ucfirst($order->status) }}</td>
-                                            <td>
-                                                <i class="fa fa-inr" aria-hidden="true"></i> {{ number_format($order->total_price) }} for {{ collect(json_decode($order->quantities, true))->sum() }}
-                                                items
+                                            <td colspan="3"><strong>Order #{{ $order->order_id }}</strong> - Placed on {{ \Carbon\Carbon::parse($order->created_at)->format('d F, Y') }} - Status: <span style="text-transform: capitalize;">{{ $order->status }}</span></td>
+                                        </tr>
+                                        <tr>
+                                            <td colspan="3">
+                                                <table style="width:100%; border-collapse: collapse; margin-top: 5px;">
+                                                    <thead>
+                                                        <tr style="background-color: #f4f4f4;">
+                                                            <th style="border: 1px solid #ddd; padding: 8px; text-align: left;">Product Name</th>
+                                                            <th style="border: 1px solid #ddd; padding: 8px; text-align: center;">Quantity</th>
+                                                            <th style="border: 1px solid #ddd; padding: 8px; text-align: center;">Price</th>
+                                                            <th style="border: 1px solid #ddd; padding: 8px; text-align: center;">Actions</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        @php
+                                                            $productNames = json_decode($order->product_names, true);
+                                                            $quantities = json_decode($order->quantities, true);
+                                                            $prices = json_decode($order->prices, true);
+                                                        @endphp
+                                                        @foreach ($productNames as $index => $productName)
+                                                            <tr>
+                                                                <td style="border: 1px solid #ddd; padding: 8px;">{{ $productName }}</td>
+                                                                <td style="border: 1px solid #ddd; padding: 8px; text-align: center;">{{ $quantities[$index] }} pcs</td>
+                                                                <td style="border: 1px solid #ddd; padding: 8px; text-align: center;">
+                                                                    <i class="fa fa-inr" aria-hidden="true"></i> {{ number_format($prices[$index], 2) }}
+                                                                </td>
+                                                                <td style="border: 1px solid #ddd; padding: 8px; text-align: center;">
+                                                                    <a href="{{ route('my.account.order.details', ['order_id' => $order->order_id]) }}" class="tf-btn btn-fill radius-4">
+                                                                        <span class="text">View</span>
+                                                                    </a>
+                                                                </td>
+                                                            </tr>
+                                                        @endforeach
+                                                        <tr>
+                                                            <td colspan="2" style="border-top: 2px solid #ddd; text-align: right; padding: 10px; font-weight: bold;">Total:</td>
+                                                            <td style="border-top: 2px solid #ddd; text-align: center; padding: 10px; font-weight: bold;">
+                                                                <i class="fa fa-inr" aria-hidden="true"></i> {{ number_format($order->total_price, 2) }}
+                                                            </td>
+                                                            <td style="border-top: 2px solid #ddd;"></td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
                                             </td>
-                                            <td>
-                                                <a href="{{ route('my.account.order.details', ['order_id' => $order->order_id]) }}" class="tf-btn btn-fill radius-4">
-                                                    <span class="text">View</span>
-                                                </a>
-                                            </td>
-
                                         </tr>
                                     @endforeach
                                 </tbody>
-                            </table>
+                                </table> -->
 
-                          
                             </div>
                         </div>
                     </div>
