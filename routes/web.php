@@ -43,6 +43,7 @@ use App\Http\Controllers\Frontend\RegistrationController;
 use App\Http\Controllers\Frontend\ForgotPasswordController;
 use App\Http\Controllers\Frontend\PoliciesController;
 use App\Http\Controllers\Frontend\PaymentController;
+use App\Http\Controllers\Frontend\AccountController;
 
 // =========================================================================== Backend Routes
 
@@ -211,6 +212,10 @@ Route::group(['prefix'=> '', 'middleware'=>[\App\Http\Middleware\PreventBackHist
     //========== Payment Integration URL
     Route::post('/process-payment', [PaymentController::class, 'processPayment'])->name('payment.process');
     Route::post('/verify-payment', [PaymentController::class, 'verifyPayment'])->name('payment.verify');
+
+    //===== My account
+    Route::get('/my-account', [AccountController::class, 'account'])->name('my.account');
+    Route::post('/my-account/update', [AccountController::class, 'updateAccount'])->name('user.account.update');
 
     //===== Category Page
     Route::get('/category/{slug}', [CategoryDetailsController::class, 'category_details'])->name('product.category');

@@ -114,7 +114,7 @@
                                             </p>
 
 
-                                            <a href="#" class="tf-btn btn-reset btn-small">My Account</a>
+                                            <a href="{{ route('my.account') }}" class="tf-btn btn-reset btn-small">My Account</a>
                                             <a href="{{ route('user.forgotpassword') }}" class="tf-btn btn-reset btn-small">Forgot Password?</a>
                                             <a href="#" class="tf-btn btn-reset btn-small">Support</a>
                                             <a href="{{ route('user.logout') }}" class="tf-btn btn-reset btn-small">Logout</a>
@@ -444,9 +444,9 @@
                             <div class="dropdown-menu dropdown-menu-end">
                                 @if(Auth::check())
                                     <p class="text-center text-secondary-2" style="font-size: 18px; font-weight: bold;">
-                                        <!-- Welcome, <strong>{{ Auth::user()->name }}</strong> -->
+                                        Welcome, <strong>{{ Auth::user()->name }}</strong>
                                     </p>
-                                    <a href="#" class="dropdown-item">My Account</a>
+                                    <a href="{{ route('my.account') }}" class="dropdown-item">My Account</a>
                                     <a href="{{ route('user.forgotpassword') }}" class="dropdown-item">Forgot Password?</a>
                                     <a href="#" class="dropdown-item">Support</a>
                                     <a href="{{ route('user.logout') }}" class="dropdown-item">Logout</a>
