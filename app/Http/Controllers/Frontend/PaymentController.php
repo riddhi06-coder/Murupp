@@ -98,19 +98,23 @@ class PaymentController extends Controller
                     ]);
             
                     \Log::info("Order Inserted Successfully: ", ['order_id' => $order->id]);
+
+                    if (Auth::check()) {
+                        DB::table('carts')
+                            ->where('user_id', Auth::id())
+                            ->whereIn('product_id', $productIds) 
+                            ->delete();
+                
+                        \Log::info("Cart items deleted for user: " . Auth::id());
+                    }
+
+
                 } catch (\Exception $e) {
                     \Log::error("Order Insert Error: " . $e->getMessage());
                     dd("Error: " . $e->getMessage());
                 }
             }
             
-            
-            
-            
-            
-            
-            
-    
             return response()->json(['status' => $status]);
     
         } catch (\Exception $e) {

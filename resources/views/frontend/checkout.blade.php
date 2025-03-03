@@ -65,46 +65,17 @@
                                         <input type="text" placeholder="Email Address*">
                                         <input type="text" placeholder="Phone Number*">
                                     </div>
-                                    <div class="tf-select">
-                                        <select class="text-title" name="address[country]" data-default="">
-                                            <option selected value="Choose Country/Region" data-provinces="[]">Choose Country/Region</option>
-                                            <option value="United States">United States</option>
-                                            <option value="Australia">Australia</option>
-                                            <option value="Austria">Austria</option>
-                                            <option value="Belgium">Belgium</option>
-                                            <option value="Canada">Canada</option>
-                                            <option value="Czech Republic">Czechia</option>
-                                            <option value="Denmark">Denmark</option>
-                                            <option value="Finland">Finland</option>
-                                            <option value="France">France</option>
-                                            <option value="Germany">Germany</option>
-                                            <option value="Vietnam">Vietnam</option>
-                                        </select>
-                                    </div>
+                                   
                                     <div class="grid-2">
+                                        <input type="text" placeholder="Street*">
                                         <input type="text" placeholder="Town/City*">
-                                        <input type="text" placeholder="Street,...">
                                     </div>
                                     <div class="grid-2">
-                                        <div class="tf-select">
-                                            <select class="text-title">
-                                                <option selected value="Choose State">Choose State</option>
-                                                <option value="California">California</option>
-                                                <option value="Alabama">Alabam</option>
-                                                <option value="Alaska">Alaska</option>
-                                                <option value="Arizona">Arizona</option>
-                                                <option value="Arkansas">Arkansas</option>
-                                                <option value="Florida">Florida</option>
-                                                <option value="Georgia">Georgia</option>
-                                                <option value="Hawaii">Hawaii</option>
-                                                <option value="Washington">Washington</option>
-                                                <option value="Texas">Texas</option>
-                                                <option value="Iowa">Iowa</option>
-                                                <option value="Nevada">Nevada</option>
-                                                <option value="Illinois">Illinois</option>
-                                            </select>
-                                        </div>
+                                        <input type="text" placeholder="State*">
                                         <input type="text" placeholder="Postal Code*">
+                                    </div>
+                                    <div class="tf-select">
+                                    <input type="text" placeholder="Country*" value="India" readonly>
                                     </div>
                                     <textarea placeholder="Write note..."></textarea>
                                 </form>
@@ -311,6 +282,81 @@
         });
 
     </script>
+
+
+
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+    const form = document.querySelector(".info-box");
+
+    form.addEventListener("submit", function (event) {
+        let isValid = true;
+        let errorMessages = [];
+
+        const firstName = form.querySelector("input[placeholder='First Name*']");
+        const lastName = form.querySelector("input[placeholder='Last Name*']");
+        const email = form.querySelector("input[placeholder='Email Address*']");
+        const phone = form.querySelector("input[placeholder='Phone Number*']");
+        const street = form.querySelector("input[placeholder='Street*']");
+        const city = form.querySelector("input[placeholder='Town/City*']");
+        const state = form.querySelector("input[placeholder='State*']");
+        const postalCode = form.querySelector("input[placeholder='Postal Code*']");
+
+        // Name validation (No numbers or special characters)
+        const nameRegex = /^[A-Za-z\s]+$/;
+        if (!nameRegex.test(firstName.value.trim())) {
+            isValid = false;
+            errorMessages.push("First Name should only contain letters.");
+        }
+        if (!nameRegex.test(lastName.value.trim())) {
+            isValid = false;
+            errorMessages.push("Last Name should only contain letters.");
+        }
+
+        // Email validation
+        const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+        if (!emailRegex.test(email.value.trim())) {
+            isValid = false;
+            errorMessages.push("Enter a valid Email Address.");
+        }
+
+        // Phone number validation (10 digits only)
+        const phoneRegex = /^\d{10}$/;
+        if (!phoneRegex.test(phone.value.trim())) {
+            isValid = false;
+            errorMessages.push("Phone Number should be exactly 10 digits.");
+        }
+
+        // Required field validation
+        if (street.value.trim() === "") {
+            isValid = false;
+            errorMessages.push("Street is required.");
+        }
+        if (city.value.trim() === "") {
+            isValid = false;
+            errorMessages.push("Town/City is required.");
+        }
+        if (state.value.trim() === "") {
+            isValid = false;
+            errorMessages.push("State is required.");
+        }
+
+        // Postal Code validation (numeric and 6 digits)
+        const postalCodeRegex = /^\d{6}$/;
+        if (!postalCodeRegex.test(postalCode.value.trim())) {
+            isValid = false;
+            errorMessages.push("Postal Code must be exactly 6 digits.");
+        }
+
+        // Display error messages if any
+        if (!isValid) {
+            event.preventDefault();
+            alert(errorMessages.join("\n"));
+        }
+    });
+});
+</script>
+
 
 
 </body>
