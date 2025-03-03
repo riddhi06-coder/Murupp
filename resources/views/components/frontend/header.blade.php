@@ -114,7 +114,7 @@
                                             </p>
 
 
-                                            <a href="#" class="tf-btn btn-reset btn-small">My Profile</a>
+                                            <a href="#" class="tf-btn btn-reset btn-small">My Account</a>
                                             <a href="{{ route('user.forgotpassword') }}" class="tf-btn btn-reset btn-small">Forgot Password?</a>
                                             <a href="#" class="tf-btn btn-reset btn-small">Support</a>
                                             <a href="{{ route('user.logout') }}" class="tf-btn btn-reset btn-small">Logout</a>
@@ -428,13 +428,34 @@
                                 Wishlist 
                             </a>
                             
-                            <a href="#" class="site-nav-icon">
+                            <a href="#" class="site-nav-icon dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
                                 <svg class="icon" width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                                     <path d="M20 21V19C20 17.9391 19.5786 16.9217 18.8284 16.1716C18.0783 15.4214 17.0609 15 16 15H8C6.93913 15 5.92172 15.4214 5.17157 16.1716C4.42143 16.9217 4 17.9391 4 19V21" stroke="#181818" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
                                     <path d="M12 11C14.2091 11 16 9.20914 16 7C16 4.79086 14.2091 3 12 3C9.79086 3 8 4.79086 8 7C8 9.20914 9.79086 11 12 11Z" stroke="#181818" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
                                 </svg>  
-                                Login
+                                @if(Auth::check())
+                                    {{ Auth::user()->name }}
+                                @else
+                                    Login
+                                @endif
                             </a>
+
+                            <!-- Dropdown menu for login/logout -->
+                            <div class="dropdown-menu dropdown-menu-end">
+                                @if(Auth::check())
+                                    <p class="text-center text-secondary-2" style="font-size: 18px; font-weight: bold;">
+                                        <!-- Welcome, <strong>{{ Auth::user()->name }}</strong> -->
+                                    </p>
+                                    <a href="#" class="dropdown-item">My Account</a>
+                                    <a href="{{ route('user.forgotpassword') }}" class="dropdown-item">Forgot Password?</a>
+                                    <a href="#" class="dropdown-item">Support</a>
+                                    <a href="{{ route('user.logout') }}" class="dropdown-item">Logout</a>
+                                @else
+                                    <a href="{{ route('user.login') }}" class="dropdown-item">Login</a>
+                                    <a href="{{ route('user.registration') }}" class="dropdown-item">Register</a>
+                                @endif
+                            </div>
+
 
                         </div>
                         <div class="mb-notice">
