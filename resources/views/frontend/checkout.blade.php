@@ -139,24 +139,30 @@
                                             <img src="{{ asset($cartItem->product_image) }}" alt="">
 
                                             </a>
-                                            <div class="content-box">
+                                            <div class="content-box d-flex justify-content-between align-items-start">
                                                 <div class="info">
-                                                    <a href="{{ route('product.show', $cartItem->slug) }}" class="name-product link text-title">
+                                                    <a href="{{ route('product.show', $cartItem->slug) }}" class="name-product link text-title" data-id="{{ $cartItem->product_id }}">
                                                         {{ $cartItem->product_name }}
                                                     </a>
-                                                    <div class="variant text-caption-1 text-secondary">
+                                                    <div class="variant text-caption-1 text-secondary mt-1">
                                                         <span class="size">{{ $cartItem->size }}</span>
                                                         @if ($cartItem->colors)
                                                             / <span class="color">{{ $cartItem->colors }}</span>
                                                         @endif
                                                     </div>
+                                                    <div class="quantity text-caption-1 text-secondary mt-1">
+                                                        Quantity: <strong>{{ $cartItem->quantity }}</strong>
+                                                    </div>
                                                 </div>
-                                                <div class="total-price text-button">
-                                                    <span class="price"><i class="fa fa-inr" aria-hidden="true"></i> 
+                                                
+                                                <div class="total-price text-button text-end">
+                                                    <span class="price">
+                                                        <i class="fa fa-inr" aria-hidden="true"></i> 
                                                         {{ number_format($cartItem->product_total_price) }}
                                                     </span>
                                                 </div>
                                             </div>
+
                                         </div>
                                     @empty
                                         <p class="text-center">No items in your cart.</p>
@@ -234,70 +240,76 @@
             });
         });
     </script>
-        
-    <!----- Payment Gateway Js---->
+
+    <!----- heckput and Payment form details and integration---->
     <script>
-        document.getElementById("payNowButton").addEventListener("click", async function (event) {
-            event.preventDefault(); 
+        document.getElementById("payNowButton").addEventListener("click", function(e) {
+            e.preventDefault();
 
-            let amount = {{ $total }}; 
+            let orderData = {
+                customer_info: {
+                    first_name: document.querySelector("input[placeholder='First Name*']").value,
+                    last_name: document.querySelector("input[placeholder='Last Name*']").value,
+                    email: document.querySelector("input[placeholder='Email Address*']").value,
+                    phone: document.querySelector("input[placeholder='Phone Number*']").value
+                },
+                cart_items: []
+            };
 
-            if (amount <= 0) {
-                alert("Your cart is empty!");
-                return;
-            }
-
-            try {
-                // Create Razorpay Order
-                let response = await fetch("/process-payment", {
-                    method: "POST",
-                    headers: {
-                        "Content-Type": "application/json",
-                        "X-CSRF-TOKEN": document.querySelector('meta[name="csrf-token"]').getAttribute("content")
-                    },
-                    body: JSON.stringify({ amount: amount })
+            document.querySelectorAll(".item-product").forEach(item => {
+                let productElement = item.querySelector(".name-product"); 
+                let quantityElement = item.querySelector(".quantity strong");
+                orderData.cart_items.push({
+                    product_id: productElement.getAttribute("data-id"), 
+                    product_name: productElement.innerText,
+                    quantity: quantityElement ? parseInt(quantityElement.innerText) : 1,
+                    price: item.querySelector(".price").innerText.replace("₹", "").trim()
                 });
+            });
 
-                let data = await response.json();
-
-                if (!data.order_id) {
-                    alert("Error creating payment order!");
-                    return;
-                }
-
-                var options = {
-                    key: data.razorpay_key,
-                    amount: data.amount * 100, 
-                    currency: data.currency,
-                    order_id: data.order_id,
-                    name: "Your Store Name",
-                    description: "Purchase from your store",
-                    handler: async function (response) {
-                        let verifyResponse = await fetch("/verify-payment", {
-                            method: "POST",
-                            headers: {
-                                "Content-Type": "application/json",
-                                "X-CSRF-TOKEN": document.querySelector('meta[name="csrf-token"]').getAttribute("content")
-                            },
-                            body: JSON.stringify(response)
-                        });
-
-                        let verifyData = await verifyResponse.json();
-                        if (verifyData.status === "Payment Successful") {
-                            window.location.href = "/thank-you"; 
+            fetch("{{ route('payment.process') }}", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    "X-CSRF-TOKEN": document.querySelector("meta[name='csrf-token']").getAttribute("content")
+                },
+                body: JSON.stringify({
+                    amount: document.querySelector(".total-price-checkout").innerText.replace("₹", "").trim(),
+                    order_data: orderData
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.order_id) {
+                    var options = {
+                        "key": data.razorpay_key,
+                        "amount": data.amount * 100,
+                        "currency": "INR",
+                        "order_id": data.order_id,
+                        "handler": function(response) {
+                            fetch("{{ route('payment.verify') }}", {
+                                method: "POST",
+                                headers: {
+                                    "Content-Type": "application/json",
+                                    "X-CSRF-TOKEN": document.querySelector("meta[name='csrf-token']").getAttribute("content")
+                                },
+                                body: JSON.stringify({
+                                    razorpay_order_id: response.razorpay_order_id,
+                                    razorpay_payment_id: response.razorpay_payment_id,
+                                    razorpay_signature: response.razorpay_signature,
+                                    order_data: orderData // Send order details for verification
+                                })
+                            })
+                            .then(response => response.json())
+                            .then(data => alert(data.status));
                         }
-                    },
-                    theme: {
-                        color: "#3399cc"
-                    }
-                };
-                var rzp = new Razorpay(options);
-                rzp.open();
-
-            } catch (error) {
-                console.error("Payment Error:", error);
-            }
+                    };
+                    var rzp1 = new Razorpay(options);
+                    rzp1.open();
+                }
+            });
         });
+
     </script>
 
 

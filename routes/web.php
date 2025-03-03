@@ -209,8 +209,8 @@ Route::group(['prefix'=> '', 'middleware'=>[\App\Http\Middleware\PreventBackHist
     Route::get('/privacy-policy', [PoliciesController::class, 'privacy'])->name('privacy.policy');
 
     //========== Payment Integration URL
-    Route::post('/process-payment', [PaymentController::class, 'processPayment']);
-    Route::post('/verify-payment', [PaymentController::class, 'verifyPayment']);
+    Route::post('/process-payment', [PaymentController::class, 'processPayment'])->name('payment.process');
+    Route::post('/verify-payment', [PaymentController::class, 'verifyPayment'])->name('payment.verify');
 
     //===== Category Page
     Route::get('/category/{slug}', [CategoryDetailsController::class, 'category_details'])->name('product.category');
