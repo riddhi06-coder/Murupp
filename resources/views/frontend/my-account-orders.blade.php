@@ -184,13 +184,15 @@
                                             <td>{{ \Carbon\Carbon::parse($order->created_at)->format('d F, Y') }}</td>
                                             <td>{{ ucfirst($order->status) }}</td>
                                             <td>
-                                                <i class="fa fa-inr" aria-hidden="true"></i> {{ number_format($order->total_price, 2) }} for {{ $order->quantities }} items
+                                                <i class="fa fa-inr" aria-hidden="true"></i> {{ number_format($order->total_price) }} for {{ collect(json_decode($order->quantities, true))->sum() }}
+                                                items
                                             </td>
                                             <td>
-                                                <a href="my-account-orders-details.html" class="tf-btn btn-fill radius-4">
+                                                <a href="{{ route('my.account.order.details', ['order_id' => $order->order_id]) }}" class="tf-btn btn-fill radius-4">
                                                     <span class="text">View</span>
                                                 </a>
                                             </td>
+
                                         </tr>
                                     @endforeach
                                 </tbody>

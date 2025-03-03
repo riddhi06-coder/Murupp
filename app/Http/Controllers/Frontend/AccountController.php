@@ -11,6 +11,7 @@
     use Illuminate\Support\Facades\Hash;
 
     use App\Models\User;
+    use App\Models\OrderDetail;
 
     
     
@@ -112,6 +113,14 @@
 
             return view('frontend.my-account-orders', compact('user', 'orders'));
         }
+
+
+        public function account_orders_details($order_id)
+        {
+            $order = OrderDetail::where('order_id', $order_id)->firstOrFail();
+            return view('frontend.my-account-order-details', compact('order'));
+        }
+
 
         
     }
