@@ -632,7 +632,7 @@
 </script>
 
 <!-- For Add to cart based on the quantity selection -->  
-<script>
+<!-- <script>
     document.addEventListener("DOMContentLoaded", function () {
         const decreaseBtn = document.querySelector(".btn-decrease");
         const increaseBtn = document.querySelector(".btn-increase");
@@ -673,7 +673,82 @@
         // Initialize URL on page load
         updateCartUrl();
     });
+</script> -->
+
+<!-- For Add to cart based on the quantity selection -->  
+<script>
+
+    
+    var notyf = new Notyf({
+            duration: 5000, 
+            ripple: true, 
+            position: {
+                x: 'right',
+                y: 'top',
+            },
+            dismissible: true,
+            types: [
+                {
+                    type: 'custom-success',
+                    background: 'black',  
+                    icon: {
+                        className: 'fa fa-check-circle', 
+                        tagName: 'i',
+                        color: 'white' 
+                    }
+                }
+            ]
+    });
+
+    document.addEventListener("DOMContentLoaded", function () {
+        const cartForm = document.getElementById("cartForm");
+        const addToCartBtn = document.querySelector(".btn-add-to-cart");
+        const sizeError = document.getElementById("sizeError");
+        const sizeInput = document.getElementById("hidden-size");
+
+        function addToCart(event) {
+            event.preventDefault();
+
+            // Ensure size is selected
+            if (!sizeInput.value.trim()) {
+                sizeError.style.display = "block";
+                return;
+            } else {
+                sizeError.style.display = "none";
+            }
+
+            let formData = new FormData(cartForm);
+            let url = cartForm.action;
+
+            $.ajax({
+                url: url,
+                type: "GET",  // Ensuring it matches the route method
+                data: new URLSearchParams(formData).toString(),
+                dataType: "json",
+                success: function (response) {
+                    if (response.success) {
+                        notyf.open({
+                            type: 'custom-success',
+                            message: response.message
+                        }); // Replace with a toast notification if needed
+                    } else {
+                        notyf.open({
+                            type: 'warning',
+                            message: response.message
+                        });
+                    }
+                },
+                error: function () {
+                    notyf.error("Something went wrong. Please try again.");
+                }
+            });
+        }
+
+        addToCartBtn.addEventListener("click", addToCart);
+    });
+
 </script>
+
 
 <!--- for print name selected option--->
 <script>
