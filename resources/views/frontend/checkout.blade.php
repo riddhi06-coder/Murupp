@@ -169,7 +169,7 @@
                                                 <div class="total-price text-button text-end">
                                                     <span class="price">
                                                         <i class="fa fa-inr" aria-hidden="true"></i> 
-                                                        {{ number_format($cartItem->product_total_price) }}
+                                                        {{ number_format_indian($cartItem->product_total_price) }}
                                                     </span>
                                                 </div>
                                             </div>
@@ -194,11 +194,11 @@
                                         <h5 class="d-flex justify-content-between">
                                             <span>Total</span>
                                             <span class="total-price-checkout">
-                                                <i class="fa fa-inr" aria-hidden="true"></i> {{ number_format($total) }}
+                                                <i class="fa fa-inr" aria-hidden="true"></i> {{ number_format_indian($total) }}
                                             </span>
                                         </h5>
                                         <small class="d-flex justify-content-between text-muted">
-                                            <span>Including ₹ {{ number_format($taxAmount) }} in taxes</span>
+                                            <span>Including ₹ {{ number_format_indian($taxAmount) }} in taxes</span>
                                         </small>
                                     </div>
                                 </div>
@@ -442,8 +442,23 @@
 
     </script>
 
-
-
+    <script>
+        function number_format_indian($num) {
+                $num = round($num); // Remove decimal points
+                $num = (string) $num;
+                $len = strlen($num);
+                
+                if ($len <= 3) {
+                    return $num;
+                }
+                
+                $lastThree = substr($num, -3);
+                $remaining = substr($num, 0, -3);
+                $remaining = preg_replace('/\B(?=(\d{2})+(?!\d))/', ',', $remaining);
+                
+                return $remaining . ',' . $lastThree;
+            }
+    </script>
 
 
 </body>
