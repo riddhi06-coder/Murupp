@@ -200,3 +200,59 @@
         <a href="https://web.whatsapp.com/" class="float" target="_blank">
             <i class="fab fa-whatsapp my-float"></i>
         </a>
+
+         <!-- Wishlist Ajax Funtion -->
+        <script>
+
+            var notyf = new Notyf({
+                duration: 5000, 
+                ripple: true, 
+                position: {
+                    x: 'right',
+                    y: 'top',
+                },
+                dismissible: true,
+                types: [
+                    {
+                        type: 'custom-success',
+                        background: 'black',  
+                        icon: {
+                            className: 'fa fa-check-circle', 
+                            tagName: 'i',
+                            color: 'white' 
+                        }
+                    }
+                ]
+            });
+
+            function addToWishlist(productId, element) {
+                $.ajax({
+                    url: "{{ route('wishlist.add', '') }}/" + productId,
+                    type: "POST",
+                    data: {
+                        _token: "{{ csrf_token() }}",
+                        product_id: productId
+                    },
+                    success: function(response) {
+                        if (response.success) {
+                            $(element).find('.icon').removeClass('icon-heart').addClass('icon-heart-filled');
+                            $(element).addClass('active');
+
+                            notyf.open({
+                                type: 'custom-success',
+                                message: response.message
+                            });
+                        } else {
+                            notyf.open({
+                                type: 'warning',
+                                message: response.message
+                            });
+                        }
+                    },
+                    error: function(xhr) {
+                        notyf.error("Something went wrong. Please try again.");
+                    }
+                });
+            }
+        </script>
+

@@ -57,9 +57,14 @@ class HomeController extends Controller
                         ->get();
 
         $user = auth()->user();
-        $wishlistItems = Wishlist::where('user_id', $user->id)->pluck('product_id');
+        $wishlistItems = collect(); 
+        
+        if ($user) {
+            $wishlistItems = Wishlist::where('user_id', $user->id)->pluck('product_id');
+        }
+                        
 
-        return view('frontend.index', compact('banners','newArrivals','collectionDetail','shopCategories','productPolicies','testimonials','socialMedia','wishlistItems'));
+        return view('frontend.index', compact('banners','newArrivals','collectionDetail','shopCategories','productPolicies','testimonials','socialMedia','wishlistItems','user'));
     }
 
 

@@ -134,12 +134,24 @@
                                             <img class="img-product" data-src="{{ asset('murupp/product/thumbnails/'.$thumbnailImages[0]) }}" src="{{ asset('murupp/product/thumbnails/'.$thumbnailImages[0]) }}" alt="image-product">
                                         @endif
                                     </a>
-                                    <div class="list-product-btn">
+                                    <!-- <div class="list-product-btn">
                                         <a href="{{ route('wishlist.add', ['id' => $product->id]) }}" class="box-icon wishlist btn-icon-action">
                                             <span class="icon icon-heart"></span>
                                             <span class="tooltip">Wishlist</span>
                                         </a>
+                                    </div> -->
+
+                                 
+                                    <div class="list-product-btn">
+                                        <a href="javascript:void(0);" 
+                                        onclick="addToWishlist({{ $product->id }}, this)" 
+                                        class="box-icon wishlist btn-icon-action">
+                                            <span class="icon icon-heart "></span>
+                                            <span class="tooltip">Wishlist</span>
+                                        </a>
                                     </div>
+
+
                                     <!-- <div class="list-btn-main">
                                         <a href="{{ route('cart.add', ['id' => $product->id]) }}" class="btn-main-product">Add To cart</a>
                                     </div> -->

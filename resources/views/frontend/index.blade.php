@@ -4,21 +4,6 @@
 <head>
     @include('components.frontend.head')
 
-    <style>
-        .list-product-btn .wishlist {
-    opacity: 0 !important; /* Hide heart by default */
-    transition: opacity 0.3s ease-in-out !important;
-}
-
-.list-product-btn:hover .wishlist {
-    opacity: 1 !important; /* Show heart on hover */
-}
-
-.list-product-btn .wishlist.static {
-    opacity: 1 !important; /* Keep heart visible if it's in wishlist */
-}
-
-        </style>
 </head>
 	   
 
@@ -203,15 +188,15 @@
                                             alt="{{ $product->product_name }}">
                                     </a>
 
-                                     <div class="list-product-btn">
-                                        <a href="{{ route('wishlist.add', ['id' => $product->product_id]) }}" 
+                                    <div class="list-product-btn">
+                                        <a href="javascript:void(0);" 
                                         class="box-icon wishlist btn-icon-action" 
-                                        aria-label="Add to Wishlist">
+                                        aria-label="Add to Wishlist"
+                                        onclick="addToWishlist({{ $product->product_id }}, this)">
                                             <span class="icon icon-heart"></span>
                                             <span class="tooltip">Wishlist</span>
                                         </a>
-                                    </div> 
-
+                                    </div>
 
                                 </div>
 
@@ -404,6 +389,10 @@
 
 
     @include('components.frontend.main-js')
+
+
+
+
 </body>
 
 </html>

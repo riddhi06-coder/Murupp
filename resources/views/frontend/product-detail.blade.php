@@ -202,7 +202,7 @@
                                                     <input type="hidden" name="product_image" value="{{ isset($galleryImages[0]) ? asset('murupp/product/gallery/' . $galleryImages[0]) : '' }}">
 
 
-                                                    <button type="submit" class="btn-style-2 flex-grow-1 text-btn-uppercase fw-6 btn-add-to-cart">
+                                                    <button type="submit" class="btn-style-2 flex-grow-1 text-btn-uppercase fw-6 btn-add-to-cart" style="width: 300px !important;">
                                                         <span>Add to cart</span>
                                                     </button>
 
@@ -210,11 +210,13 @@
                                                 </form>
 
 
-                                                <a href="{{ route('wishlist.add', ['id' => $product->id]) }}" 
+                                                <a href="javascript:void(0);" onclick="addToWishlist({{ $product->id }}, this)" 
                                                     class="box-icon hover-tooltip text-caption-2 wishlist btn-icon-action">
                                                     <span class="icon icon-heart"></span>
                                                     <span class="tooltip text-caption-2">Wishlist</span>
                                                 </a>
+
+                                              
                                             </div>
                                         </div>
                                         <br>
@@ -465,11 +467,12 @@
 
                                         </div>
                                         <div class="list-product-btn">
-                                            <a href="{{ route('wishlist.add', ['id' => $related->id]) }}" class="box-icon wishlist btn-icon-action" aria-label="Add to Wishlist">
+                                            <a href="javascript:void(0);" onclick="addToWishlist({{ $related->id }}, this)" class="box-icon wishlist btn-icon-action" aria-label="Add to Wishlist">
                                                 <span class="icon icon-heart"></span>
                                                 <span class="tooltip">Wishlist</span>
                                             </a>
                                         </div>
+
                                         <!-- <div class="list-btn-main">
                                             <a href="{{ route('cart.add', ['id' => $related->id]) }}" data-bs-toggle="modal" class="btn-main-product">Quick Add</a>
                                         </div> -->
