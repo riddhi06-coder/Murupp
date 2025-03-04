@@ -1,43 +1,43 @@
 <style>
-  #searchResults {
-    margin-top: 10px;
-}
+    #searchResults {
+        margin-top: 10px;
+    }
 
-.search-results-list {
-    list-style: none;
-    padding: 0;
-    border: 1px solid #ddd;
-    border-radius: 5px;
-    max-height: 300px;
-    overflow-y: auto;
-    background: #fff;
-}
+    .search-results-list {
+        list-style: none;
+        padding: 0;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+        max-height: 300px;
+        overflow-y: auto;
+        background: #fff;
+    }
 
-.search-results-list li {
-    padding: 10px;
-    border-bottom: 1px solid #ddd;
-    transition: background 0.2s;
-}
+    .search-results-list li {
+        padding: 10px;
+        border-bottom: 1px solid #ddd;
+        transition: background 0.2s;
+    }
 
-.search-results-list li:last-child {
-    border-bottom: none;
-}
+    .search-results-list li:last-child {
+        border-bottom: none;
+    }
 
-.search-results-list li:hover {
-    background: #f8f9fa;
-}
+    .search-results-list li:hover {
+        background: #f8f9fa;
+    }
 
-.search-results-list li a {
-    text-decoration: none;
-    color: #333;
-    font-weight: 500;
-    display: block;
-}
+    .search-results-list li a {
+        text-decoration: none;
+        color: #333;
+        font-weight: 500;
+        display: block;
+    }
 
     </style>
 
 
-<meta name="csrf-token" content="{{ csrf_token() }}">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
         <!-- Scroll Top -->
     <button id="scroll-top">
         <svg width="24" height="25" viewBox="0 0 24 25" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -401,7 +401,7 @@
                     <div class="mb-content-top">
                         <form class="form-search" id="searchForm">
                             <fieldset class="text">
-                                <input type="text" id="searchInput" placeholder="What are you looking for?" class="" name="text" tabindex="0" value="" aria-required="true" required="">
+                                <input type="text" id="searchInputMobile" placeholder="What are you looking for?" class="" name="text" tabindex="0" value="" aria-required="true" required="">
                             </fieldset>
                             <button class="" type="submit">
                                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -410,7 +410,7 @@
                                 </svg>                                
                             </button>
                         </form>
-                        <div id="searchResults"></div>
+                        <div id="searchResultsMobile"></div>
 
                         <ul class="nav-ul-mb" id="wrapper-menu-navigation">
 
@@ -672,52 +672,61 @@
             updateCheckoutButton();
         </script>
 
-        <!--- for search functionality --->
+        <!--- for search functionality for mobile and desktop both--->
         <script>
             document.addEventListener("DOMContentLoaded", function () {
-                let searchInput = document.getElementById("searchInput");
-                let resultsContainer = document.getElementById("searchResults");
-                let debounceTimeout = null;
+                function setupLiveSearch(inputId, resultsId) {
+                    let searchInput = document.getElementById(inputId);
+                    let resultsContainer = document.getElementById(resultsId);
+                    let debounceTimeout = null;
 
-                if (!searchInput || !resultsContainer) {
-                    console.error("Search input or results container not found.");
-                    return;
-                }
-
-                searchInput.addEventListener("keyup", function () {
-                    let query = searchInput.value.trim();
-
-                    if (query.length < 2) {
-                        resultsContainer.innerHTML = "<p class='text-danger'>Please enter at least 2 characters.</p>";
+                    if (!searchInput || !resultsContainer) {
+                        console.error("Search input or results container not found.");
                         return;
                     }
 
-                    // Debounce to avoid excessive API calls
-                    clearTimeout(debounceTimeout);
-                    debounceTimeout = setTimeout(() => {
-                        fetch(`/search?q=${query}`)
-                            .then(response => response.json())
-                            .then(data => {
-                                if (data.length > 0) {
-                                    let resultsHtml = `
-                                        <ul class="search-results-list">
-                                            ${data.map(item => `
-                                                <li>
-                                                    <a href="/product-detail/${item.slug}">${item.product_name}</a>
-                                                </li>
-                                            `).join('')}
-                                        </ul>
-                                    `;
-                                    resultsContainer.innerHTML = resultsHtml;
-                                } else {
-                                    resultsContainer.innerHTML = "<p class='text-muted'>No results found.</p>";
-                                }
-                            })
-                            .catch(error => {
-                                console.error("Error:", error);
-                                resultsContainer.innerHTML = "<p class='text-danger'>Error fetching results.</p>";
-                            });
-                    }, 300); // Delay search execution by 300ms
-                });
+                    searchInput.addEventListener("keyup", function () {
+                        let query = searchInput.value.trim();
+
+                        if (query.length < 2) {
+                            resultsContainer.innerHTML = "<p class='text-danger'>Please enter at least 2 characters.</p>";
+                            return;
+                        }
+
+                        // Debounce to avoid excessive API calls
+                        clearTimeout(debounceTimeout);
+                        debounceTimeout = setTimeout(() => {
+                            fetch(`/search?q=${query}`)
+                                .then(response => response.json())
+                                .then(data => {
+                                    if (data.length > 0) {
+                                        let resultsHtml = `
+                                            <ul class="search-results-list">
+                                                ${data.map(item => `
+                                                    <li>
+                                                        <a href="/product-detail/${item.slug}">${item.product_name}</a>
+                                                    </li>
+                                                `).join('')}
+                                            </ul>
+                                        `;
+                                        resultsContainer.innerHTML = resultsHtml;
+                                    } else {
+                                        resultsContainer.innerHTML = "<p class='text-muted'>No results found.</p>";
+                                    }
+                                })
+                                .catch(error => {
+                                    console.error("Error:", error);
+                                    resultsContainer.innerHTML = "<p class='text-danger'>Error fetching results.</p>";
+                                });
+                        }, 300); // Delay search execution by 300ms
+                    });
+                }
+
+                // Setup for desktop and mobile search
+                setupLiveSearch("searchInput", "searchResults"); // Desktop
+                setupLiveSearch("searchInputMobile", "searchResultsMobile"); // Mobile
             });
         </script>
+
+
+  
