@@ -68,56 +68,57 @@
 
                                     <div>
                                         <input type="text" id="first-name" placeholder="First Name*" 
-                                            value="{{ old('first_name', $order->customer_name ? explode(' ', $order->customer_name)[0] : ($user->first_name ?? '')) }}">
+                                            value="{{ old('first_name', isset($order) && $order->customer_name ? explode(' ', $order->customer_name)[0] : ($user->first_name ?? '')) }}">
                                         <small class="error-message"></small>
                                     </div>
                                     <div>
                                         <input type="text" id="last-name" placeholder="Last Name*" 
-                                            value="{{ old('last_name', $order->customer_name ? explode(' ', $order->customer_name)[1] ?? '' : ($user->last_name ?? '')) }}">
+                                            value="{{ old('last_name', isset($order) && $order->customer_name ? explode(' ', $order->customer_name)[1] ?? '' : ($user->last_name ?? '')) }}">
                                         <small class="error-message"></small>
                                     </div>
                                 </div>
                                 <div class="grid-2">
                                     <div>
                                         <input type="text" id="email" placeholder="Email Address*" 
-                                            value="{{ old('email', $order->customer_email ?? $user->email ?? '') }}">
+                                            value="{{ old('email', isset($order) ? $order->customer_email : ($user->email ?? '')) }}">
                                         <small class="error-message"></small>
                                     </div>
                                     <div>
                                         <input type="text" id="phone" placeholder="Phone Number*" 
-                                            value="{{ old('phone', $order->customer_phone ?? $user->phone ?? '') }}">
+                                            value="{{ old('phone', isset($order) ? $order->customer_phone : ($user->phone ?? '')) }}">
                                         <small class="error-message"></small>
                                     </div>
                                 </div>
                                 <div class="grid-2">
                                     <div>
                                         <input type="text" id="street" placeholder="Street*" 
-                                            value="{{ old('street', $order->street ?? '') }}">
+                                            value="{{ old('street', isset($order) ? $order->street : '') }}">
                                         <small class="error-message"></small>
                                     </div>
                                     <div>
                                         <input type="text" id="city" placeholder="Town/City*" 
-                                            value="{{ old('city', $order->city ?? '') }}">
+                                            value="{{ old('city', isset($order) ? $order->city : '') }}">
                                         <small class="error-message"></small>
                                     </div>
                                 </div>
                                 <div class="grid-2">
                                     <div>
                                         <input type="text" id="state" placeholder="State*" 
-                                            value="{{ old('state', $order->state ?? '') }}">
+                                            value="{{ old('state', isset($order) ? $order->state : '') }}">
                                         <small class="error-message"></small>
                                     </div>
                                     <div>
                                         <input type="text" id="postal-code" placeholder="Postal Code*" 
-                                            value="{{ old('postal_code', $order->postal_code ?? '') }}">
+                                            value="{{ old('postal_code', isset($order) ? $order->postal_code : '') }}">
                                         <small class="error-message"></small>
                                     </div>
                                 </div>
                                 <div class="tf-select">
                                     <input type="text" placeholder="Country*" value="India" readonly>
                                 </div>
-                                <textarea placeholder="Write note...">{{ old('note', $order->note ?? '') }}</textarea>
+                                <textarea placeholder="Write note...">{{ old('note', isset($order) ? $order->note : '') }}</textarea>
                             </form>
+
 
                             </div>
                             <div class="wrap">
