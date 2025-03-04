@@ -113,12 +113,12 @@
 
                 </div>
                 <div class="wrapper-control-shop">
-                    <div class="meta-filter-shop">
+                    <!-- <div class="meta-filter-shop">
                         <div id="product-count-grid" class="count-text"></div>
                         <div id="product-count-list" class="count-text"></div>
                         <div id="applied-filters"></div>
                         <button id="remove-all" class="remove-all-filters text-btn-uppercase" style="display: none;">REMOVE ALL <i class="icon icon-close"></i></button>
-                    </div>
+                    </div> -->
                     <div class="tf-grid-layout wrapper-shop tf-col-3" id="gridLayout">
                         @foreach($products as $product)
                             <div class="card-product grid">
