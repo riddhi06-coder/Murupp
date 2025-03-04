@@ -632,7 +632,7 @@
 </script>
 
 <!-- For Add to cart based on the quantity selection -->  
-<!-- <script>
+<script>
     document.addEventListener("DOMContentLoaded", function () {
         const decreaseBtn = document.querySelector(".btn-decrease");
         const increaseBtn = document.querySelector(".btn-increase");
@@ -673,10 +673,10 @@
         // Initialize URL on page load
         updateCartUrl();
     });
-</script> -->
+</script>
 
 <!-- For Add to cart based on the quantity selection -->  
-<script>
+<!-- <script>
 
     
     var notyf = new Notyf({
@@ -747,7 +747,7 @@
         addToCartBtn.addEventListener("click", addToCart);
     });
 
-</script>
+</script> -->
 
 
 <!--- for print name selected option--->

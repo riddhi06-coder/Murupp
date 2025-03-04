@@ -101,7 +101,8 @@ class CartController extends Controller
             ]);
         }
 
-        return response()->json(['success' => true, 'message' => 'Product added to cart!']);
+        return redirect()->back()->with('message', 'Product added to cart!');
+
     }
 
 
