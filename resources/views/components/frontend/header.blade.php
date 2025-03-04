@@ -1,3 +1,42 @@
+<style>
+  #searchResults {
+    margin-top: 10px;
+}
+
+.search-results-list {
+    list-style: none;
+    padding: 0;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    max-height: 300px;
+    overflow-y: auto;
+    background: #fff;
+}
+
+.search-results-list li {
+    padding: 10px;
+    border-bottom: 1px solid #ddd;
+    transition: background 0.2s;
+}
+
+.search-results-list li:last-child {
+    border-bottom: none;
+}
+
+.search-results-list li:hover {
+    background: #f8f9fa;
+}
+
+.search-results-list li a {
+    text-decoration: none;
+    color: #333;
+    font-weight: 500;
+    display: block;
+}
+
+    </style>
+
+
 <meta name="csrf-token" content="{{ csrf_token() }}">
         <!-- Scroll Top -->
     <button id="scroll-top">
@@ -335,9 +374,9 @@
                         <h5>Search</h5>
                         <span class="icon-close icon-close-popup" data-bs-dismiss="modal"></span>
                     </div>
-                    <form class="form-search">
+                    <form class="form-search" id="searchForm">
                         <fieldset class="text">
-                            <input type="text" placeholder="Searching..." class="" name="text" tabindex="0" value="" aria-required="true" required="">
+                            <input type="text" id="searchInput" placeholder="Searching..." class="" name="text" tabindex="0" value="" aria-required="true" required="">
                         </fieldset>
                         <button class="" type="submit">
                             <svg class="icon" width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -346,20 +385,23 @@
                             </svg>
                         </button>
                     </form>
+                    <!-- Search Results Container -->
+                    <div id="searchResults"></div>
+
                 </div>
             </div>
         </div>
         <!-- /search -->
       
         <!-- mobile menu -->
-        <div class="offcanvas offcanvas-start canvas-mb" id="mobileMenu">
+        <div class="offcanvas offcanvas-start canvas-mb" id="mobileMenu" >
             <span class="icon-close icon-close-popup" data-bs-dismiss="offcanvas" aria-label="Close"></span>
-            <div class="mb-canvas-content">
+            <div class="mb-canvas-content" id="search">
                 <div class="mb-body">
                     <div class="mb-content-top">
-                        <form class="form-search">
+                        <form class="form-search" id="searchForm">
                             <fieldset class="text">
-                                <input type="text" placeholder="What are you looking for?" class="" name="text" tabindex="0" value="" aria-required="true" required="">
+                                <input type="text" id="searchInput" placeholder="What are you looking for?" class="" name="text" tabindex="0" value="" aria-required="true" required="">
                             </fieldset>
                             <button class="" type="submit">
                                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -368,6 +410,8 @@
                                 </svg>                                
                             </button>
                         </form>
+                        <div id="searchResults"></div>
+
                         <ul class="nav-ul-mb" id="wrapper-menu-navigation">
 
                             <li class="nav-mb-item">
@@ -483,7 +527,7 @@
             </div>       
         </div>
         <!-- /mobile menu -->
-
+    </div>
 
         <!--- to manage the price based on the quantity--->
         <script>
@@ -626,4 +670,54 @@
 
             // Run function initially to ensure button is set correctly
             updateCheckoutButton();
+        </script>
+
+        <!--- for search functionality --->
+        <script>
+            document.addEventListener("DOMContentLoaded", function () {
+                let searchInput = document.getElementById("searchInput");
+                let resultsContainer = document.getElementById("searchResults");
+                let debounceTimeout = null;
+
+                if (!searchInput || !resultsContainer) {
+                    console.error("Search input or results container not found.");
+                    return;
+                }
+
+                searchInput.addEventListener("keyup", function () {
+                    let query = searchInput.value.trim();
+
+                    if (query.length < 2) {
+                        resultsContainer.innerHTML = "<p class='text-danger'>Please enter at least 2 characters.</p>";
+                        return;
+                    }
+
+                    // Debounce to avoid excessive API calls
+                    clearTimeout(debounceTimeout);
+                    debounceTimeout = setTimeout(() => {
+                        fetch(`/search?q=${query}`)
+                            .then(response => response.json())
+                            .then(data => {
+                                if (data.length > 0) {
+                                    let resultsHtml = `
+                                        <ul class="search-results-list">
+                                            ${data.map(item => `
+                                                <li>
+                                                    <a href="/product-detail/${item.slug}">${item.product_name}</a>
+                                                </li>
+                                            `).join('')}
+                                        </ul>
+                                    `;
+                                    resultsContainer.innerHTML = resultsHtml;
+                                } else {
+                                    resultsContainer.innerHTML = "<p class='text-muted'>No results found.</p>";
+                                }
+                            })
+                            .catch(error => {
+                                console.error("Error:", error);
+                                resultsContainer.innerHTML = "<p class='text-danger'>Error fetching results.</p>";
+                            });
+                    }, 300); // Delay search execution by 300ms
+                });
+            });
         </script>

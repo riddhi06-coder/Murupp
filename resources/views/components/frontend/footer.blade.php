@@ -2,160 +2,160 @@
   <footer id="footer" class="footer">
             <div class="footer-wrap">
             <div class="footer-body">
-    <div class="container">
-        <div class="row">
-            <div class="col-lg-3">
-                <div class="footer-infor">
-                    <div class="footer-logo">
-                        <a href="{{ route('frontend.index') }}">
-                            <img src="{{ asset('frontend/assets/images/logo/logo.webp') }}" width="144px" height="26px" alt="Murupp Logo">
-                        </a>
-                    </div>
-                    @php
-                        $footer = \App\Models\Footer::first();
-                    @endphp
-                    <div class="footer-address">
-                        <p>{!! $footer->about !!}</p>
-                        <!-- <a href="{{ $footer->map_url ?? '#' }}" class="tf-btn-default fw-6" target="_blank">GET DIRECTION<i class="icon-arrowUpRight"></i></a> -->
-                    </div>
+                <div class="container">
+                    <div class="row">
+                        <div class="col-lg-3">
+                            <div class="footer-infor">
+                                <div class="footer-logo">
+                                    <a href="{{ route('frontend.index') }}">
+                                        <img src="{{ asset('frontend/assets/images/logo/logo.webp') }}" width="144px" height="26px" alt="Murupp Logo">
+                                    </a>
+                                </div>
+                                @php
+                                    $footer = \App\Models\Footer::first();
+                                @endphp
+                                <div class="footer-address">
+                                    <p>{!! $footer->about !!}</p>
+                                    <!-- <a href="{{ $footer->map_url ?? '#' }}" class="tf-btn-default fw-6" target="_blank">GET DIRECTION<i class="icon-arrowUpRight"></i></a> -->
+                                </div>
 
-                    <ul class="footer-info">
-                    <li>
-                        <i class="icon-mail"></i>
-                        <p>
-                            <a href="mailto:{{ $footer->email ?? '' }}">{{ $footer->email ?? '' }}</a>
-                        </p>
-                    </li>
-                    <li>
-                        <i class="icon-phone"></i>
-                        <p>
-                            <a href="tel:+91{{ $footer->contact_number ?? '' }}">+91 {{ $footer->contact_number ?? '' }}</a>
-                        </p>
-                    </li>
+                                <ul class="footer-info">
+                                <li>
+                                    <i class="icon-mail"></i>
+                                    <p>
+                                        <a href="mailto:{{ $footer->email ?? '' }}">{{ $footer->email ?? '' }}</a>
+                                    </p>
+                                </li>
+                                <li>
+                                    <i class="icon-phone"></i>
+                                    <p>
+                                        <a href="tel:+91{{ $footer->contact_number ?? '' }}">+91 {{ $footer->contact_number ?? '' }}</a>
+                                    </p>
+                                </li>
 
-                    </ul>
-                        @php
-                            // Decode the stored media platform and link arrays
-                            $mediaPlatforms = json_decode($footer->media_platform ?? '[]', true);
-                            $mediaLinks = json_decode($footer->media_link ?? '[]', true);
+                                </ul>
+                                    @php
+                                        // Decode the stored media platform and link arrays
+                                        $mediaPlatforms = json_decode($footer->media_platform ?? '[]', true);
+                                        $mediaLinks = json_decode($footer->media_link ?? '[]', true);
 
-                            // Define icons for known platforms
-                            $socialIcons = [
-                                '1' => ['class' => 'social-facebook', 'icon' => 'icon-fb', 'label' => 'Facebook'],
-                                '2' => ['class' => 'social-twitter', 'icon' => 'icon-x', 'label' => 'Twitter'],
-                                '3' => ['class' => 'social-instagram', 'icon' => 'icon-instagram', 'label' => 'Instagram'],
-                                '4' => ['class' => 'social-pinterest', 'icon' => 'icon-pinterest', 'label' => 'Pinterest']
-                            ];
-                        @endphp
+                                        // Define icons for known platforms
+                                        $socialIcons = [
+                                            '1' => ['class' => 'social-facebook', 'icon' => 'icon-fb', 'label' => 'Facebook'],
+                                            '2' => ['class' => 'social-twitter', 'icon' => 'icon-x', 'label' => 'Twitter'],
+                                            '3' => ['class' => 'social-instagram', 'icon' => 'icon-instagram', 'label' => 'Instagram'],
+                                            '4' => ['class' => 'social-pinterest', 'icon' => 'icon-pinterest', 'label' => 'Pinterest']
+                                        ];
+                                    @endphp
 
-                        <ul class="tf-social-icon">
-                            @foreach($mediaPlatforms as $index => $platformId)
-                                @if(!empty($mediaLinks[$index]) && isset($socialIcons[$platformId])) 
-                                    <li>
-                                        <a href="{{ $mediaLinks[$index] }}" class="{{ $socialIcons[$platformId]['class'] }}" aria-label="{{ $socialIcons[$platformId]['label'] }}">
-                                            <i class="icon {{ $socialIcons[$platformId]['icon'] }}"></i>
-                                        </a>
-                                    </li>
-                                @endif
-                            @endforeach
-                        </ul>
-                </div>
-            </div>
-            <div class="col-lg-5">
-                <div class="footer-menu">
-                    <div class="footer-col-block">
-                        <div class="footer-heading text-button footer-heading-mobile">
-                            Information
+                                    <ul class="tf-social-icon">
+                                        @foreach($mediaPlatforms as $index => $platformId)
+                                            @if(!empty($mediaLinks[$index]) && isset($socialIcons[$platformId])) 
+                                                <li>
+                                                    <a href="{{ $mediaLinks[$index] }}" class="{{ $socialIcons[$platformId]['class'] }}" aria-label="{{ $socialIcons[$platformId]['label'] }}">
+                                                        <i class="icon {{ $socialIcons[$platformId]['icon'] }}"></i>
+                                                    </a>
+                                                </li>
+                                            @endif
+                                        @endforeach
+                                    </ul>
+                            </div>
                         </div>
-                        <div class="tf-collapse-content">
-                            <ul class="footer-menu-list">
-                                <li class="text-caption-1">
-                                    <a href="#" class="footer-menu_item">About Us</a>
-                                </li>
-                                <li class="text-caption-1">
-                                    <a href="#" class="footer-menu_item">Contact us</a>
-                                </li>
-                                <li class="text-caption-1">
-                                    <a href="{{ route('shipping.delivery') }}" class="footer-menu_item">Shipping & Delivery</a>
-                                </li>
-                                <li class="text-caption-1">
-                                    <a href="{{ route('return.refunds') }}" class="footer-menu_item">Return & Refunds</a>
-                                </li>
-                                <li class="text-caption-1">
-                                    <a href="{{ route('privacy.policy') }}" class="footer-menu_item">Privacy Policy</a>
-                                </li>
-                                <li class="text-caption-1">
-                                    <a href="{{ route('terms.condition') }}" class="footer-menu_item">Terms & Conditions</a>
-                                </li>
-                            </ul>
-                        </div>
-                    </div>
-                    @php
-                        use Illuminate\Support\Facades\DB;
-                        $categories = DB::table('master_product_category')
-                            ->whereNull('deleted_by')
-                            ->orderBy('id', 'asc')
-                            ->get();
-                    @endphp
-
-                    <div class="footer-col-block">
-                        <div class="footer-heading text-button footer-heading-mobile">
-                            Category
-                        </div>
-                        <div class="tf-collapse-content">
-                            <ul class="footer-menu-list">
-                                @foreach ($categories as $category)
-                                    <li class="text-caption-1">
-                                        <a href="{{ route('product.category', ['slug' => $category->slug]) }}" class="footer-menu_item">
-                                            {{ $category->category_name }}
-                                        </a>
-                                    </li>
-                                @endforeach
-                            </ul>
-                        </div>
-                    </div>
-
-                </div>
-            </div>
-            <div class="col-lg-4">
-                <div class="footer-col-block">
-                    <div class="footer-heading text-button footer-heading-mobile">
-                        Newsletter
-                    </div>
-                    <div class="tf-collapse-content">
-                        <div class="footer-newsletter">
-                            <p class="text-caption-1">Sign up for our newsletter and get your first purchase</p>
-                            <form id="subscribe-form" action="#" class="form-newsletter subscribe-form" method="post" accept-charset="utf-8" data-mailchimp="true">
-                                <div id="subscribe-content" class="subscribe-content">
-                                    <fieldset class="email">
-                                        <input id="subscribe-email" type="email" name="email-form" class="subscribe-email" placeholder="Enter your e-mail" tabindex="0" aria-required="true">
-                                    </fieldset>
-                                    <div class="button-submit">
-                                        <button id="subscribe-button" class="subscribe-button" type="button" aria-label="Subscribe">
-                                            <i class="icon icon-arrowUpRight"></i>
-                                        </button>
+                        <div class="col-lg-5">
+                            <div class="footer-menu">
+                                <div class="footer-col-block">
+                                    <div class="footer-heading text-button footer-heading-mobile">
+                                        Information
+                                    </div>
+                                    <div class="tf-collapse-content">
+                                        <ul class="footer-menu-list">
+                                            <li class="text-caption-1">
+                                                <a href="#" class="footer-menu_item">About Us</a>
+                                            </li>
+                                            <li class="text-caption-1">
+                                                <a href="#" class="footer-menu_item">Contact us</a>
+                                            </li>
+                                            <li class="text-caption-1">
+                                                <a href="{{ route('shipping.delivery') }}" class="footer-menu_item">Shipping & Delivery</a>
+                                            </li>
+                                            <li class="text-caption-1">
+                                                <a href="{{ route('return.refunds') }}" class="footer-menu_item">Return & Refunds</a>
+                                            </li>
+                                            <li class="text-caption-1">
+                                                <a href="{{ route('privacy.policy') }}" class="footer-menu_item">Privacy Policy</a>
+                                            </li>
+                                            <li class="text-caption-1">
+                                                <a href="{{ route('terms.condition') }}" class="footer-menu_item">Terms & Conditions</a>
+                                            </li>
+                                        </ul>
                                     </div>
                                 </div>
-                                <div id="subscribe-msg" class="subscribe-msg"></div>
-                            </form>
-                            <!-- <div class="tf-cart-checkbox">
-                                <div class="tf-checkbox-wrapp">
-                                    <input class="" type="checkbox" id="footer-Form_agree" name="agree_checkbox">
-                                    <div>
-                                        <i class="icon-check"></i>
+                                @php
+                                    use Illuminate\Support\Facades\DB;
+                                    $categories = DB::table('master_product_category')
+                                        ->whereNull('deleted_by')
+                                        ->orderBy('id', 'asc')
+                                        ->get();
+                                @endphp
+
+                                <div class="footer-col-block">
+                                    <div class="footer-heading text-button footer-heading-mobile">
+                                        Category
+                                    </div>
+                                    <div class="tf-collapse-content">
+                                        <ul class="footer-menu-list">
+                                            @foreach ($categories as $category)
+                                                <li class="text-caption-1">
+                                                    <a href="{{ route('product.category', ['slug' => $category->slug]) }}" class="footer-menu_item">
+                                                        {{ $category->category_name }}
+                                                    </a>
+                                                </li>
+                                            @endforeach
+                                        </ul>
                                     </div>
                                 </div>
-                                <label class="text-caption-1" for="footer-Form_agree">
-                                    By clicking subscribe, you agree to the <a class="fw-6 link" href="#">Terms of Service</a> and <a class="fw-6 link" href="#">Privacy Policy</a>.
-                                </label>
-                            </div> -->
+
+                            </div>
+                        </div>
+                        <div class="col-lg-4">
+                            <div class="footer-col-block">
+                                <div class="footer-heading text-button footer-heading-mobile">
+                                    Newsletter
+                                </div>
+                                <div class="tf-collapse-content">
+                                    <div class="footer-newsletter">
+                                        <p class="text-caption-1">Sign up for our newsletter and get your first purchase</p>
+                                        <form id="subscribe-form" action="#" class="form-newsletter subscribe-form" method="post" accept-charset="utf-8" data-mailchimp="true">
+                                            <div id="subscribe-content" class="subscribe-content">
+                                                <fieldset class="email">
+                                                    <input id="subscribe-email" type="email" name="email-form" class="subscribe-email" placeholder="Enter your e-mail" tabindex="0" aria-required="true">
+                                                </fieldset>
+                                                <div class="button-submit">
+                                                    <button id="subscribe-button" class="subscribe-button" type="button" aria-label="Subscribe">
+                                                        <i class="icon icon-arrowUpRight"></i>
+                                                    </button>
+                                                </div>
+                                            </div>
+                                            <div id="subscribe-msg" class="subscribe-msg"></div>
+                                        </form>
+                                        <!-- <div class="tf-cart-checkbox">
+                                            <div class="tf-checkbox-wrapp">
+                                                <input class="" type="checkbox" id="footer-Form_agree" name="agree_checkbox">
+                                                <div>
+                                                    <i class="icon-check"></i>
+                                                </div>
+                                            </div>
+                                            <label class="text-caption-1" for="footer-Form_agree">
+                                                By clicking subscribe, you agree to the <a class="fw-6 link" href="#">Terms of Service</a> and <a class="fw-6 link" href="#">Privacy Policy</a>.
+                                            </label>
+                                        </div> -->
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
-    </div>
-</div>
 
                 <div class="footer-bottom">
                     <div class="container">

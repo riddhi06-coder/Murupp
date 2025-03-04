@@ -2,6 +2,10 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\LoginController;
+
+use App\Models\ProductDetails;
+use Illuminate\Http\Request;
+
 use App\Http\Controllers\Backend\UserDetailsController;
 use App\Http\Controllers\Backend\UserPermissionsController;
 use App\Http\Controllers\Backend\CollectionsController;
@@ -248,6 +252,17 @@ Route::group(['prefix'=> '', 'middleware'=>[\App\Http\Middleware\PreventBackHist
     //====== Update Cart Count Dynamically
     Route::post('/cart/update', [CartController::class, 'updateCart'])->name('cart.update');
 
+    
+    Route::get('/search', function (Request $request) {
+        $query = $request->query('q');
+    
+        $results = ProductDetails::where('product_name', 'LIKE', "%{$query}%")
+                        ->orWhere('description', 'LIKE', "%{$query}%")
+                        ->limit(10)
+                        ->get(['id', 'product_name','slug']);
+    
+        return response()->json($results);
+    });
 
 });
 

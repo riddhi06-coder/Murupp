@@ -36,12 +36,14 @@ class PoliciesController extends Controller
     public function return(Request $request)
     { 
         $terms = Returns::all();
+       
         return view('frontend.refund', compact('terms'));
     }
     
     public function privacy(Request $request)
     { 
         $terms = Privacy::all();
+        // dd($terms);
         return view('frontend.privacy', compact('terms'));
     }
 }
