@@ -442,9 +442,10 @@
 
     </script>
 
+    <!-----Number format function---->
     <script>
         function number_format_indian($num) {
-                $num = round($num); // Remove decimal points
+                $num = round($num); 
                 $num = (string) $num;
                 $len = strlen($num);
                 

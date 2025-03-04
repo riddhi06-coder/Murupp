@@ -184,7 +184,7 @@
                                                 <td>{{ \Carbon\Carbon::parse($order->created_at)->format('d F, Y') }}</td>
                                                 <!-- <td>{{ ucfirst($order->status) }}</td> -->
                                                 <td>
-                                                    <i class="fa fa-inr" aria-hidden="true"></i> {{ number_format($order->total_price) }} for {{ collect(json_decode($order->quantities, true))->sum() }}
+                                                    <i class="fa fa-inr" aria-hidden="true"></i> {{ number_format_indian($order->total_price) }} for {{ collect(json_decode($order->quantities, true))->sum() }}
                                                     items
                                                 </td>
                                                 <td>
@@ -360,6 +360,25 @@
                 });
             });
 
+        </script>
+
+        <!-----Number format function---->
+        <script>
+            function number_format_indian($num) {
+                    $num = round($num); 
+                    $num = (string) $num;
+                    $len = strlen($num);
+                    
+                    if ($len <= 3) {
+                        return $num;
+                    }
+                    
+                    $lastThree = substr($num, -3);
+                    $remaining = substr($num, 0, -3);
+                    $remaining = preg_replace('/\B(?=(\d{2})+(?!\d))/', ',', $remaining);
+                    
+                    return $remaining . ',' . $lastThree;
+                }
         </script>
 
 </body>
