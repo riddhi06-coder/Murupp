@@ -252,7 +252,7 @@ Route::group(['prefix'=> '', 'middleware'=>[\App\Http\Middleware\PreventBackHist
     //====== Update Cart Count Dynamically
     Route::post('/cart/update', [CartController::class, 'updateCart'])->name('cart.update');
 
-    
+    //====== For Search Functionality
     Route::get('/search', function (Request $request) {
         $query = $request->query('q');
     
