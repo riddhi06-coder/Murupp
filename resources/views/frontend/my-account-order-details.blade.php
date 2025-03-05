@@ -91,33 +91,40 @@
                     <div class="my-account-content">
                         <div class="account-order-details">
                             <div class="wd-form-order">
-                                <div class="order-head">
-                                    <figure class="img-product">
-                                        <img src="images/New-Arrivals/1_2_11zon.webp" alt="product">
-                                    </figure>
-                                    <div class="content">
-                                        <div class="badge">In Progress</div>
-                                        <h6 class="mt-8 fw-5">Order #17493</h6>
+                            <div class="order-head">
+                                <div class="content">
+                                    <div class="badge">
+                                        @if($order->status == 0)
+                                            Pending
+                                        @elseif($order->status == 1)
+                                            Completed
+                                        @elseif($order->status == 2)
+                                            Cancelled
+                                        @endif
                                     </div>
+                                    <h6 class="mt-8 fw-5">Order Id: {{ $order->order_id }}</h6>
                                 </div>
-                                <div class="tf-grid-layout md-col-2 gap-15">
-                                    <div class="item">
-                                        <div class="text-2 text_black-2">Item</div>
-                                        <div class="text-2 mt_4 fw-6">Fashion</div>
-                                    </div>
-                                    <div class="item">
-                                        <div class="text-2 text_black-2">Courier</div>
-                                        <div class="text-2 mt_4 fw-6">Ribbed modal T-shirt</div>
-                                    </div>
-                                    <div class="item">
-                                        <div class="text-2 text_black-2">Start Time</div>
-                                        <div class="text-2 mt_4 fw-6">04 September 2024, 13:30:23</div>
-                                    </div>
-                                    <div class="item">
-                                        <div class="text-2 text_black-2">Address</div>
-                                        <div class="text-2 mt_4 fw-6">1234 Fashion Street, Suite 567, New York</div>
-                                    </div>
+                            </div>
+
+                            <div class="tf-grid-layout md-col-2 gap-15">
+                                <div class="item">
+                                    <div class="text-2 text_black-2">Customer Name</div>
+                                    <div class="text-2 mt_4 fw-6">{{ $order->customer_name }}</div>
                                 </div>
+                                <div class="item">
+                                    <div class="text-2 text_black-2">Customer Email</div>
+                                    <div class="text-2 mt_4 fw-6">{{ $order->customer_email }}</div>
+                                </div>
+                                <div class="item">
+                                    <div class="text-2 text_black-2">Customer Phone</div>
+                                    <div class="text-2 mt_4 fw-6">{{ $order->customer_phone }}</div>
+                                </div>
+                                <div class="item">
+                                    <div class="text-2 text_black-2">Address</div>
+                                    <div class="text-2 mt_4 fw-6">{{ $order->address }}</div>
+                                </div>
+                            </div>
+
                                 <div class="widget-tabs style-3 widget-order-tab">
                                     <ul class="widget-menu-tab">
                                         <li class="item-title active">
