@@ -187,29 +187,43 @@
                                                 </ul>
                                             </div>
                                         </div>
+
+
                                         <div class="widget-content-inner">
-                                            <div class="order-head">
-                                                <figure class="img-product">
-                                                    <img src="images/New-Arrivals/1_2_11zon.webp" alt="product">
-                                                </figure>
-                                                <div class="content">
-                                                    <div class="text-2 fw-6">SAA Tiered Midi Dress</div>
-                                                    <div class="mt_4"><span class="fw-6">Price :</span> <i class="fa fa-inr" aria-hidden="true"></i> 14,000</div>
-                                                    <div class="mt_4"><span class="fw-6">Size :</span> XL</div>
+                                            @php
+                                                // Decode the JSON stored in the database
+                                                $productIds = json_decode($order->product_ids, true) ?? [];
+                                                $productNames = json_decode($order->product_names, true) ?? [];
+                                                $quantities = json_decode($order->quantities, true) ?? [];
+                                                $prices = json_decode($order->prices, true) ?? [];
+
+                                                // Ensure all arrays have the same length
+                                                $totalItems = count($productNames);
+                                            @endphp
+
+                                            @for ($i = 0; $i < $totalItems; $i++)
+                                                <div class="order-head">
+                                                    <figure class="img-product">
+                                                        <img src="{{ asset('images/products/' . ($productIds[$i] ?? 'default.jpg')) }}" alt="product">
+                                                    </figure>
+                                                    <div class="content">
+                                                        <div class="text-2 fw-6">{{ $productNames[$i] ?? 'Unknown Product' }}</div>
+                                                        <div class="mt_4"><span class="fw-6">Price :</span> <i class="fa fa-inr" aria-hidden="true"></i> {{ number_format_indian($prices[$i] ?? 0) }}</div>
+                                                        <div class="mt_4"><span class="fw-6">Quantity :</span> {{ $quantities[$i] ?? 1 }}</div>
+                                                    </div>
                                                 </div>
-                                            </div>
+                                            @endfor
+
                                             <ul>
                                                 <li class="d-flex justify-content-between text-2">
                                                     <span>Total Price</span>
-                                                    <span class="fw-6">14,000</span>
-                                                </li>
-    
-                                                <li class="d-flex justify-content-between text-2 mt_8">
-                                                    <span>Order Total</span>
-                                                    <span class="fw-6">24,000</span>
+                                                    <span class="fw-6"><i class="fa fa-inr" aria-hidden="true"></i> {{ number_format_indian($order->total_price) }}</span>
                                                 </li>
                                             </ul>
                                         </div>
+
+
+
                                         <div class="widget-content-inner">
                                             <p>Our courier service is dedicated to providing fast, reliable, and secure delivery solutions tailored to meet your needs. Whether you're sending documents, parcels, or larger shipments, our team ensures that your items are handled with the utmost care and delivered on time. With a commitment to customer satisfaction, real-time tracking, and a wide network of routes, we make it easy for you to send and receive packages both locally and internationally. Choose our service for a seamless and efficient delivery experience.</p>
                                         </div>
@@ -237,6 +251,25 @@
         @include('components.frontend.footer')
 
         @include('components.frontend.main-js')
+
+         <!-----Number format function---->
+         <script>
+            function number_format_indian($num) {
+                    $num = round($num); 
+                    $num = (string) $num;
+                    $len = strlen($num);
+                    
+                    if ($len <= 3) {
+                        return $num;
+                    }
+                    
+                    $lastThree = substr($num, -3);
+                    $remaining = substr($num, 0, -3);
+                    $remaining = preg_replace('/\B(?=(\d{2})+(?!\d))/', ',', $remaining);
+                    
+                    return $remaining . ',' . $lastThree;
+                }
+        </script>
 
 
 
