@@ -1,309 +1,309 @@
 (function ($) {
   "use strict";
 
-  var rangeTwoPrice = function () {
-    if ($("#price-value-range").length > 0) {
-      var skipSlider = document.getElementById("price-value-range");
-      var skipValues = [
-        document.getElementById("price-min-value"),
-        document.getElementById("price-max-value"),
-      ];
+  // var rangeTwoPrice = function () {
+  //   if ($("#price-value-range").length > 0) {
+  //     var skipSlider = document.getElementById("price-value-range");
+  //     var skipValues = [
+  //       document.getElementById("price-min-value"),
+  //       document.getElementById("price-max-value"),
+  //     ];
 
-      var min = parseInt(skipSlider.getAttribute("data-min"));
-      var max = parseInt(skipSlider.getAttribute("data-max"));
+  //     var min = parseInt(skipSlider.getAttribute("data-min"));
+  //     var max = parseInt(skipSlider.getAttribute("data-max"));
 
-      noUiSlider.create(skipSlider, {
-        start: [min, max],
-        connect: true,
-        step: 1,
-        range: {
-          min: min,
-          max: max,
-        },
-        format: {
-          from: function (value) {
-            return parseInt(value);
-          },
-          to: function (value) {
-            return parseInt(value);
-          },
-        },
-      });
+  //     noUiSlider.create(skipSlider, {
+  //       start: [min, max],
+  //       connect: true,
+  //       step: 1,
+  //       range: {
+  //         min: min,
+  //         max: max,
+  //       },
+  //       format: {
+  //         from: function (value) {
+  //           return parseInt(value);
+  //         },
+  //         to: function (value) {
+  //           return parseInt(value);
+  //         },
+  //       },
+  //     });
 
-      skipSlider.noUiSlider.on("update", function (val, e) {
-        skipValues[e].innerText = val[e];
-      });
-    }
-  };
+  //     skipSlider.noUiSlider.on("update", function (val, e) {
+  //       skipValues[e].innerText = val[e];
+  //     });
+  //   }
+  // };
 
-  var filterProducts = function () {
-    const priceSlider = document.getElementById("price-value-range");
+  // var filterProducts = function () {
+  //   const priceSlider = document.getElementById("price-value-range");
 
-    const minPrice = parseInt(priceSlider.dataset.min);
-    const maxPrice = parseInt(priceSlider.dataset.max);
+  //   const minPrice = parseInt(priceSlider.dataset.min);
+  //   const maxPrice = parseInt(priceSlider.dataset.max);
 
-    const filters = {
-      minPrice: minPrice,
-      maxPrice: maxPrice,
-      size: null,
-      color: null,
-      availability: null,
-      brands: [],
-      sale: false,
-    };
+  //   const filters = {
+  //     minPrice: minPrice,
+  //     maxPrice: maxPrice,
+  //     size: null,
+  //     color: null,
+  //     availability: null,
+  //     brands: [],
+  //     sale: false,
+  //   };
 
-    priceSlider.noUiSlider.on("update", function (values) {
-      filters.minPrice = parseInt(values[0]);
-      filters.maxPrice = parseInt(values[1]);
+  //   priceSlider.noUiSlider.on("update", function (values) {
+  //     filters.minPrice = parseInt(values[0]);
+  //     filters.maxPrice = parseInt(values[1]);
 
-      $("#price-min-value").text(filters.minPrice);
-      $("#price-max-value").text(filters.maxPrice);
+  //     $("#price-min-value").text(filters.minPrice);
+  //     $("#price-max-value").text(filters.maxPrice);
 
-      applyFilters();
-      updateMetaFilter();
-    });
+  //     applyFilters();
+  //     updateMetaFilter();
+  //   });
 
-    $(".size-check").click(function () {
-      filters.size = $(this).hasClass("free-size")
-        ? null
-        : $(this).text().trim();
-      applyFilters();
-      updateMetaFilter();
-    });
+  //   $(".size-check").click(function () {
+  //     filters.size = $(this).hasClass("free-size")
+  //       ? null
+  //       : $(this).text().trim();
+  //     applyFilters();
+  //     updateMetaFilter();
+  //   });
 
-    $(".color-check").click(function () {
-      filters.color = $(this).text().trim();
-      applyFilters();
-      updateMetaFilter();
-    });
+  //   $(".color-check").click(function () {
+  //     filters.color = $(this).text().trim();
+  //     applyFilters();
+  //     updateMetaFilter();
+  //   });
 
-    $('input[name="availability"]').change(function () {
-      filters.availability =
-        $(this).attr("id") === "inStock" ? "In stock" : "Out of stock";
-      applyFilters();
-      updateMetaFilter();
-    });
+  //   $('input[name="availability"]').change(function () {
+  //     filters.availability =
+  //       $(this).attr("id") === "inStock" ? "In stock" : "Out of stock";
+  //     applyFilters();
+  //     updateMetaFilter();
+  //   });
 
-    $('input[name="brand"]').change(function () {
-      const brandId = $(this).attr("id");
-      let brandLabel = $(this).next("label").text().trim();
-      brandLabel = brandLabel.replace(/\s*\(\d+\)$/, "");
+  //   $('input[name="brand"]').change(function () {
+  //     const brandId = $(this).attr("id");
+  //     let brandLabel = $(this).next("label").text().trim();
+  //     brandLabel = brandLabel.replace(/\s*\(\d+\)$/, "");
 
-      if ($(this).is(":checked")) {
-        filters.brands.push({ id: brandId, label: brandLabel });
-      } else {
-        filters.brands = filters.brands.filter((brand) => brand.id !== brandId);
-      }
-      applyFilters();
-      updateMetaFilter();
-    });
+  //     if ($(this).is(":checked")) {
+  //       filters.brands.push({ id: brandId, label: brandLabel });
+  //     } else {
+  //       filters.brands = filters.brands.filter((brand) => brand.id !== brandId);
+  //     }
+  //     applyFilters();
+  //     updateMetaFilter();
+  //   });
 
-    $(".shop-sale-text").click(function () {
-      filters.sale = !filters.sale;
-      $(this).toggleClass("active", filters.sale);
-      applyFilters();
-      updateMetaFilter();
-    });
+  //   $(".shop-sale-text").click(function () {
+  //     filters.sale = !filters.sale;
+  //     $(this).toggleClass("active", filters.sale);
+  //     applyFilters();
+  //     updateMetaFilter();
+  //   });
 
-    function updateMetaFilter() {
-      const appliedFilters = $("#applied-filters");
-      const metaFilterShop = $(".meta-filter-shop");
-      appliedFilters.empty();
+  //   function updateMetaFilter() {
+  //     const appliedFilters = $("#applied-filters");
+  //     const metaFilterShop = $(".meta-filter-shop");
+  //     appliedFilters.empty();
 
-      if (filters.availability) {
-        appliedFilters.append(
-          `<span class="filter-tag">${filters.availability} <span class="remove-tag icon-close" data-filter="availability"></span></span>`
-        );
-      }
-      if (filters.size) {
-        appliedFilters.append(
-          `<span class="filter-tag">${filters.size} <span class="remove-tag icon-close" data-filter="size"></span></span>`
-        );
-      }
-      if (filters.minPrice > minPrice || filters.maxPrice < maxPrice) {
-        appliedFilters.append(
-          `<span class="filter-tag">$${filters.minPrice} - $${filters.maxPrice} <span class="remove-tag icon-close" data-filter="price"></span></span>`
-        );
-      }
-      if (filters.color) {
-        const colorElement = $(`.color-check:contains('${filters.color}')`);
-        const backgroundClass = colorElement
-          .find(".color")
-          .attr("class")
-          .split(" ")
-          .find((cls) => cls.startsWith("bg-"));
-        const line = backgroundClass === "bg-white" ? "line-black" : "";
-        appliedFilters.append(
-          `<span class="filter-tag color-tag">
-                  <span class="color ${backgroundClass} ${line}"></span>
-                  ${filters.color}
-                  <span class="remove-tag icon-close" data-filter="color"></span>
-              </span>`
-        );
-      }
+  //     if (filters.availability) {
+  //       appliedFilters.append(
+  //         `<span class="filter-tag">${filters.availability} <span class="remove-tag icon-close" data-filter="availability"></span></span>`
+  //       );
+  //     }
+  //     if (filters.size) {
+  //       appliedFilters.append(
+  //         `<span class="filter-tag">${filters.size} <span class="remove-tag icon-close" data-filter="size"></span></span>`
+  //       );
+  //     }
+  //     if (filters.minPrice > minPrice || filters.maxPrice < maxPrice) {
+  //       appliedFilters.append(
+  //         `<span class="filter-tag">$${filters.minPrice} - $${filters.maxPrice} <span class="remove-tag icon-close" data-filter="price"></span></span>`
+  //       );
+  //     }
+  //     if (filters.color) {
+  //       const colorElement = $(`.color-check:contains('${filters.color}')`);
+  //       const backgroundClass = colorElement
+  //         .find(".color")
+  //         .attr("class")
+  //         .split(" ")
+  //         .find((cls) => cls.startsWith("bg-"));
+  //       const line = backgroundClass === "bg-white" ? "line-black" : "";
+  //       appliedFilters.append(
+  //         `<span class="filter-tag color-tag">
+  //                 <span class="color ${backgroundClass} ${line}"></span>
+  //                 ${filters.color}
+  //                 <span class="remove-tag icon-close" data-filter="color"></span>
+  //             </span>`
+  //       );
+  //     }
 
-      if (filters.brands.length > 0) {
-        filters.brands.forEach((brand) => {
-          appliedFilters.append(
-            `<span class="filter-tag">${brand.label} <span class="remove-tag icon-close" data-filter="brand" data-value="${brand.id}"></span></span>`
-          );
-        });
-      }
+  //     if (filters.brands.length > 0) {
+  //       filters.brands.forEach((brand) => {
+  //         appliedFilters.append(
+  //           `<span class="filter-tag">${brand.label} <span class="remove-tag icon-close" data-filter="brand" data-value="${brand.id}"></span></span>`
+  //         );
+  //       });
+  //     }
 
-      if (filters.sale) {
-        appliedFilters.append(
-          `<span class="filter-tag on-sale d-none">On Sale <span class="remove-tag icon-close" data-filter="sale"></span></span>`
-        );
-      }
+  //     if (filters.sale) {
+  //       appliedFilters.append(
+  //         `<span class="filter-tag on-sale d-none">On Sale <span class="remove-tag icon-close" data-filter="sale"></span></span>`
+  //       );
+  //     }
 
-      const hasFiltersApplied = appliedFilters.children().length > 0;
-      metaFilterShop.toggle(hasFiltersApplied);
+  //     const hasFiltersApplied = appliedFilters.children().length > 0;
+  //     metaFilterShop.toggle(hasFiltersApplied);
 
-      $("#remove-all").toggle(hasFiltersApplied);
-    }
+  //     $("#remove-all").toggle(hasFiltersApplied);
+  //   }
 
-    $("#applied-filters").on("click", ".remove-tag", function () {
-      const filterType = $(this).data("filter");
-      const filterValue = $(this).data("value");
+  //   $("#applied-filters").on("click", ".remove-tag", function () {
+  //     const filterType = $(this).data("filter");
+  //     const filterValue = $(this).data("value");
 
-      if (filterType === "size") {
-        filters.size = null;
-        $(".size-check").removeClass("active");
-      }
-      if (filterType === "color") {
-        filters.color = null;
-        $(".color-check").removeClass("active");
-      }
-      if (filterType === "availability") {
-        filters.availability = null;
-        $('input[name="availability"]').prop("checked", false);
-      }
-      if (filterType === "brand") {
-        filters.brands = filters.brands.filter(
-          (brand) => brand.id !== filterValue
-        );
-        $(`input[name="brand"][id="${filterValue}"]`).prop("checked", false);
-      }
-      if (filterType === "price") {
-        filters.minPrice = minPrice;
-        filters.maxPrice = maxPrice;
-        priceSlider.noUiSlider.set([minPrice, maxPrice]);
-      }
+  //     if (filterType === "size") {
+  //       filters.size = null;
+  //       $(".size-check").removeClass("active");
+  //     }
+  //     if (filterType === "color") {
+  //       filters.color = null;
+  //       $(".color-check").removeClass("active");
+  //     }
+  //     if (filterType === "availability") {
+  //       filters.availability = null;
+  //       $('input[name="availability"]').prop("checked", false);
+  //     }
+  //     if (filterType === "brand") {
+  //       filters.brands = filters.brands.filter(
+  //         (brand) => brand.id !== filterValue
+  //       );
+  //       $(`input[name="brand"][id="${filterValue}"]`).prop("checked", false);
+  //     }
+  //     if (filterType === "price") {
+  //       filters.minPrice = minPrice;
+  //       filters.maxPrice = maxPrice;
+  //       priceSlider.noUiSlider.set([minPrice, maxPrice]);
+  //     }
 
-      if (filterType === "sale") {
-        filters.sale = false;
-        $(".shop-sale-text").removeClass("active");
-      }
+  //     if (filterType === "sale") {
+  //       filters.sale = false;
+  //       $(".shop-sale-text").removeClass("active");
+  //     }
 
-      applyFilters();
-      updateMetaFilter();
-    });
+  //     applyFilters();
+  //     updateMetaFilter();
+  //   });
 
-    $("#remove-all,#reset-filter").click(function () {
-      filters.size = null;
-      filters.color = null;
-      filters.availability = null;
-      filters.brands = [];
-      filters.minPrice = minPrice;
-      filters.maxPrice = maxPrice;
-      filters.sale = false;
+  //   $("#remove-all,#reset-filter").click(function () {
+  //     filters.size = null;
+  //     filters.color = null;
+  //     filters.availability = null;
+  //     filters.brands = [];
+  //     filters.minPrice = minPrice;
+  //     filters.maxPrice = maxPrice;
+  //     filters.sale = false;
 
-      $(".shop-sale-text").removeClass("active");
-      $('input[name="brand"]').prop("checked", false);
-      $('input[name="availability"]').prop("checked", false);
-      $(".size-check, .color-check").removeClass("active");
-      priceSlider.noUiSlider.set([minPrice, maxPrice]);
+  //     $(".shop-sale-text").removeClass("active");
+  //     $('input[name="brand"]').prop("checked", false);
+  //     $('input[name="availability"]').prop("checked", false);
+  //     $(".size-check, .color-check").removeClass("active");
+  //     priceSlider.noUiSlider.set([minPrice, maxPrice]);
 
-      applyFilters();
-      updateMetaFilter();
-    });
+  //     applyFilters();
+  //     updateMetaFilter();
+  //   });
 
-    function applyFilters() {
-      let visibleProductCountGrid = 0;
-      let visibleProductCountList = 0;
+  //   function applyFilters() {
+  //     let visibleProductCountGrid = 0;
+  //     let visibleProductCountList = 0;
 
-      $(".wrapper-shop .card-product").each(function () {
-        const product = $(this);
-        let showProduct = true;
+  //     $(".wrapper-shop .card-product").each(function () {
+  //       const product = $(this);
+  //       let showProduct = true;
 
-        const priceText = product
-          .find(".current-price")
-          .text()
-          .replace("$", "");
-        const price = parseFloat(priceText);
-        if (price < filters.minPrice || price > filters.maxPrice) {
-          showProduct = false;
-        }
+  //       const priceText = product
+  //         .find(".current-price")
+  //         .text()
+  //         .replace("$", "");
+  //       const price = parseFloat(priceText);
+  //       if (price < filters.minPrice || price > filters.maxPrice) {
+  //         showProduct = false;
+  //       }
 
-        if (
-          filters.size &&
-          !product.find(`.size-item:contains('${filters.size}')`).length
-        ) {
-          showProduct = false;
-        }
+  //       if (
+  //         filters.size &&
+  //         !product.find(`.size-item:contains('${filters.size}')`).length
+  //       ) {
+  //         showProduct = false;
+  //       }
 
-        if (
-          filters.color &&
-          !product.find(`.color-swatch:contains('${filters.color}')`).length
-        ) {
-          showProduct = false;
-        }
+  //       if (
+  //         filters.color &&
+  //         !product.find(`.color-swatch:contains('${filters.color}')`).length
+  //       ) {
+  //         showProduct = false;
+  //       }
 
-        if (filters.availability) {
-          const availabilityStatus = product.data("availability");
-          if (filters.availability !== availabilityStatus) {
-            showProduct = false;
-          }
-        }
+  //       if (filters.availability) {
+  //         const availabilityStatus = product.data("availability");
+  //         if (filters.availability !== availabilityStatus) {
+  //           showProduct = false;
+  //         }
+  //       }
 
-        if (filters.sale) {
-          if (!product.find(".on-sale-wrap").length) {
-            showProduct = false;
-          }
-        }
+  //       if (filters.sale) {
+  //         if (!product.find(".on-sale-wrap").length) {
+  //           showProduct = false;
+  //         }
+  //       }
 
-        if (filters.brands.length > 0) {
-          const brandId = product.attr("data-brand");
-          if (!filters.brands.some((brand) => brand.id === brandId)) {
-            showProduct = false;
-          }
-        }
+  //       if (filters.brands.length > 0) {
+  //         const brandId = product.attr("data-brand");
+  //         if (!filters.brands.some((brand) => brand.id === brandId)) {
+  //           showProduct = false;
+  //         }
+  //       }
 
-        product.toggle(showProduct);
+  //       product.toggle(showProduct);
 
-        if (showProduct) {
-          if (product.hasClass("grid")) {
-            visibleProductCountGrid++;
-          } else if (product.hasClass("style-list")) {
-            visibleProductCountList++;
-          }
-        }
-      });
+  //       if (showProduct) {
+  //         if (product.hasClass("grid")) {
+  //           visibleProductCountGrid++;
+  //         } else if (product.hasClass("style-list")) {
+  //           visibleProductCountList++;
+  //         }
+  //       }
+  //     });
 
-      $("#product-count-grid").html(
-        `<span class="count">${visibleProductCountGrid}</span> Products Found`
-      );
-      $("#product-count-list").html(
-        `<span class="count">${visibleProductCountList}</span> Products Found`
-      );
-      updateLastVisibleItem();
-      if (visibleProductCountGrid >= 12 || visibleProductCountList >= 12) {
-        $(".wg-pagination,.tf-loading").show();
-      } else {
-        $(".wg-pagination,.tf-loading").hide();
-      }
-    }
+  //     $("#product-count-grid").html(
+  //       `<span class="count">${visibleProductCountGrid}</span> Products Found`
+  //     );
+  //     $("#product-count-list").html(
+  //       `<span class="count">${visibleProductCountList}</span> Products Found`
+  //     );
+  //     updateLastVisibleItem();
+  //     if (visibleProductCountGrid >= 12 || visibleProductCountList >= 12) {
+  //       $(".wg-pagination,.tf-loading").show();
+  //     } else {
+  //       $(".wg-pagination,.tf-loading").hide();
+  //     }
+  //   }
 
-    function updateLastVisibleItem() {
-      setTimeout(() => {
-        $(".card-product.style-list").removeClass("last");
-        const lastVisible = $(".card-product.style-list:visible").last();
-        if (lastVisible.length > 0) {
-          lastVisible.addClass("last");
-        }
-      }, 50);
-    }
-  };
+  //   function updateLastVisibleItem() {
+  //     setTimeout(() => {
+  //       $(".card-product.style-list").removeClass("last");
+  //       const lastVisible = $(".card-product.style-list:visible").last();
+  //       if (lastVisible.length > 0) {
+  //         lastVisible.addClass("last");
+  //       }
+  //     }, 50);
+  //   }
+  // };
 
   var filterSort = function () {
     let isListActive = $(".sw-layout-list").hasClass("active");
@@ -607,8 +607,8 @@
   };
 
   $(function () {
-    rangeTwoPrice();
-    filterProducts();
+    // rangeTwoPrice();
+    // filterProducts();
     filterSort();
     swLayoutShop();
     handleSidebarFilter();
