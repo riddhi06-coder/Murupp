@@ -453,7 +453,7 @@
                 let minPrice = $('#price-min-value').text().trim().replace('₹', '');
                 let maxPrice = $('#price-max-value').text().trim().replace('₹', '');
                 let sizes = [];
-                
+
                 $('.size-check.selected').each(function () {
                     sizes.push($(this).text().trim());
                 });
@@ -461,11 +461,16 @@
                 let availability = $('input[name="availability"]:checked').attr('id');
                 let categoryId = $('#category-id').val();
 
+                // Extract slug from the URL (last segment of pathname)
+                let currentUrl = window.location.pathname;
+                let slug = currentUrl.split('/').pop();
+
                 $.ajax({
                     url: "{{ route('products.filter') }}",
                     method: "GET",
                     data: {
                         category_id: categoryId,
+                        slug: slug, // Passing slug to the controller
                         min_price: minPrice,
                         max_price: maxPrice,
                         sizes: sizes,
@@ -543,6 +548,7 @@
             });
         });
     </script>
+
 
 
 </body>
