@@ -168,6 +168,8 @@ class CategoryDetailsController extends Controller
     //     ]);
     // }
 
+
+    
     public function filterProducts(Request $request)
     {
         Log::info('Filter request received', ['request_data' => $request->all()]);
