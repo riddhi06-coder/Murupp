@@ -446,10 +446,7 @@
         });
     </script>
 
-
-
-
-
+    <!------ Ajax for filetered results fetching---->
     <script>
         $(document).ready(function () {
             $('#apply-filters').click(function () {
@@ -486,7 +483,7 @@
                                 filteredProductsHTML += `
                                     <div class="card-product grid">
                                         <div class="card-product-wrapper">
-                                            <a href="/product/${product.slug}" class="product-img">
+                                            <a href="/product-detail/${product.slug}" class="product-img">
                                                 <img class="img-product" src="${imgSrc1}" alt="image-product">
                                                 <img class="img-hover" src="${imgSrc2}" alt="image-product">
                                             </a>
