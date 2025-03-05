@@ -264,5 +264,8 @@ Route::group(['prefix'=> '', 'middleware'=>[\App\Http\Middleware\PreventBackHist
         return response()->json($results);
     });
 
+    Route::get('/products/filter', [CategoryDetailsController::class, 'filterProducts'])->name('products.filter');
+
+
 });
 
