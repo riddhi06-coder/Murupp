@@ -171,11 +171,8 @@
                         <div id="product-count-grid" class="count-text"></div>
                         <div id="product-count-list" class="count-text"></div>
                         <div id="applied-filters"></div>
-                        <button id="remove-all" class="remove-all-filters text-btn-uppercase" style="display: none;">
-                            REMOVE ALL <i class="icon icon-close"></i>
-                        </button>
+                        <button id="remove-all" class="remove-all-filters text-btn-uppercase" style="display: none;">REMOVE ALL <i class="icon icon-close"></i></button>
                     </div>
-
                     <div class="tf-grid-layout wrapper-shop tf-col-3" id="gridLayout">
                         @foreach($products as $product)
                             <div class="card-product grid">
@@ -500,13 +497,14 @@
                                             </div>
                                         </div>
                                         <div class="card-product-info">
-                                            <a href="/product/${product.slug}" class="title link">${product.product_name}</a>
+                                            <a href="/product-detail/${product.slug}" class="title link">${product.product_name}</a>
                                             <span class="price current-price"><i class="fa fa-inr" aria-hidden="true"></i> INR ${product.product_price}</span>
                                         </div>
                                     </div>
                                 `;
                             });
-                        } else {
+                        } 
+                        else {
                             filteredProductsHTML = '<p>No products found.</p>';
                         }
 
@@ -549,16 +547,19 @@
             // Remove specific filters
             $(document).on('click', '.remove-filter', function () {
                 $(this).parent().remove();
-                $('#apply-filters').click(); // Reapply filters
+                // $('#apply-filters').click(); // Reapply filters
             });
 
-            // Reset filters
+            // // Reset filters
             $('#reset-filter, #remove-all').click(function () {
                 location.reload();
             });
         });
     </script>
 
+
+
+  
 
 </body>
 

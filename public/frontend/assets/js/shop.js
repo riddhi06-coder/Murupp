@@ -571,7 +571,7 @@
   };
 
   var handleDropdownFilter = function () {
-    if (".wrapper-filter-dropdown".length > 0) { 
+    if (".wrapper-filter-dropdown".length > 0) {
       $(".filterDropdown").click(function (event) {
         event.stopPropagation();
         $(".dropdown-filter").toggleClass("show");
