@@ -86,14 +86,14 @@
                     
                     <div class="tf-control-sorting">
                         <p class="d-none d-lg-block text-caption-1">Sort by:</p>
-                        <div class="tf-dropdown-sort">
+                        <div class="tf-dropdown-sort" data-bs-toggle="dropdown">
                             <div class="btn-select">
-                                <span class="text-sort-value">Alphabetically, A-Z</span>
+                                <span class="text-sort-value">Best selling</span>
                                 <span class="icon icon-arrow-down"></span>
                             </div>
                             <div class="dropdown-menu">
                                 <div class="select-item" data-sort-value="best-selling">
-                                    <span class="text-value-item">Bestselling</span>
+                                    <span class="text-value-item">Best selling</span>
                                 </div>
                                 <div class="select-item" data-sort-value="a-z">
                                     <span class="text-value-item">Alphabetically, A-Z</span>
