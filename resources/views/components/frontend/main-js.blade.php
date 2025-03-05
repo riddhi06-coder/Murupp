@@ -8,7 +8,7 @@
 <script src="{{ asset('frontend/assets/js/wow.min.js') }}" defer></script>
 <script src="{{ asset('frontend/assets/js/multiple-modal.js') }}" defer></script>
 <script src="{{ asset('frontend/assets/js/nouislider.min.js') }}" defer></script>
-<script src="{{ asset('frontend/assets/js/shop.js') }}" defer></script>
+<!-- <script src="{{ asset('frontend/assets/js/shop.js') }}" defer></script> -->
 <script src="{{ asset('frontend/assets/js/main.js') }}" defer></script>
 
 
