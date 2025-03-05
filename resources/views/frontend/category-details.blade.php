@@ -446,7 +446,7 @@
         });
     </script>
 
-    <!------ Ajax for filetered results fetching---->
+    <!------ Ajax for filetered results fetching----> 
     <script>
         $(document).ready(function () {
             $('#apply-filters').click(function () {
@@ -527,6 +527,16 @@
                         }
 
                         $('#applied-filters').html(appliedFiltersHTML);
+
+                        // Close the offcanvas
+                        let filterOffcanvas = document.getElementById('filterShop');
+                        let bsOffcanvas = bootstrap.Offcanvas.getInstance(filterOffcanvas);
+                        if (bsOffcanvas) {
+                            bsOffcanvas.hide();
+                        } else {
+                            let newOffcanvas = new bootstrap.Offcanvas(filterOffcanvas);
+                            newOffcanvas.hide();
+                        }
                     }
                 });
             });
@@ -548,10 +558,6 @@
             });
         });
     </script>
-
-
-    
-
 
 
 </body>
