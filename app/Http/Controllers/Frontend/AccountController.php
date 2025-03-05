@@ -117,8 +117,9 @@
         // === My Account Order Detailed Page
         public function account_orders_details($order_id)
         {
+            $user = Auth::user(); 
             $order = OrderDetail::where('order_id', $order_id)->firstOrFail();
-            return view('frontend.my-account-order-details', compact('order'));
+            return view('frontend.my-account-order-details', compact('order','user'));
         }
 
 
