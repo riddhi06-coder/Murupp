@@ -19,6 +19,8 @@ class OrderDetail extends Model
         'customer_name',
         'customer_email',
         'customer_phone',
+        'images',
+        'sizes',
         'address',
         'total_price',
         'status',

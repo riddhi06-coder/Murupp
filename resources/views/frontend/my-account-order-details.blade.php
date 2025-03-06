@@ -192,10 +192,11 @@
                                         <div class="widget-content-inner">
                                             @php
                                                 // Decode the JSON stored in the database
-                                                $productIds = json_decode($order->product_ids, true) ?? [];
+                                                $images = json_decode($order->images, true) ?? [];
                                                 $productNames = json_decode($order->product_names, true) ?? [];
                                                 $quantities = json_decode($order->quantities, true) ?? [];
                                                 $prices = json_decode($order->prices, true) ?? [];
+                                                $size = json_decode($order->sizes, true) ?? [];
 
                                                 // Ensure all arrays have the same length
                                                 $totalItems = count($productNames);
@@ -203,40 +204,57 @@
 
                                             @for ($i = 0; $i < $totalItems; $i++)
                                                 <div class="order-head">
-                                                    <figure class="img-product">
-                                                        <img src="{{ asset('images/products/' . ($productIds[$i] ?? 'default.jpg')) }}" alt="product">
-                                                    </figure>
+                                                <figure class="img-product">
+                                                    <img src="{{ $images[$i] ?? asset('default.jpg') }}" alt="product" class="product-image">
+                                                </figure>
+
                                                     <div class="content">
-                                                        <div class="text-2 fw-6">{{ $productNames[$i] ?? 'Unknown Product' }}</div>
+                                                        <div class="text-2 fw-6">{{ $productNames[$i] }}</div>
                                                         <div class="mt_4"><span class="fw-6">Price :</span> <i class="fa fa-inr" aria-hidden="true"></i> {{ number_format_indian($prices[$i] ?? 0) }}</div>
-                                                        <div class="mt_4"><span class="fw-6">Quantity :</span> {{ $quantities[$i] ?? 1 }}</div>
+                                                        <div class="mt_4"><span class="fw-6">Size :</span> {{ $size[$i] ?? '' }}</div>
+                                                        <div class="mt_4"><span class="fw-6">Quantity :</span> {{ $quantities[$i] ?? '' }}</div>
                                                     </div>
                                                 </div>
                                             @endfor
+                                            
+                                            @php
+                                                $pricesArray = json_decode($order->prices, true) ?? [];
+                                                $priceValue = !empty($pricesArray) ? (float) $pricesArray[0] : 0;
+                                                $totalPrice = is_numeric($order->total_price) ? (float) $order->total_price : 0;
+                                            @endphp
 
                                             <ul>
                                                 <li class="d-flex justify-content-between text-2">
                                                     <span>Total Price</span>
-                                                    <span class="fw-6"><i class="fa fa-inr" aria-hidden="true"></i> {{ number_format_indian($order->total_price) }}</span>
+                                                    <span class="fw-6">
+                                                        <i class="fa fa-inr" aria-hidden="true"></i> {{ number_format_indian($totalPrice) }}
+                                                    </span>
+                                                </li>
+                                                <li class="d-flex justify-content-between text-2">
+                                                    <span>Order Total</span>
+                                                    <span class="fw-6">
+                                                        <i class="fa fa-inr" aria-hidden="true"></i> {{ number_format_indian($totalPrice) }}
+                                                    </span>
                                                 </li>
                                             </ul>
+
                                         </div>
-
-
 
                                         <div class="widget-content-inner">
                                             <p>Our courier service is dedicated to providing fast, reliable, and secure delivery solutions tailored to meet your needs. Whether you're sending documents, parcels, or larger shipments, our team ensures that your items are handled with the utmost care and delivered on time. With a commitment to customer satisfaction, real-time tracking, and a wide network of routes, we make it easy for you to send and receive packages both locally and internationally. Choose our service for a seamless and efficient delivery experience.</p>
                                         </div>
-                                        <div class="widget-content-inner">
-                                            <p class="text-2 text-success">Thank you Your order has been received</p>
-                                            <ul class="mt_20">
-                                                <li>Order Number : <span class="fw-7">#17493</span></li>
-                                                <li>Date : <span class="fw-7"> 17/07/2025, 02:34pm</span></li>
-                                                <li>Total : <span class="fw-7"><i class="fa fa-inr" aria-hidden="true"></i> 24,0000</span></li>
-                                                <li>Payment Methods : <span class="fw-7">Cash on Delivery</span></li>
-    
-                                            </ul>
-                                        </div>
+                                            <div class="widget-content-inner">
+                                                <p class="text-2 text-success">Thank you! Your order has been received</p>
+                                                <ul class="mt_20">
+                                                    <li>Order Number: <span class="fw-7">{{ $order->order_id ?? 'N/A' }}</span></li>
+                                                    <li>Date: <span class="fw-7"> 
+                                                        {{ \Carbon\Carbon::parse($order->created_at)->format('d/m/Y, h:i A') ?? 'N/A' }}
+                                                    </span></li>
+                                                    <li>Total: <span class="fw-7"><i class="fa fa-inr" aria-hidden="true"></i> {{ number_format($order->total_price ?? 0) }}</span></li>
+                                                    <li>Payment Method: <span class="fw-7"> Online Payment</span></li>
+                                                </ul>
+                                            </div>
+
     
                                     </div>
                                 </div>

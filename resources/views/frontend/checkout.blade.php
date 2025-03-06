@@ -148,7 +148,7 @@
                                     @forelse ($cartItems as $cartItem)
                                         <div class="item-product">
                                             <a href="{{ route('product.show', $cartItem->slug) }}" class="img-product">
-                                            <img src="{{ asset($cartItem->product_image) }}" alt="">
+                                            <img src="{{ asset($cartItem->product_image) }}" alt="" class="product-image">
 
                                             </a>
                                             <div class="content-box d-flex justify-content-between align-items-start">
@@ -157,7 +157,7 @@
                                                         {{ $cartItem->product_name }}
                                                     </a>
                                                     <div class="variant text-caption-1 text-secondary mt-1">
-                                                        <span class="size">{{ $cartItem->size }}</span>
+                                                        <span class="product-size size">{{ $cartItem->size }}</span>
                                                         @if ($cartItem->colors)
                                                             / <span class="color">{{ $cartItem->colors }}</span>
                                                         @endif
@@ -276,11 +276,16 @@
             document.querySelectorAll(".item-product").forEach(item => {
                 let productElement = item.querySelector(".name-product"); 
                 let quantityElement = item.querySelector(".quantity strong");
+                let imageElement = item.querySelector(".product-image");
+                let sizeElement = item.querySelector(".product-size");
+
                 orderData.cart_items.push({
                     product_id: productElement.getAttribute("data-id"), 
                     product_name: productElement.innerText,
                     quantity: quantityElement ? parseInt(quantityElement.innerText) : 1,
-                    price: item.querySelector(".price").innerText.replace("₹", "").trim()
+                    price: item.querySelector(".price").innerText.replace("₹", "").trim(),
+                    image: imageElement ? imageElement.getAttribute("src") : "", // Handle missing images
+                    size: sizeElement ? sizeElement.innerText : "N/A" // Handle missing size
                 });
             });
 

@@ -48,6 +48,7 @@ class PaymentController extends Controller
     
 
     public function verifyPayment(Request $request) {
+        // dd($request);
         try {
             $api = new Api(env('RAZORPAY_KEY'), env('RAZORPAY_SECRET'));
     
@@ -66,12 +67,16 @@ class PaymentController extends Controller
                 $productNames = [];
                 $quantities   = [];
                 $prices       = [];
+                $images       = [];
+                $sizes        = [];
             
                 foreach ($orderData['cart_items'] as $cartItem) {
                     $productIds[]   = (int) ($cartItem['product_id'] ?? 0);
                     $productNames[] = trim($cartItem['product_name']);
                     $quantities[]   = (int) ($cartItem['quantity'] ?? 1);
                     $prices[]       = (int) str_replace(',', '', $cartItem['price']); 
+                    $images[]       = $cartItem['image'] ?? null;
+                    $sizes[]        = $cartItem['size'] ?? "";
                 }
             
                 // Debugging Log to check data before inserting
@@ -80,6 +85,8 @@ class PaymentController extends Controller
                     'product_names' => json_encode($productNames),
                     'quantities' => json_encode($quantities),
                     'prices' => json_encode($prices),
+                    'images'        => json_encode($images),
+                    'sizes'         => json_encode($sizes),
                 ]);
             
                 try {
@@ -96,6 +103,8 @@ class PaymentController extends Controller
                         'product_names'  => json_encode($productNames, JSON_UNESCAPED_UNICODE),
                         'quantities'     => json_encode($quantities, JSON_UNESCAPED_UNICODE),
                         'prices'         => json_encode($prices, JSON_UNESCAPED_UNICODE),
+                        'images'         => json_encode($images, JSON_UNESCAPED_UNICODE),
+                        'sizes'          => json_encode($sizes, JSON_UNESCAPED_UNICODE),
                         'address'        => $orderData['address'],
                         'created_at'     => Carbon::now(),
                         'created_by'     => Auth::check() ? Auth::id() : null,
