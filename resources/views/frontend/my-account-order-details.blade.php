@@ -93,7 +93,7 @@
                             <div class="wd-form-order">
                             <div class="order-head">
                                 <div class="content">
-                                <div class="badge">
+                                <div class="">
                                     @php
                                         $latestStatus = $orderStatuses->sortByDesc('status_updated_at')->first();
                                     @endphp
