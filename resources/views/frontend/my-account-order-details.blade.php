@@ -141,65 +141,65 @@
                             </div>
 
                                 <div class="widget-tabs style-3 widget-order-tab">
-                                    <ul class="widget-menu-tab">
-                                        <li class="item-title active">
-                                            <span class="inner">Order History</span>
-                                        </li>
-                                        <li class="item-title">
-                                            <span class="inner">Item Details</span>
-                                        </li>
-                                        <li class="item-title">
-                                            <span class="inner">Courier</span>
-                                        </li>
-                                        <li class="item-title">
-                                            <span class="inner">Receiver</span>
-                                        </li>
-                                    </ul>
-                                    <div class="widget-content-tab">
-                                        <div class="widget-content-inner active">
-                                        <div class="widget-timeline">
-                                        <ul class="timeline">
-                                        @php
-                                            $allStatuses = ['Order Placed', 'Processing', 'Shipped', 'Delivered', 'Completed'];
-                                            $updatedStatuses = $orderStatuses->pluck('order_status')->toArray();
-                                        @endphp
-
-                                        @foreach($allStatuses as $status)
+                                        <ul class="widget-menu-tab">
+                                            <li class="item-title active">
+                                                <span class="inner">Order History</span>
+                                            </li>
+                                            <li class="item-title">
+                                                <span class="inner">Item Details</span>
+                                            </li>
+                                            <li class="item-title">
+                                                <span class="inner">Courier</span>
+                                            </li>
+                                            <li class="item-title">
+                                                <span class="inner">Receiver</span>
+                                            </li>
+                                        </ul>
+                                        <div class="widget-content-tab">
+                                            <div class="widget-content-inner active">
+                                            <div class="widget-timeline">
+                                            <ul class="timeline">
                                             @php
-                                                $statusRecord = $orderStatuses->firstWhere('order_status', $status);
-                                                $isActive = in_array($status, $updatedStatuses);
+                                                $allStatuses = ['Order Placed', 'Processing', 'Shipped', 'Delivered', 'Completed'];
+                                                $updatedStatuses = $orderStatuses->pluck('order_status')->toArray();
                                             @endphp
 
-                                            <li>
-                                                <div class="timeline-badge {{ $isActive ? ($status == 'Cancelled' ? 'danger' : 'success') : '' }}"></div>
-                                                <div class="timeline-box">
-                                                    <a class="timeline-panel" href="javascript:void(0);">
-                                                        <div class="text-2 fw-6">{{ $status }}</div>
-                                                        
-                                                        @if($isActive)
-                                                            <span>{{ \Carbon\Carbon::parse($statusRecord->status_updated_at)->format('d/m/Y h:ia') }}</span>
-                                                        @else
-                                                            <!-- <span class="text-muted">Pending</span> -->
+                                            @foreach($allStatuses as $status)
+                                                @php
+                                                    $statusRecord = $orderStatuses->firstWhere('order_status', $status);
+                                                    $isActive = in_array($status, $updatedStatuses);
+                                                @endphp
+
+                                                <li>
+                                                    <div class="timeline-badge {{ $isActive ? ($status == 'Cancelled' ? 'danger' : 'success') : '' }}"></div>
+                                                    <div class="timeline-box">
+                                                        <a class="timeline-panel" href="javascript:void(0);">
+                                                            <div class="text-2 fw-6">{{ $status }}</div>
+                                                            
+                                                            @if($isActive)
+                                                                <span>{{ \Carbon\Carbon::parse($statusRecord->status_updated_at)->format('d/m/Y h:ia') }}</span>
+                                                            @else
+                                                                <!-- <span class="text-muted">Pending</span> -->
+                                                            @endif
+                                                        </a>
+
+                                                        @if($isActive && $status == 'Shipped')
+                                                            <p><strong>Estimated Delivery Date : </strong>{{ $statusRecord->delivery_date ? \Carbon\Carbon::parse($statusRecord->delivery_date)->format('d/m/Y') : 'N/A' }}</p>
                                                         @endif
-                                                    </a>
 
-                                                    @if($isActive && $status == 'Shipped')
-                                                        <p><strong>Estimated Delivery Date : </strong>{{ $statusRecord->delivery_date ? \Carbon\Carbon::parse($statusRecord->delivery_date)->format('d/m/Y') : 'N/A' }}</p>
-                                                    @endif
-
-                                                    @if($isActive && $statusRecord->order_remarks)
-                                                        <p><strong>Remarks : </strong>{{ $statusRecord->order_remarks }}</p>
-                                                    @endif
+                                                        @if($isActive && $statusRecord->order_remarks)
+                                                            <p><strong>Remarks : </strong>{{ $statusRecord->order_remarks }}</p>
+                                                        @endif
+                                                    </div>
+                                                </li>
+                                            @endforeach
+                                            </ul>
+                                            </div>
+                                            @if($isCancelled)
+                                                <div class="alert alert-danger">
+                                                    <strong>Note:</strong> This order has been <strong>Cancelled</strong> and cannot be updated further.
                                                 </div>
-                                            </li>
-                                        @endforeach
-                                    </ul>
-                                    </div>
-                                    @if($isCancelled)
-                                        <div class="alert alert-danger">
-                                            <strong>Note:</strong> This order has been <strong>Cancelled</strong> and cannot be updated further.
-                                        </div>
-                                    @endif
+                                            @endif
 
                                         </div>
 
