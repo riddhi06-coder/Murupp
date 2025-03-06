@@ -81,7 +81,7 @@
                                             data-id="{{ $order->order_id }}" 
                                             data-status="{{ $order->order_status }}"
                                             data-delivery="{{ $order->delivery_date ?? '' }}"
-                                            data-remarks="{{ $order->remarks ?? '' }}">
+                                            data-remarks="{{ $order->order_remarks  ?? '' }}">
                                             Update
                                         </button>
                                     </td>
@@ -160,14 +160,14 @@
 
                 if (updateOrderModal) {
                     updateOrderModal.addEventListener('show.bs.modal', function (event) {
-                        var button = event.relatedTarget; // Button that triggered the modal
+                        var button = event.relatedTarget; 
 
                         var orderId = button.getAttribute('data-id'); 
                         var orderStatus = button.getAttribute('data-status'); 
                         var deliveryDate = button.getAttribute('data-delivery'); 
                         var remarks = button.getAttribute('data-remarks'); 
 
-                        document.getElementById('orderId').value = orderId; // Set hidden input
+                        document.getElementById('orderId').value = orderId; 
                         document.getElementById('orderStatus').value = orderStatus; 
                         document.getElementById('deliveryDate').value = deliveryDate; 
                         document.getElementById('remarks').value = remarks; 
