@@ -46,7 +46,10 @@
 										<li class="breadcrumb-item active" aria-current="page">Order Tracking List</li>
 									</ol>
 								</nav>
-                                <a href="{{ route('fabric-composition.create') }}" class="btn btn-primary px-5 radius-30">Update Status</a>
+                                <a href="#" class="btn btn-primary px-5 radius-30" data-bs-toggle="modal" data-bs-target="#updateOrderModal">
+                                    Update Status
+                                </a>
+
 					</div>
 
 
@@ -58,7 +61,6 @@
                             <th>Order Id</th>
                             <th>Status</th>
                             <th>Date</th>
-                            <th>Action</th>
                           </tr>
                         </thead>
                         <tbody>
@@ -75,18 +77,6 @@
                                         </span>
                                     </td>
                                     <td>{{ \Carbon\Carbon::parse($order->created_at)->format('d/m/Y, h:i A') }}</td>
-                                    <td>
-                                        <button type="button" class="btn btn-sm btn-primary" 
-                                            data-bs-toggle="modal" 
-                                            data-bs-target="#updateOrderModal" 
-                                            data-id="{{ $order->order_id }}" 
-                                            data-status="{{ $order->order_status }}"
-                                            data-delivery="{{ $order->delivery_date ?? '' }}"
-                                            data-remarks="{{ $order->order_remarks  ?? '' }}">
-                                            Update
-                                        </button>
-                                    </td>
-
                                 </tr>
                             @endforeach
                         </tbody>
@@ -110,31 +100,42 @@
                     <form id="updateOrderForm" method="POST" action="{{ route('order.update') }}">
                         @csrf
                         <div class="modal-body">
-                            <input type="hidden" id="orderId" name="order_id">
+
+                            <!-- Order ID Dropdown -->
+                            <div class="mb-3">
+                                <label for="orderId" class="form-label">Select Order ID <span class="txt-danger">*</span></label>
+                                <select class="form-select" id="orderId" name="order_id" required>
+                                    <option value="">Select Order</option>
+                                    @foreach($uniqueOrders as $order)
+                                        <option value="{{ $order->order_id }}">{{ $order->order_id }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
 
                             <!-- Order Status Dropdown -->
                             <div class="mb-3">
                                 <label for="orderStatus" class="form-label">Order Status <span class="txt-danger">*</span></label>
                                 <select class="form-select" id="orderStatus" name="order_status" required>
-                                    <option value="Order Placed" disabled {{ $order->order_status == 'Order Placed' ? 'selected' : '' }}>Order Placed</option>
-                                    <option value="Processing" {{ $order->order_status == 'Processing' ? 'selected' : '' }}>Processing</option>
-                                    <option value="Shipped" {{ $order->order_status == 'Shipped' ? 'selected' : '' }}>Shipped</option>
-                                    <option value="Delivered" {{ $order->order_status == 'Delivered' ? 'selected' : '' }}>Delivered</option>
-                                    <option value="Completed" {{ $order->order_status == 'Completed' ? 'selected' : '' }}>Completed</option>
-                                    <option value="Cancelled" {{ $order->order_status == 'Cancelled' ? 'selected' : '' }}>Cancelled</option>
+                                    <option value=" ">Select Status</option>
+                                    <option value="Order Placed">Order Placed</option>
+                                    <option value="Processing">Processing</option>
+                                    <option value="Shipped">Shipped</option>
+                                    <option value="Delivered">Delivered</option>
+                                    <option value="Completed">Completed</option>
+                                    <option value="Cancelled">Cancelled</option>
                                 </select>
                             </div>
 
                             <!-- Delivery Date -->
                             <div class="mb-3">
-                                <label for="deliveryDate" class="form-label">Tentative Delivery Date <span class="txt-danger">*</span></label>
-                                <input type="date" class="form-control" id="deliveryDate" name="delivery_date" required>
+                                <label for="deliveryDate" class="form-label">Tentative Delivery Date</label>
+                                <input type="date" class="form-control" id="deliveryDate" name="delivery_date" >
                             </div>
 
                             <!-- Remarks -->
                             <div class="mb-3">
-                                <label for="remarks" class="form-label">Remarks <span class="txt-danger">*</span></label>
-                                <textarea class="form-control" id="remarks" name="remarks" rows="3" required></textarea>
+                                <label for="remarks" class="form-label">Remarks</label>
+                                <textarea class="form-control" id="remarks" name="remarks" rows="3"></textarea>
                             </div>
                         </div>
                         <div class="modal-footer">
@@ -154,29 +155,72 @@
 
         @include('components.backend.main-js')
 
-        <!--- js for order status update--->
+        <!-----to auto fetch the latest status as per the order id selectdd--->
         <script>
-            document.addEventListener('DOMContentLoaded', function () {
-                var updateOrderModal = document.getElementById('updateOrderModal');
+            document.addEventListener("DOMContentLoaded", function () {
+                console.log("Script is running!");
 
-                if (updateOrderModal) {
-                    updateOrderModal.addEventListener('show.bs.modal', function (event) {
-                        var button = event.relatedTarget; 
+                let orderIdDropdown = document.getElementById("orderId");
+                let orderStatusDropdown = document.getElementById("orderStatus");
 
-                        var orderId = button.getAttribute('data-id'); 
-                        var orderStatus = button.getAttribute('data-status'); 
-                        var deliveryDate = button.getAttribute('data-delivery'); 
-                        var remarks = button.getAttribute('data-remarks'); 
+                console.log("Order ID Dropdown:", orderIdDropdown);
+                console.log("Order Status Dropdown:", orderStatusDropdown);
 
-                        document.getElementById('orderId').value = orderId; 
-                        document.getElementById('orderStatus').value = orderStatus; 
-                        document.getElementById('deliveryDate').value = deliveryDate; 
-                        document.getElementById('remarks').value = remarks; 
+                // Define the correct status order
+                let statusOrder = ["Order Placed", "Processing", "Shipped", "Delivered", "Completed", "Cancelled"];
+
+                if (orderIdDropdown) {
+                    console.log("Adding event listener to Order ID dropdown...");
+
+                    orderIdDropdown.addEventListener("change", function () {
+                        console.log("Change event triggered!");
+
+                        let selectedOrderId = this.value;
+                        console.log("Selected Order ID:", selectedOrderId);
+
+                        let orderStatusesRaw = @json($latestStatuses);
+                        let orderStatuses = {};
+
+                        Object.keys(orderStatusesRaw).forEach(key => {
+                            orderStatuses[key] = orderStatusesRaw[key].order_status;
+                        });
+
+                        console.log("Parsed Order Statuses:", orderStatuses);
+
+                        if (selectedOrderId && orderStatuses[selectedOrderId]) {
+                            let latestStatus = orderStatuses[selectedOrderId];
+                            console.log("Latest Status Found:", latestStatus);
+
+                            // Set the value in the dropdown
+                            orderStatusDropdown.value = latestStatus;
+
+                            // Disable all statuses before the latest one
+                            let latestStatusIndex = statusOrder.indexOf(latestStatus);
+                            let options = orderStatusDropdown.options;
+
+                            for (let option of options) {
+                                let optionIndex = statusOrder.indexOf(option.value);
+
+                                if (optionIndex < latestStatusIndex) {
+                                    option.disabled = true;
+                                } else {
+                                    option.disabled = false;
+                                }
+                            }
+                        } else {
+                            console.log("No status found for Order ID:", selectedOrderId);
+                        }
                     });
+                } else {
+                    console.error("Order ID dropdown not found in DOM!");
                 }
             });
-
         </script>
+
+
+
+
+
 </body>
 
 </html>
