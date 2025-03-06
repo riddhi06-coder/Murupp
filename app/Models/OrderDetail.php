@@ -28,6 +28,11 @@ class OrderDetail extends Model
         'product_names',
         'quantities',
         'prices',
+        'order_status',
+        'status_updated_by',
+        'status_updated_at',
+        'order_remarks',
+        'delivery_date',
         'created_at',
         'created_by',
     ];

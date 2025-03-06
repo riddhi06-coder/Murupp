@@ -17,6 +17,7 @@ use App\Http\Controllers\Backend\ProductPrintsController;
 use App\Http\Controllers\Backend\ProductDetailsController;
 use App\Http\Controllers\Backend\SEOController;
 use App\Http\Controllers\Backend\StockDetailsController;
+use App\Http\Controllers\Backend\OrderTrackingController;
 use App\Http\Controllers\Backend\Home\BannerDetailsController;
 use App\Http\Controllers\Backend\Home\NewArrivalsController;
 use App\Http\Controllers\Backend\Home\CollectionDetailsController;
@@ -161,6 +162,10 @@ Route::resource('seo-tags', SEOController::class);
 
 // ==== Manage Stock Management
 Route::resource('stock-details', StockDetailsController::class);
+
+// ==== Manage Order Tracking
+Route::resource('order-tracking', OrderTrackingController::class);
+Route::post('/order/update', [OrderTrackingController::class, 'update'])->name('order.update');
 
 
 // ======================= Frontend

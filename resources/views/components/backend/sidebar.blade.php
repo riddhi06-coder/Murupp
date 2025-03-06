@@ -108,27 +108,6 @@
                   </ul>
                 </li>
 
-
-                <!-- <li class="sidebar-list {{ request()->routeIs('dresses.index', 'tops.index', 'bottoms.index', 'co-ords.index', 'jackets.index') ? 'active' : '' }}">
-                  <i class="fa fa-thumb-tack"> </i>
-                  <a class="sidebar-link sidebar-title" href="#">
-                    <svg class="stroke-icon"> 
-                      <use href="{{ asset('admin/assets/svg/icon-sprite.svg#product-category') }}"></use>
-                    </svg>
-                    <svg class="fill-icon">
-                      <use href="{{ asset('admin/assets/svg/icon-sprite.svg#product-category') }}"></use>
-                    </svg>
-                    <span>Category page</span>
-                  </a>
-                  <ul class="sidebar-submenu">
-                    <li><a href="{{ route('dresses.index') }}" class="{{ request()->routeIs('dresses.index') ? 'active' : '' }}">Dresses</a></li>
-                    <li><a href="{{ route('tops.index') }}" class="{{ request()->routeIs('tops.index') ? 'active' : '' }}">Tops</a></li>
-                    <li><a href="{{ route('bottoms.index') }}" class="{{ request()->routeIs('bottoms.index') ? 'active' : '' }}">Bottoms</a></li>
-                    <li><a href="{{ route('co-ords.index') }}" class="{{ request()->routeIs('co-ords.index') ? 'active' : '' }}">Co-ords</a></li>
-                    <li><a href="{{ route('jackets.index') }}" class="{{ request()->routeIs('jackets.index') ? 'active' : '' }}">Blazers/Jackets</a></li>
-                  </ul>
-                </li> -->
-
                 <li class="sidebar-list {{ request()->routeIs('terms.index') ? 'active' : '' }}">
                   <i class="fa fa-thumb-tack"></i>
                   <a class="sidebar-link" href="{{ route('terms.index') }}">
@@ -207,6 +186,20 @@
                       <use href="{{ asset('admin/assets/svg/icon-sprite.svg#sale') }}"></use>
                     </svg>
                     <span>Stock Management</span>
+                  </a>
+                </li>
+
+
+                <li class="sidebar-list {{ request()->routeIs('order-tracking.index') ? 'active' : '' }}">
+                  <i class="fa fa-thumb-tack"></i>
+                  <a class="sidebar-link" href="{{ route('order-tracking.index') }}">
+                    <svg class="stroke-icon"> 
+                      <use href="{{ asset('admin/assets/svg/icon-sprite.svg#orders') }}"></use>
+                    </svg>
+                    <svg class="fill-icon">
+                      <use href="{{ asset('admin/assets/svg/icon-sprite.svg#orders') }}"></use>
+                    </svg>
+                    <span>Order Tracking</span>
                   </a>
                 </li>
 
