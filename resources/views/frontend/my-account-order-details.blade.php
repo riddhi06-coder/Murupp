@@ -93,15 +93,30 @@
                             <div class="wd-form-order">
                             <div class="order-head">
                                 <div class="content">
-                                    <div class="badge">
-                                        @if($order->status == 0)
-                                            Pending
-                                        @elseif($order->status == 1)
-                                            Completed
-                                        @elseif($order->status == 2)
-                                            Cancelled
+                                <div class="">
+                                    @php
+                                        $latestStatus = $orderStatuses->sortByDesc('status_updated_at')->first();
+                                    @endphp
+
+                                    @if($latestStatus)
+                                        @if($latestStatus->order_status == 'Order Placed')
+                                            <span class="badge bg-warning">Order Placed</span>
+                                        @elseif($latestStatus->order_status == 'Processing')
+                                            <span class="badge bg-primary">Processing</span>
+                                        @elseif($latestStatus->order_status == 'Shipped')
+                                            <span class="badge bg-info">Shipped</span>
+                                        @elseif($latestStatus->order_status == 'Delivered')
+                                            <span class="badge bg-success">Delivered</span>
+                                        @elseif($latestStatus->order_status == 'Completed')
+                                            <span class="badge bg-dark">Completed</span>
+                                        @elseif($latestStatus->order_status == 'Cancelled')
+                                            <span class="badge bg-danger">Cancelled</span>
                                         @endif
-                                    </div>
+                                    @else
+                                        <span class="badge bg-secondary">Pending</span>
+                                    @endif
+                                </div>
+
                                     <h6 class="mt-8 fw-5">Order Id: {{ $order->order_id }}</h6>
                                 </div>
                             </div>
@@ -142,50 +157,50 @@
                                     </ul>
                                     <div class="widget-content-tab">
                                         <div class="widget-content-inner active">
-                                            <div class="widget-timeline">
-                                                <ul class="timeline">
-                                                    <li>
-                                                        <div class="timeline-badge success"></div>
-                                                        <div class="timeline-box">
-                                                            <a class="timeline-panel" href="javascript:void(0);">
-                                                                <div class="text-2 fw-6">Product Shipped</div>
-                                                                <span>10/07/2024 4:30pm</span>
-                                                            </a>
-                                                            <p><strong>Courier Service : </strong>FedEx World Service Center</p>
-                                                            <p><strong>Estimated Delivery Date : </strong>12/07/2024</p>
-                                                        </div>
-                                                    </li>
-                                                    <li>
-                                                        <div class="timeline-badge success"></div>
-                                                        <div class="timeline-box">
-                                                            <a class="timeline-panel" href="javascript:void(0);">
-                                                                <div class="text-2 fw-6">Product Shipped</div>
-                                                                <span>10/07/2024 4:30pm</span>
-                                                            </a>
-                                                            <p><strong>Tracking Number : </strong>2307-3215-6759</p>
-                                                            <p><strong>Warehouse : </strong>T-Shirt 10b</p>
-                                                        </div>
-                                                    </li>
-                                                    <li>
-                                                        <div class="timeline-badge"></div>
-                                                        <div class="timeline-box">
-                                                            <a class="timeline-panel" href="javascript:void(0);">
-                                                                <div class="text-2 fw-6">Product Packaging</div>
-                                                                <span>12/07/2024 4:34pm</span>
-                                                            </a>
-                                                        </div>
-                                                    </li>
-                                                    <li>
-                                                        <div class="timeline-badge"></div>
-                                                        <div class="timeline-box">
-                                                            <a class="timeline-panel" href="javascript:void(0);">
-                                                                <div class="text-2 fw-6">Order Placed</div>
-                                                                <span>11/07/2024 2:36pm</span>
-                                                            </a>
-                                                        </div>
-                                                    </li>
-                                                </ul>
-                                            </div>
+                                        <div class="widget-timeline">
+                                        <ul class="timeline">
+                                        @php
+                                            $allStatuses = ['Order Placed', 'Processing', 'Shipped', 'Delivered', 'Completed'];
+                                            $updatedStatuses = $orderStatuses->pluck('order_status')->toArray();
+                                        @endphp
+
+                                        @foreach($allStatuses as $status)
+                                            @php
+                                                $statusRecord = $orderStatuses->firstWhere('order_status', $status);
+                                                $isActive = in_array($status, $updatedStatuses);
+                                            @endphp
+
+                                            <li>
+                                                <div class="timeline-badge {{ $isActive ? ($status == 'Cancelled' ? 'danger' : 'success') : '' }}"></div>
+                                                <div class="timeline-box">
+                                                    <a class="timeline-panel" href="javascript:void(0);">
+                                                        <div class="text-2 fw-6">{{ $status }}</div>
+                                                        
+                                                        @if($isActive)
+                                                            <span>{{ \Carbon\Carbon::parse($statusRecord->status_updated_at)->format('d/m/Y h:ia') }}</span>
+                                                        @else
+                                                            <!-- <span class="text-muted">Pending</span> -->
+                                                        @endif
+                                                    </a>
+
+                                                    @if($isActive && $status == 'Shipped')
+                                                        <p><strong>Estimated Delivery Date : </strong>{{ $statusRecord->delivery_date ? \Carbon\Carbon::parse($statusRecord->delivery_date)->format('d/m/Y') : 'N/A' }}</p>
+                                                    @endif
+
+                                                    @if($isActive && $statusRecord->order_remarks)
+                                                        <p><strong>Remarks : </strong>{{ $statusRecord->order_remarks }}</p>
+                                                    @endif
+                                                </div>
+                                            </li>
+                                        @endforeach
+                                    </ul>
+
+                                    @if($isCancelled)
+                                        <div class="alert alert-danger">
+                                            <strong>Note:</strong> This order has been <strong>Cancelled</strong> and cannot be updated further.
+                                        </div>
+                                    @endif
+
                                         </div>
 
 

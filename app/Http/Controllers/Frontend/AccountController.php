@@ -12,6 +12,7 @@
 
     use App\Models\User;
     use App\Models\OrderDetail;
+    use App\Models\OrderStatus;
 
     
     
@@ -119,7 +120,16 @@
         {
             $user = Auth::user(); 
             $order = OrderDetail::where('order_id', $order_id)->firstOrFail();
-            return view('frontend.my-account-order-details', compact('order','user'));
+
+            // Fetch order status history sorted by update time
+            $orderStatuses = OrderStatus::where('order_id', $order_id)
+            ->orderBy('status_updated_at', 'asc')
+            ->get();
+
+            // Check if the order has been cancelled
+            $isCancelled = $orderStatuses->contains('order_status', 'Cancelled');
+
+            return view('frontend.my-account-order-details', compact('order','user', 'orderStatuses', 'isCancelled'));
         }
 
 
