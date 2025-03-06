@@ -93,7 +93,7 @@
                             <div class="wd-form-order">
                             <div class="order-head">
                                 <div class="content">
-                                <div class="">
+                                <div class="badge">
                                     @php
                                         $latestStatus = $orderStatuses->sortByDesc('status_updated_at')->first();
                                     @endphp
@@ -194,7 +194,7 @@
                                             </li>
                                         @endforeach
                                     </ul>
-
+                                    </div>
                                     @if($isCancelled)
                                         <div class="alert alert-danger">
                                             <strong>Note:</strong> This order has been <strong>Cancelled</strong> and cannot be updated further.
