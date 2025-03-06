@@ -46,7 +46,8 @@
 										<li class="breadcrumb-item active" aria-current="page">Order Tracking List</li>
 									</ol>
 								</nav>
-							</div>
+                                <a href="{{ route('fabric-composition.create') }}" class="btn btn-primary px-5 radius-30">Update Status</a>
+					</div>
 
 
                     <div class="table-responsive custom-scrollbar">

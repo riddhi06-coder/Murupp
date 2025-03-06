@@ -15,6 +15,7 @@ use Carbon\Carbon;
 
 use App\Models\Payment;
 use App\Models\OrderDetail;
+use App\Models\OrderStatus;
 
 
 class PaymentController extends Controller
@@ -106,14 +107,19 @@ class PaymentController extends Controller
                         'images'         => json_encode($images, JSON_UNESCAPED_UNICODE),
                         'sizes'          => json_encode($sizes, JSON_UNESCAPED_UNICODE),
                         'address'        => $orderData['address'],
-                        'order_status'   => ($status == 2) ? 'Pending' : 'Order Placed',
                         'created_at'     => Carbon::now(),
                         'created_by'     => Auth::check() ? Auth::id() : null,
-                        'status_updated_at'  => Carbon::now(),
-                        'status_updated_by'  => Auth::check() ? Auth::id() : null,
                     ]);
             
-                    \Log::info("Order Inserted Successfully: ", ['order_id' => $order->id]);
+                    Log::info("Order Inserted Successfully: ", ['order_id' => $order->id]);
+
+                    OrderStatus::create([
+                        'user_id'           => Auth::check() ? Auth::id() : null,
+                        'order_id'          => $order->order_id,
+                        'order_status' => ($status == 2) ? 'Pending' : 'Order Placed',
+                        'status_updated_at' => Carbon::now(),
+                        'status_updated_by' => Auth::check() ? Auth::id() : null,
+                    ]);
 
                     if (Auth::check()) {
                         DB::table('carts')

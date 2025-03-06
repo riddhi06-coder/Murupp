@@ -14,6 +14,7 @@ use Illuminate\Support\Str;
 use Carbon\Carbon;
 use App\Models\User;
 use App\Models\OrderDetail;
+use App\Models\OrderStatus;
 
 
 class OrderTrackingController extends Controller
@@ -21,7 +22,7 @@ class OrderTrackingController extends Controller
 
     public function index()
     {
-        $data = OrderDetail::all();
+        $data = OrderStatus::all();
         return view('backend.tracking.index', compact('data'));
     }
 
@@ -42,30 +43,31 @@ class OrderTrackingController extends Controller
             'remarks.string' => 'Remarks should be a valid text.',
             'remarks.max' => 'Remarks should not exceed 500 characters.',
         ]);
-    
+
         try {
-    
-            $order = OrderDetail::where('order_id', $request->order_id)->first();
-    
-            if (!$order) {
-                return redirect()->back()->with('error', 'Order not found!');
-            }
-    
-            $order->order_status = $request->order_status;
-            $order->delivery_date = $request->delivery_date;
-            $order->order_remarks = $request->remarks;
-            $order->status_updated_at  = Carbon::now();
-            $order->status_updated_by  = Auth::check() ? Auth::id() : null;
-    
-            $order->save();
-    
-    
+            // Fetch the latest record for the given order_id
+            $latestOrder = OrderStatus::where('order_id', $request->order_id)
+                ->latest('status_updated_at')
+                ->first();
+        
+            // Insert new record with user_id from the latest entry
+            OrderStatus::create([
+                'user_id'          => $latestOrder ? $latestOrder->user_id : (Auth::check() ? Auth::id() : null),
+                'order_id'         => $request->order_id,
+                'order_status'     => $request->order_status,
+                'delivery_date'    => $request->delivery_date,
+                'order_remarks'    => $request->remarks,
+                'status_updated_at'=> Carbon::now(),
+                'status_updated_by'=> Auth::check() ? Auth::id() : null,
+            ]);
+        
             return redirect()->back()->with('message', 'Status updated successfully!');
         } catch (Exception $e) {
             return redirect()->back()->with('error', 'Something went wrong! ' . $e->getMessage());
         }
+        
     }
-    
+
     
 
 }
