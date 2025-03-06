@@ -56,7 +56,12 @@ class OrderTrackingController extends Controller
             $latestOrder = OrderStatus::where('order_id', $request->order_id)
                 ->latest('status_updated_at')
                 ->first();
-    
+
+            // Restriction: If the last status is "Cancelled", do not allow updates
+            if ($latestOrder && $latestOrder->order_status === 'Cancelled') {
+                return redirect()->back()->with('message', 'This order has been cancelled and cannot be updated.');
+            }
+        
             // Check if the latest status is the same as the new one
             if ($latestOrder && $latestOrder->order_status === $request->order_status) {
                 return redirect()->back()->with('message', 'Similar Status cannot be updated again!');
