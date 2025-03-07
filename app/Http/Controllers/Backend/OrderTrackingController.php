@@ -20,20 +20,63 @@ use App\Models\OrderStatus;
 class OrderTrackingController extends Controller
 {
 
-    public function index()
+    // public function index()
+    // {
+    //     $data = OrderStatus::all();
+
+    //     $uniqueOrders = OrderStatus::select('order_id')->distinct()->get();
+
+    //     // Fetch latest order status for each order_id
+    //     $latestStatuses = OrderStatus::select('order_id', 'order_status')
+    //                         ->whereIn('id', function ($query) {
+    //                             $query->selectRaw('MAX(id)')->from('order_status_details')->groupBy('order_id');
+    //                         })->get()->keyBy('order_id');
+
+    //     return view('backend.tracking.index', compact('data','uniqueOrders','latestStatuses'));
+    // }
+
+
+    public function user_list()
     {
-        $data = OrderStatus::all();
-
-        $uniqueOrders = OrderStatus::select('order_id')->distinct()->get();
-
-        // Fetch latest order status for each order_id
-        $latestStatuses = OrderStatus::select('order_id', 'order_status')
-                            ->whereIn('id', function ($query) {
-                                $query->selectRaw('MAX(id)')->from('order_status_details')->groupBy('order_id');
-                            })->get()->keyBy('order_id');
-
-        return view('backend.tracking.index', compact('data','uniqueOrders','latestStatuses'));
+        $user_data = User::all();
+        return view('backend.tracking.user-list', compact('user_data'));
     }
+
+
+    public function userOrders($id)
+    {
+        $user = User::findOrFail($id); 
+    
+        // Fetch only the latest status for each order_id belonging to the user
+        $data = OrderStatus::whereIn('id', function ($query) use ($id) {
+                $query->selectRaw('MAX(id)')
+                    ->from('order_status_details')
+                    ->whereIn('order_id', function ($subQuery) use ($id) {
+                        $subQuery->select('order_id')
+                            ->from('order_details')
+                            ->where('user_id', $id);
+                    })
+                    ->groupBy('order_id');
+            })
+            ->select('order_id', 'order_status', 'status_updated_at')
+            ->get();
+    
+        // ✅ Fetch unique orders belonging to the user
+        $uniqueOrders = OrderStatus::select('order_id')
+            ->whereIn('order_id', function ($subQuery) use ($id) {
+                $subQuery->select('order_id')
+                    ->from('order_details')
+                    ->where('user_id', $id);
+            })
+            ->distinct()
+            ->get();
+    
+        // ✅ Fetch latest status for each order_id
+        $latestStatuses = $data->keyBy('order_id');  // Index by order_id for quick lookup
+    
+        return view('backend.tracking.user-orders', compact('data', 'user', 'uniqueOrders', 'latestStatuses'));
+    }
+    
 
     public function update(Request $request)
     {
@@ -85,7 +128,7 @@ class OrderTrackingController extends Controller
     }
     
 
-    
+
 
     
 

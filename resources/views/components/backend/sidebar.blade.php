@@ -190,9 +190,9 @@
                 </li>
 
 
-                <li class="sidebar-list {{ request()->routeIs('order-tracking.index') ? 'active' : '' }}">
+                <!-- <li class="sidebar-list {{ request()->routeIs('users.list') ? 'active' : '' }}">
                   <i class="fa fa-thumb-tack"></i>
-                  <a class="sidebar-link" href="{{ route('order-tracking.index') }}">
+                  <a class="sidebar-link" href="{{ route('users.list') }}">
                     <svg class="stroke-icon"> 
                       <use href="{{ asset('admin/assets/svg/icon-sprite.svg#orders') }}"></use>
                     </svg>
@@ -201,7 +201,33 @@
                     </svg>
                     <span>Order Tracking</span>
                   </a>
+                </li> -->
+
+                <li class="sidebar-list {{ request()->routeIs('users.list') ? 'active' : '' }}">
+                    <i class="fa fa-thumb-tack"></i>
+                    <a class="sidebar-link" href="{{ route('users.list') }}">
+                        <svg class="stroke-icon"> 
+                            <use href="{{ asset('admin/assets/svg/icon-sprite.svg#orders') }}"></use>
+                        </svg>
+                        <svg class="fill-icon">
+                            <use href="{{ asset('admin/assets/svg/icon-sprite.svg#orders') }}"></use>
+                        </svg>
+                        <span>Order Tracking</span>
+                    </a>
                 </li>
+
+                <li class="sidebar-list {{ request()->routeIs('order-tracking.user') ? 'active' : '' }}">
+                    <i class="fa fa-list1"></i>
+                    <a class="sidebar-link1" href="{{ route('order-tracking.user', ['id' => Auth::id()]) }}">
+                    </a>
+                </li>
+
+                <li class="sidebar-list {{ request()->routeIs('user.view') ? 'active' : '' }}">
+                    <i class="fa fa-user"></i>
+                    <a class="sidebar-link1" href="{{ route('user.view', ['id' => Auth::id()]) }}">
+                    </a>
+                </li>
+
 
 
               </ul>

@@ -5,11 +5,11 @@
     @include('components.backend.head')
 </head>
 	   
-		@include('components.backend.header')
+        @include('components.backend.header')
 
-	    <!--start sidebar wrapper-->	
-	    @include('components.backend.sidebar')
-	   <!--end sidebar wrapper-->
+        <!--start sidebar wrapper-->	
+        @include('components.backend.sidebar')
+        <!--end sidebar wrapper-->
 
     
      <div class="page-body">
@@ -29,19 +29,21 @@
               </div>
             </div>
           </div>
+    
           <!-- Container-fluid starts-->
           <div class="container-fluid">
             <div class="row">
               <!-- Zero Configuration  Starts-->
               <div class="col-sm-12">
                 <div class="card">
+               
                   <div class="card-body">
 
                     <div class="d-flex justify-content-between align-items-center mb-4">
 								<nav aria-label="breadcrumb" role="navigation">
 									<ol class="breadcrumb mb-0">
 										<li class="breadcrumb-item">
-											<a href="{{ route('fabric-composition.index') }}">Home</a>
+											<a href="#">Home</a>
 										</li>
 										<li class="breadcrumb-item active" aria-current="page">Order Tracking List</li>
 									</ol>
@@ -49,10 +51,11 @@
                                 <a href="#" class="btn btn-primary px-5 radius-30" data-bs-toggle="modal" data-bs-target="#updateOrderModal">
                                     Update Status
                                 </a>
-
 					</div>
 
-
+                    <div class="card-header">
+                        <h4 class="mb-3">Order Details: <strong>{{ $user->name }}</strong></h4>
+                    </div>
                     <div class="table-responsive custom-scrollbar">
                       <table class="display" id="basic-1">
                         <thead>
@@ -76,7 +79,7 @@
                                             {{ $order->order_status }}
                                         </span>
                                     </td>
-                                    <td>{{ \Carbon\Carbon::parse($order->created_at)->format('d/m/Y, h:i A') }}</td>
+                                    <td>{{ \Carbon\Carbon::parse($order->status_updated_at)->format('d/m/Y, h:i A') }}</td>
                                 </tr>
                             @endforeach
                         </tbody>
@@ -106,10 +109,11 @@
                                 <label for="orderId" class="form-label">Select Order ID <span class="txt-danger">*</span></label>
                                 <select class="form-select" id="orderId" name="order_id" required>
                                     <option value="">Select Order</option>
-                                    @foreach($uniqueOrders as $order)
+                                    @foreach($latestStatuses as $order)
                                         <option value="{{ $order->order_id }}">{{ $order->order_id }}</option>
                                     @endforeach
                                 </select>
+
                             </div>
 
                             <!-- Order Status Dropdown -->

@@ -164,8 +164,12 @@ Route::resource('seo-tags', SEOController::class);
 Route::resource('stock-details', StockDetailsController::class);
 
 // ==== Manage Order Tracking
-Route::resource('order-tracking', OrderTrackingController::class);
+Route::get('/order-tracking/user/{id}', [OrderTrackingController::class, 'userOrders'])->name('order-tracking.user');
+Route::get('/user/view/{id}', [OrderTrackingController::class, 'view'])->name('user.view');
+
 Route::post('/order/update', [OrderTrackingController::class, 'update'])->name('order.update');
+Route::get('/users', [OrderTrackingController::class, 'user_list'])->name('users.list');
+
 
 
 // ======================= Frontend
