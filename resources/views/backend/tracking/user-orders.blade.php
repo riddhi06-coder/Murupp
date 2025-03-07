@@ -48,9 +48,9 @@
 										<li class="breadcrumb-item active" aria-current="page">Order Tracking List</li>
 									</ol>
 								</nav>
-                                <a href="#" class="btn btn-primary px-5 radius-30" data-bs-toggle="modal" data-bs-target="#updateOrderModal">
+                                <!-- <a href="#" class="btn btn-primary px-5 radius-30" data-bs-toggle="modal" data-bs-target="#updateOrderModal">
                                     Update Status
-                                </a>
+                                </a> -->
 					</div>
 
                     <div class="card-header">
@@ -86,11 +86,14 @@
                                                 View Details
                                             </a>
                                     </td>
-
                                 </tr>
                             @endforeach
                         </tbody>
                     </table>
+                        <!-- Back Button After the Table -->
+                        <div class="col-12 text-end mt-3">
+                            <a href="{{ route('users.list') }}" class="btn btn-danger px-4">Back</a>
+                        </div>
                     </div>
                   </div>
                 </div>
@@ -166,67 +169,7 @@
 
         @include('components.backend.main-js')
 
-        <!-----to auto fetch the latest status as per the order id selectdd--->
-        <script>
-            document.addEventListener("DOMContentLoaded", function () {
-                console.log("Script is running!");
-
-                let orderIdDropdown = document.getElementById("orderId");
-                let orderStatusDropdown = document.getElementById("orderStatus");
-
-                console.log("Order ID Dropdown:", orderIdDropdown);
-                console.log("Order Status Dropdown:", orderStatusDropdown);
-
-                // Define the correct status order
-                let statusOrder = ["Order Placed", "Processing", "Shipped", "Delivered", "Completed", "Cancelled"];
-
-                if (orderIdDropdown) {
-                    console.log("Adding event listener to Order ID dropdown...");
-
-                    orderIdDropdown.addEventListener("change", function () {
-                        console.log("Change event triggered!");
-
-                        let selectedOrderId = this.value;
-                        console.log("Selected Order ID:", selectedOrderId);
-
-                        let orderStatusesRaw = @json($latestStatuses);
-                        let orderStatuses = {};
-
-                        Object.keys(orderStatusesRaw).forEach(key => {
-                            orderStatuses[key] = orderStatusesRaw[key].order_status;
-                        });
-
-                        console.log("Parsed Order Statuses:", orderStatuses);
-
-                        if (selectedOrderId && orderStatuses[selectedOrderId]) {
-                            let latestStatus = orderStatuses[selectedOrderId];
-                            console.log("Latest Status Found:", latestStatus);
-
-                            // Set the value in the dropdown
-                            orderStatusDropdown.value = latestStatus;
-
-                            // Disable all statuses before the latest one
-                            let latestStatusIndex = statusOrder.indexOf(latestStatus);
-                            let options = orderStatusDropdown.options;
-
-                            for (let option of options) {
-                                let optionIndex = statusOrder.indexOf(option.value);
-
-                                if (optionIndex < latestStatusIndex) {
-                                    option.disabled = true;
-                                } else {
-                                    option.disabled = false;
-                                }
-                            }
-                        } else {
-                            console.log("No status found for Order ID:", selectedOrderId);
-                        }
-                    });
-                } else {
-                    console.error("Order ID dropdown not found in DOM!");
-                }
-            });
-        </script>
+      
 
 
 

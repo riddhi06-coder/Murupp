@@ -62,8 +62,36 @@ class OrderTrackingController extends Controller
     }
     
     // to update the status of the each respetive orders
+
+    // to fetch and display the oreder details
+    // public function orderDetails($order_id)
+    // {
+    //     // Fetch the order details where order_id matches
+    //     $order = OrderDetail::where('order_id', $order_id)->firstOrFail();
+
+    //     // Fetch the complete order tracking history
+    //     $orderTracking = DB::table('order_status_details')
+    //         ->leftJoin('users', 'order_status_details.status_updated_by', '=', 'users.id') 
+    //         ->where('order_status_details.order_id', $order_id)
+    //         ->orderBy('order_status_details.status_updated_at', 'asc')
+    //         ->select('order_status_details.*', 'users.name as updated_by_name') 
+    //         ->get();
+
+    //     // Fetch the latest status update
+    //     $orderTrackings = DB::table('order_status_details')
+    //         ->leftJoin('users', 'order_status_details.status_updated_by', '=', 'users.id') 
+    //         ->where('order_status_details.order_id', $order_id)
+    //         ->orderBy('order_status_details.status_updated_at', 'desc')
+    //         ->select('order_status_details.*', 'users.name as updated_by_name') 
+    //         ->first();
+
+    //     return view('backend.tracking.order-details', compact('order', 'orderTracking', 'orderTrackings'));
+    // }
+
+     // to update the status of the each respetive orders
     public function update(Request $request)
     {
+        // dd($request);
         $request->validate([
             'order_id' => 'required|exists:order_details,order_id',
             'order_status' => 'required',
@@ -74,21 +102,21 @@ class OrderTrackingController extends Controller
             'order_id.exists' => 'The selected Order ID does not exist in our records.',
             'order_status.required' => 'Please select an order status.',
             'delivery_date.date' => 'Invalid date format. Please select a valid date.',
-            'remarks.string' => 'Remarks should be a valid text.',
+            'remarks.string' => 'Remarks should be valid text.',
             'remarks.max' => 'Remarks should not exceed 500 characters.',
         ]);
     
         try {
-            // Fetch the latest record for the given order_id
+            // Fetch the latest status entry for the given order_id
             $latestOrder = OrderStatus::where('order_id', $request->order_id)
                 ->latest('status_updated_at')
                 ->first();
-
+    
             // Restriction: If the last status is "Cancelled", do not allow updates
             if ($latestOrder && $latestOrder->order_status === 'Cancelled') {
                 return redirect()->back()->with('message', 'This order has been cancelled and cannot be updated.');
             }
-        
+    
             // Check if the latest status is the same as the new one
             if ($latestOrder && $latestOrder->order_status === $request->order_status) {
                 return redirect()->back()->with('message', 'Similar Status cannot be updated again!');
@@ -99,9 +127,9 @@ class OrderTrackingController extends Controller
                 'user_id'          => $latestOrder ? $latestOrder->user_id : (Auth::check() ? Auth::id() : null),
                 'order_id'         => $request->order_id,
                 'order_status'     => $request->order_status,
-                'delivery_date'    => $request->delivery_date,
+                'delivery_date'    => $request->delivery_date ?? ($latestOrder->delivery_date ?? null),
                 'order_remarks'    => $request->remarks,
-                'status_updated_at'=> Carbon::now(),
+                'status_updated_at'=> now(),
                 'status_updated_by'=> Auth::check() ? Auth::id() : null,
             ]);
     
@@ -110,8 +138,9 @@ class OrderTrackingController extends Controller
             return redirect()->back()->with('message', 'Something went wrong! ' . $e->getMessage());
         }
     }
+    
 
-    // to fetch and display the oreder details
+
     public function orderDetails($order_id)
     {
         // Fetch the order details where order_id matches
@@ -119,22 +148,31 @@ class OrderTrackingController extends Controller
 
         // Fetch the complete order tracking history
         $orderTracking = DB::table('order_status_details')
-            ->leftJoin('users', 'order_status_details.status_updated_by', '=', 'users.id') 
+            ->leftJoin('users', 'order_status_details.status_updated_by', '=', 'users.id')
             ->where('order_status_details.order_id', $order_id)
             ->orderBy('order_status_details.status_updated_at', 'asc')
-            ->select('order_status_details.*', 'users.name as updated_by_name') 
+            ->select('order_status_details.*', 'users.name as updated_by_name')
             ->get();
 
         // Fetch the latest status update
         $orderTrackings = DB::table('order_status_details')
-            ->leftJoin('users', 'order_status_details.status_updated_by', '=', 'users.id') 
+            ->leftJoin('users', 'order_status_details.status_updated_by', '=', 'users.id')
             ->where('order_status_details.order_id', $order_id)
             ->orderBy('order_status_details.status_updated_at', 'desc')
-            ->select('order_status_details.*', 'users.name as updated_by_name') 
+            ->select('order_status_details.*', 'users.name as updated_by_name')
             ->first();
 
-        return view('backend.tracking.order-details', compact('order', 'orderTracking', 'orderTrackings'));
+            $latestStatuses = DB::table('order_status_details')
+            ->where('order_id', $order_id)
+            ->orderBy('status_updated_at', 'desc')
+            ->select('order_id', 'order_status')
+            ->get(); // Use get() to return an array of objects
+        
+        
+        // Pass the latestStatuses variable to the view
+        return view('backend.tracking.order-details', compact('order', 'orderTracking', 'orderTrackings', 'latestStatuses'));
     }
+
 
     
 
