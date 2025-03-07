@@ -64,6 +64,7 @@
                             <th>Order Id</th>
                             <th>Status</th>
                             <th>Date</th>
+                            <th>Action</th>
                           </tr>
                         </thead>
                         <tbody>
@@ -80,6 +81,12 @@
                                         </span>
                                     </td>
                                     <td>{{ \Carbon\Carbon::parse($order->status_updated_at)->format('d/m/Y, h:i A') }}</td>
+                                    <td>
+                                            <a href="{{ url('/order-tracking-details/' . $order->order_id) }}" class="btn btn-primary btn-sm">
+                                                View Details
+                                            </a>
+                                    </td>
+
                                 </tr>
                             @endforeach
                         </tbody>

@@ -19,30 +19,14 @@ use App\Models\OrderStatus;
 
 class OrderTrackingController extends Controller
 {
-
-    // public function index()
-    // {
-    //     $data = OrderStatus::all();
-
-    //     $uniqueOrders = OrderStatus::select('order_id')->distinct()->get();
-
-    //     // Fetch latest order status for each order_id
-    //     $latestStatuses = OrderStatus::select('order_id', 'order_status')
-    //                         ->whereIn('id', function ($query) {
-    //                             $query->selectRaw('MAX(id)')->from('order_status_details')->groupBy('order_id');
-    //                         })->get()->keyBy('order_id');
-
-    //     return view('backend.tracking.index', compact('data','uniqueOrders','latestStatuses'));
-    // }
-
-
+    // to fetch the user list for order tracking
     public function user_list()
     {
         $user_data = User::all();
         return view('backend.tracking.user-list', compact('user_data'));
     }
 
-
+    // top fetch the particular order id details for the specific user
     public function userOrders($id)
     {
         $user = User::findOrFail($id); 
@@ -77,7 +61,7 @@ class OrderTrackingController extends Controller
         return view('backend.tracking.user-orders', compact('data', 'user', 'uniqueOrders', 'latestStatuses'));
     }
     
-
+    // to update the status of the each respetive orders
     public function update(Request $request)
     {
         $request->validate([
@@ -126,6 +110,16 @@ class OrderTrackingController extends Controller
             return redirect()->back()->with('message', 'Something went wrong! ' . $e->getMessage());
         }
     }
+
+
+    public function orderDetails($order_id)
+    {
+        // Fetch the order details where order_id matches
+        $order = OrderDetail::where('order_id', $order_id)->firstOrFail();
+
+        return view('backend.tracking.order-details', compact('order'));
+    }
+
     
 
 
