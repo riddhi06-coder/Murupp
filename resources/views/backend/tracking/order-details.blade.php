@@ -102,9 +102,13 @@
                                     $prices = json_decode($order->prices, true) ?? [];
                                     $sizes = json_decode($order->sizes, true) ?? [];
                                     $images = json_decode($order->images, true) ?? [];
+                                    $totalPrice = 0;
                                 @endphp
 
                                 @for ($i = 0; $i < count($productNames); $i++)
+                                    @php
+                                        $totalPrice += $prices[$i] * $quantities[$i]; // Calculate total price
+                                    @endphp
                                     <tr>
                                         <td>{{ $productNames[$i] }}</td>
                                         <td>
@@ -115,8 +119,15 @@
                                         <td><strong>₹{{ number_format($prices[$i], 2) }}</strong></td>
                                     </tr>
                                 @endfor
+
+                                <!-- Total Price Row -->
+                                <tr>
+                                    <td colspan="4" class="text-end"><strong>Total Price:</strong></td>
+                                    <td><strong>₹{{ number_format($totalPrice, 2) }}</strong></td>
+                                </tr>
                             </tbody>
-                        </table>
+                            </table>
+
 
 
                         <!-- Order Tracking Status Section -->
@@ -124,17 +135,16 @@
                         <table class="table table-bordered">
                             <thead>
                                 <tr>
-                                    <th>Updated By</th>
                                     <th>Updated At</th>
                                     <th>Delivery Date</th>
                                     <th>Status</th>
+                                    <th>Updated By</th>
                                     <th>Remarks</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 @foreach ($orderTracking as $tracking)
                                     <tr>
-                                        <td>{{ $tracking->updated_by_name ?? '-' }}</td>
                                         <td>{{ \Carbon\Carbon::parse($tracking->status_updated_at)->format('d-m-Y H:i:s') }}</td>
                                         <td>{{ $tracking->delivery_date ? \Carbon\Carbon::parse($tracking->delivery_date)->format('d-m-Y') : '-' }}</td>
                                         <td>
@@ -154,6 +164,7 @@
                                                 <span class="badge bg-secondary">{{ ucfirst($tracking->order_status) }}</span>
                                             @endif
                                         </td>
+                                        <td>{{ $tracking->updated_by_name ?? '-' }}</td>
                                         <td>{{ $tracking->order_remarks ?? '-' }}</td>
                                     </tr>
                                 @endforeach
