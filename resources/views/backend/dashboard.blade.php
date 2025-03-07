@@ -22,10 +22,97 @@
               </div>
             </div>
           </div>
-          <!-- Container-fluid starts -->
+
+
+         <!-- Container-fluid starts -->
           <div class="container-fluid">
             <div class="row"> 
-             
+              <div class="col-xl-6 box-col-7"> 
+                <div class="card">
+                  <div class="card-header sales-chart card-no-border pb-0">
+                    <h4>Sales Chart </h4>
+                    <div class="sales-chart-dropdown">
+                      <ul class="balance-data"> 
+                        <li> <span class="circle bg-warning"></span><span class="f-light ms-1">Revenue</span></li>
+                        <li><span class="circle bg-primary"> </span><span class="f-light ms-1">Orders</span></li>
+                      </ul>
+                      <div class="sales-chart-dropdown-select">
+                        <div class="card-header-right-icon online-store">
+                          <div class="dropdown">
+                            <button class="btn dropdown-toggle dropdown-toggle-store" id="dropdownMenuButtonToggle" data-bs-toggle="dropdown" aria-expanded="false">Online Store</button>
+                            <div class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownMenuButtonToggle" role="menu"><span class="dropdown-item">All </span><span class="dropdown-item">Employee</span><span class="dropdown-item">Client    </span></div>
+                          </div>
+                        </div>
+                        <div class="card-header-right-icon"> 
+                          <div class="dropdown"> 
+                            <button class="btn dropdown-toggle" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">Last Year  </button>
+                            <div class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownMenuButton1" role="menu"><span class="dropdown-item">Last Month</span><span class="dropdown-item">Last Week </span><span class="dropdown-item">Today  </span></div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+
+                  <div class="card-body p-2 pt-0">
+                    <div class="sales-wrapper">
+                      <div id="saleschart"> </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+
+                <div class="col-xl-6 col-md-12 box-col-5 total-revenue-total-order">
+                  <div class="row">
+                    <!-- Total Revenue -->
+                    <div class="col-md-6">
+                      <div class="card"> 
+                        <div class="card-body"> 
+                          <div class="total-revenue mb-2"> 
+                            <span>Total Revenue</span>
+                            <a href="index.html">View Report</a>
+                          </div>
+                          <h3 class="f-w-600">₹97,250.89</h3>
+                          <div class="total-chart">
+                            <div class="data-grow d-flex gap-2">
+                              <i class="font-primary" data-feather="arrow-up-right"></i>
+                              <span class="f-w-500">60.00% from last year</span>
+                            </div>
+                            <div class="total-revenue-chart"> 
+                              <div id="revenue"></div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    
+                    <!-- Total Order -->
+                    <div class="col-md-6">
+                      <div class="card"> 
+                        <div class="card-body"> 
+                          <div class="total-revenue mb-2">
+                            <span>Total Order</span>
+                            <a href="index.html">View Report</a>
+                          </div>
+                          <h3 class="f-w-600">35,452</h3>
+                          <div class="total-chart">
+                            <div class="data-grow d-flex gap-2">
+                              <i class="font-secondary" data-feather="arrow-down-left"></i>
+                              <span class="f-w-500">15.00% from last week</span>
+                            </div>
+                            <div class="total-order">
+                              <div id="totalOrder"></div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    
+                  </div>
+                </div>
+
+              
               <div class="col-xxl-6 box-col-12"> 
                 <div class="row">
                   <div class="col-xl-5 col-sm-6">
@@ -35,7 +122,7 @@
                           <li class="product-cost">
                             <div class="product-icon bg-primary-light">
                               <svg>
-                                <use href="{{ asset('admin/assets/svg/icon-sprite.svg#activity') }}"></use>
+                                <use href="../assets/svg/icon-sprite.svg#activity"></use>
                               </svg>
                             </div>
                             <div><span class="f-w-500 f-14 mb-0">Total Sales</span>
@@ -48,7 +135,7 @@
                           <li class="product-cost">
                             <div class="product-icon bg-warning-light">
                               <svg>
-                                <use href="{{ asset('admin/assets/svg/icon-sprite.svg#people') }}"></use>
+                                <use href="../assets/svg/icon-sprite.svg#people"></use>
                               </svg>
                             </div>
                             <div><span class="f-w-500 f-14 mb-0">Total Visitors</span>
@@ -61,7 +148,7 @@
                           <li class="product-cost">
                             <div class="product-icon bg-light">
                               <svg>
-                                <use href="{{ asset('admin/assets/svg/icon-sprite.svg#task-square') }}"></use>
+                                <use href="../assets/svg/icon-sprite.svg#task-square"></use>
                               </svg>
                             </div>
                             <div><span class="f-w-500 f-14 mb-0">Total Orders</span>
@@ -70,14 +157,84 @@
                           </li>
                           <li> <span class="f-light f-14 f-w-500">We have total +5k orders this week.</span></li>
                         </ul>
-                        
+                        <ul class="product-costing">
+                          <li class="product-cost">
+                            <div class="product-icon bg-danger-light">
+                              <svg>
+                                <use href="../assets/svg/icon-sprite.svg#money-recive"></use>
+                              </svg>
+                            </div>
+                            <div><span class="f-w-500 f-14 mb-0">Refunded</span>
+                              <h2 class="f-w-600">₹20,000</h2>
+                            </div>
+                          </li>
+                          <li> <span class="f-light f-14 f-w-500">We got +66k refund this week.</span></li>
+                        </ul>
                       </div>
                     </div>
                   </div>
-
+                  <div class="col-xl-7 col-sm-6">
+                    <div class="card height-equal">
+                      <div class="card-header pb-0 total-revenue card-no-border"> 
+                        <h4>Sale History </h4><a href="index.html">View All</a>
+                      </div>
+                      <div class="card-body"> 
+                        <ul>
+                          <li class="sale-history-card">
+                            <div class="history-price"><a class="f-w-500 f-14  mb-0" href="category.html">Oxford shirt with rolled sleeve</a><span class="mb-0 txt-primary f-w-600 f-16">₹1500.14</span></div>
+                            <div class="state-time"> <span class="f-w-500 f-14 f-light mb-0">United States</span><span class="f-w-400 f-14 f-light">50 min ago</span></div>
+                          </li>
+                          <li class="sale-history-card">
+                            <div class="history-price"><a class="f-w-500 f-14  mb-0" href="category.html">Jordans 1 high neck tshirt</a><span class="mb-0 txt-primary f-w-600 f-16">₹1800.87</span></div>
+                            <div class="state-time"> <span class="f-w-500 f-14 f-light mb-0">Canada</span><span class="f-w-400 f-14 f-light">40 min ago</span></div>
+                          </li>
+                          <li class="sale-history-card">
+                            <div class="history-price"><a class="f-w-500 f-14  mb-0" href="category.html">Graphic Print Men Round Neck Whi...</a><span class="mb-0 txt-primary f-w-600 f-16">₹2000.84</span></div>
+                            <div class="state-time"> <span class="f-w-500 f-14 f-light mb-0">United States</span><span class="f-w-400 f-14 f-light">35 min ago</span></div>
+                          </li>
+                          <li class="sale-history-card">
+                            <div class="history-price"><a class="f-w-500 f-14  mb-0" href="category.html">Full Sleeve Solid Women Denim Jac...</a><span class="mb-0 txt-primary f-w-600 f-16">₹1500.14</span></div>
+                            <div class="state-time"> <span class="f-w-500 f-14 f-light mb-0">Australia</span><span class="f-w-400 f-14 f-light">50 min ago</span></div>
+                          </li>
+                          <li class="sale-history-card">
+                            <div class="history-price"><a class="f-w-500 f-14  mb-0" href="category.html">Slim Women Black Jeans</a><span class="mb-0 txt-primary f-w-600 f-16">₹780.25</span></div>
+                            <div class="state-time"> <span class="f-w-500 f-14 f-light mb-0">UK</span><span class="f-w-400 f-14 f-light">28 min ago</span></div>
+                          </li>
+                        </ul>
+                      </div>
+                    </div>
+                  </div>
                 </div>
               </div>
 
+              <div class="col-xxl-3 col-md-6 box-col-6">
+                <div class="card">
+                  <div class="card-header total-revenue card-no-border">
+                    <h4>Top Revenue Product</h4>
+                    <div class="sales-chart-dropdown-select">
+                      <div class="card-header-right-icon">
+                        <div class="dropdown">
+                          <button class="btn dropdown-toggle" id="dropdownMenuButtonup" data-bs-toggle="dropdown" aria-expanded="false">Today</button>
+                          <div class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownMenuButtonup" role="menu"><span class="dropdown-item">Last Month</span><span class="dropdown-item">Last Week  </span><span class="dropdown-item">Last Day </span></div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="card-body pt-0"> 
+                    <div class="revenueproduct" id="revenueproduct"> </div>
+                    <div class="sales-chart-dropdown"> 
+                      <ul class="balance-data flex-wrap flex">
+                        <li><span class="circle bg-primary"></span><span class="f-light ms-1">Men & Women Jeans</span></li>
+                        <li><span class="circle bg-warning"></span><span class="f-light ms-1">Men & Women T-shirts</span></li>
+                        <li><span class="circle bg-secondary"></span><span class="f-light ms-1">Men & Women Shoes</span></li>
+                        <li><span class="circle bg-light"></span><span class="f-light ms-1">Kurtas & Kurti</span></li>
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+             
             </div>
           </div>
           <!-- Container-fluid Ends -->
@@ -88,8 +245,17 @@
     </div>
 
         
-     
-        @include('components.backend.main-js')
+    <script src="{{ asset('admin/assets/js/chart/apex-chart/moment.min.js') }}"></script>
+    <script src="{{ asset('admin/assets/js/chart/apex-chart/apex-chart.js') }}"></script>
+    <script src="{{ asset('admin/assets/js/chart/apex-chart/stock-prices.js') }}"></script>
+
+    <script src="{{ asset('admin/assets/js/animation/wow/wow.min.js') }}"></script>
+    @include('components.backend.main-js')
+
+
+
+
+        
 </body>
 
 </html>

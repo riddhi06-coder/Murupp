@@ -18,11 +18,7 @@
                   <div class="mobile-back text-end"> <span>Back </span><i class="fa fa-angle-right ps-2" aria-hidden="true"></i></div>
                 </li>
 
-                <li class="sidebar-main-title">
-                  <div>
-                    <h6 class="lan-1">General</h6>
-                  </div>
-                </li>
+             
                 <li class="sidebar-list {{ request()->routeIs('admin.dashboard') ? 'active' : '' }}">
                   <i class="fa fa-thumb-tack"> </i>
                   <a class="sidebar-link sidebar-title link-nav" href="{{ route('admin.dashboard') }}">
@@ -188,20 +184,6 @@
                     <span>Stock Management</span>
                   </a>
                 </li>
-
-
-                <!-- <li class="sidebar-list {{ request()->routeIs('users.list') ? 'active' : '' }}">
-                  <i class="fa fa-thumb-tack"></i>
-                  <a class="sidebar-link" href="{{ route('users.list') }}">
-                    <svg class="stroke-icon"> 
-                      <use href="{{ asset('admin/assets/svg/icon-sprite.svg#orders') }}"></use>
-                    </svg>
-                    <svg class="fill-icon">
-                      <use href="{{ asset('admin/assets/svg/icon-sprite.svg#orders') }}"></use>
-                    </svg>
-                    <span>Order Tracking</span>
-                  </a>
-                </li> -->
 
                 <li class="sidebar-list {{ request()->routeIs('users.list') ? 'active' : '' }}">
                     <i class="fa fa-thumb-tack"></i>
