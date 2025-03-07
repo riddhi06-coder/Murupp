@@ -58,7 +58,7 @@
                             </tr>
                             <tr>
                                 <th>Total Price</th>
-                                <td><strong>₹{{ $order->total_price }}</strong></td>
+                                <td><strong>₹{{ number_format($order->total_price) }}</strong></td>
                             </tr>
                             <tr>
                                 <th>Current Status</th>
@@ -89,10 +89,11 @@
                             <thead class="table-dark">
                                 <tr>
                                     <th>Product Name</th>
+                                    <th>Product Image</th>
+                                    <th>Size</th>
                                     <th>Quantity</th>
                                     <th>Price</th>
-                                    <th>Size</th>
-                                    <th>Image</th>
+                                    
                                 </tr>
                             </thead>
                             <tbody>
@@ -107,12 +108,13 @@
                                 @for ($i = 0; $i < count($productNames); $i++)
                                     <tr>
                                         <td>{{ $productNames[$i] }}</td>
-                                        <td>{{ $quantities[$i] }}</td>
-                                        <td><strong>₹{{ $prices[$i] }}</strong></td>
-                                        <td>{{ $sizes[$i] }}</td>
                                         <td>
                                             <img src="{{ asset($images[$i]) }}" width="50" height="50" alt="Product Image">
                                         </td>
+                                        <td>{{ $sizes[$i] }}</td>
+                                        <td>{{ $quantities[$i] }}</td>
+                                        <td><strong>₹{{ number_format($prices[$i]) }}</strong></td>
+
                                     </tr>
                                 @endfor
                             </tbody>
@@ -152,7 +154,7 @@
                                             @endif
                                         </td>
                                         <td>{{ $tracking->order_remarks ?? 'N/A' }}</td>
-                                        <td>{{ $tracking->delivery_date ?? 'N/A' }}</td>
+                                        <td>{{ $tracking->delivery_date ? \Carbon\Carbon::parse($tracking->delivery_date)->format('d-m-Y') : 'N/A' }}</td>
                                         <td>{{ $tracking->updated_by_name ?? 'N/A' }}</td>
                                         <td>{{ \Carbon\Carbon::parse($tracking->status_updated_at)->format('d-m-Y H:i:s') }}</td>
                                     </tr>
@@ -176,6 +178,8 @@
 
     <!-- Scripts -->
     @include('components.backend.main-js')
+
+
 
 </body>
 </html>

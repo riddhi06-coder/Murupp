@@ -227,14 +227,13 @@
                     <a class="sidebar-link1" href="{{ route('user.view', ['id' => Auth::id()]) }}">
                     </a>
                 </li>
+
                 <li class="sidebar-list {{ request()->routeIs('orders-tracking.details', ['order_id' => $order->order_id ?? '']) ? 'active' : '' }}">
                     <i class="fa fa-user1"></i>
                     @if(!empty($order->order_id)) 
                         <a class="sidebar-link1" href="{{ route('orders-tracking.details', ['order_id' => $order->order_id]) }}">
-                            Order Tracking
                         </a>
                     @else
-                        <span class="text-muted">No Order Available</span> 
                     @endif
                 </li>
 

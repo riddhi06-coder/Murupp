@@ -111,7 +111,7 @@ class OrderTrackingController extends Controller
         }
     }
 
-    
+    // to fetch and display the oreder details
     public function orderDetails($order_id)
     {
         // Fetch the order details where order_id matches
@@ -119,19 +119,19 @@ class OrderTrackingController extends Controller
 
         // Fetch the complete order tracking history
         $orderTracking = DB::table('order_status_details')
-            ->leftJoin('users', 'order_status_details.status_updated_by', '=', 'users.id') // Join with users
+            ->leftJoin('users', 'order_status_details.status_updated_by', '=', 'users.id') 
             ->where('order_status_details.order_id', $order_id)
             ->orderBy('order_status_details.status_updated_at', 'asc')
-            ->select('order_status_details.*', 'users.name as updated_by_name') // Fetch user name
+            ->select('order_status_details.*', 'users.name as updated_by_name') 
             ->get();
 
         // Fetch the latest status update
         $orderTrackings = DB::table('order_status_details')
-            ->leftJoin('users', 'order_status_details.status_updated_by', '=', 'users.id') // Join with users
+            ->leftJoin('users', 'order_status_details.status_updated_by', '=', 'users.id') 
             ->where('order_status_details.order_id', $order_id)
             ->orderBy('order_status_details.status_updated_at', 'desc')
-            ->select('order_status_details.*', 'users.name as updated_by_name') // Fetch user name
-            ->first(); // Get only the latest status update
+            ->select('order_status_details.*', 'users.name as updated_by_name') 
+            ->first();
 
         return view('backend.tracking.order-details', compact('order', 'orderTracking', 'orderTrackings'));
     }
