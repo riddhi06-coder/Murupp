@@ -63,14 +63,23 @@
                             <tr>
                                 <th>Current Status</th>
                                 <td>
-                                    @if($order->status == 0)
-                                        <span class="badge bg-warning">Pending</span>
-                                    @elseif($order->status == 1)
-                                        <span class="badge bg-success">Completed</span>
-                                    @else
+                                    @if($orderTrackings->order_status == 'Order Placed')
+                                        <span class="badge bg-warning">Order Placed</span>
+                                    @elseif($orderTrackings->order_status == 'Processing')
+                                        <span class="badge bg-primary">Processing</span>
+                                    @elseif($orderTrackings->order_status == 'Shipped')
+                                        <span class="badge bg-info">Shipped</span>
+                                    @elseif($orderTrackings->order_status == 'Delivered')
+                                        <span class="badge bg-success">Delivered</span>
+                                    @elseif($orderTrackings->order_status == 'Completed')
+                                        <span class="badge bg-dark">Completed</span>
+                                    @elseif($orderTrackings->order_status == 'Cancelled')
                                         <span class="badge bg-danger">Cancelled</span>
+                                    @else
+                                        <span class="badge bg-secondary">{{ ucfirst($orderTrackings->order_status) }}</span>
                                     @endif
                                 </td>
+
                             </tr>
                         </table>
 
@@ -106,6 +115,48 @@
                                         </td>
                                     </tr>
                                 @endfor
+                            </tbody>
+                        </table>
+
+
+                        <!-- Order Tracking Status Section -->
+                        <h4 class="mt-5 text-primary">Order Tracking Status</h4><br>
+                        <table class="table table-striped">
+                            <thead class="table-dark">
+                                <tr>
+                                    <th>Status</th>
+                                    <th>Remarks</th>
+                                    <th>Delivery Date</th>
+                                    <th>Updated By</th>
+                                    <th>Updated At</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach ($orderTracking as $tracking)
+                                    <tr>
+                                        <td>
+                                            @if($tracking->order_status == 'Order Placed')
+                                                <span class="badge bg-warning">Order Placed</span>
+                                            @elseif($tracking->order_status == 'Processing')
+                                                <span class="badge bg-primary">Processing</span>
+                                            @elseif($tracking->order_status == 'Shipped')
+                                                <span class="badge bg-info">Shipped</span>
+                                            @elseif($tracking->order_status == 'Delivered')
+                                                <span class="badge bg-success">Delivered</span>
+                                            @elseif($tracking->order_status == 'Completed')
+                                                <span class="badge bg-dark">Completed</span>
+                                            @elseif($tracking->order_status == 'Cancelled')
+                                                <span class="badge bg-danger">Cancelled</span>
+                                            @else
+                                                <span class="badge bg-secondary">{{ ucfirst($tracking->order_status) }}</span>
+                                            @endif
+                                        </td>
+                                        <td>{{ $tracking->order_remarks ?? 'N/A' }}</td>
+                                        <td>{{ $tracking->delivery_date ?? 'N/A' }}</td>
+                                        <td>{{ $tracking->updated_by_name ?? 'N/A' }}</td>
+                                        <td>{{ \Carbon\Carbon::parse($tracking->status_updated_at)->format('d-m-Y H:i:s') }}</td>
+                                    </tr>
+                                @endforeach
                             </tbody>
                         </table>
                     </div>
