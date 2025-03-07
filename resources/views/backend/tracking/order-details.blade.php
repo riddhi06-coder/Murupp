@@ -84,16 +84,15 @@
                         </table>
 
                         <!-- Ordered Products Section -->
-                        <h4 class="mt-4 text-primary">Products Details</h4><br>
-                        <table class="table table-striped">
-                            <thead class="table-dark">
+                        <h4 class="mt-4">Products Details</h4><br>
+                        <table class="table table-bordered">
+                            <thead class="">
                                 <tr>
                                     <th>Product Name</th>
                                     <th>Product Image</th>
                                     <th>Size</th>
                                     <th>Quantity</th>
                                     <th>Price</th>
-                                    
                                 </tr>
                             </thead>
                             <tbody>
@@ -113,8 +112,7 @@
                                         </td>
                                         <td>{{ $sizes[$i] }}</td>
                                         <td>{{ $quantities[$i] }}</td>
-                                        <td><strong>₹{{ number_format($prices[$i]) }}</strong></td>
-
+                                        <td><strong>₹{{ number_format($prices[$i], 2) }}</strong></td>
                                     </tr>
                                 @endfor
                             </tbody>
@@ -122,20 +120,23 @@
 
 
                         <!-- Order Tracking Status Section -->
-                        <h4 class="mt-5 text-primary">Order Tracking Status</h4><br>
-                        <table class="table table-striped">
-                            <thead class="table-dark">
+                        <h4 class="mt-5">Order Tracking Status</h4><br>
+                        <table class="table table-bordered">
+                            <thead>
                                 <tr>
-                                    <th>Status</th>
-                                    <th>Remarks</th>
-                                    <th>Delivery Date</th>
                                     <th>Updated By</th>
                                     <th>Updated At</th>
+                                    <th>Delivery Date</th>
+                                    <th>Status</th>
+                                    <th>Remarks</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 @foreach ($orderTracking as $tracking)
                                     <tr>
+                                        <td>{{ $tracking->updated_by_name ?? '-' }}</td>
+                                        <td>{{ \Carbon\Carbon::parse($tracking->status_updated_at)->format('d-m-Y H:i:s') }}</td>
+                                        <td>{{ $tracking->delivery_date ? \Carbon\Carbon::parse($tracking->delivery_date)->format('d-m-Y') : '-' }}</td>
                                         <td>
                                             @if($tracking->order_status == 'Order Placed')
                                                 <span class="badge bg-warning">Order Placed</span>
@@ -153,14 +154,12 @@
                                                 <span class="badge bg-secondary">{{ ucfirst($tracking->order_status) }}</span>
                                             @endif
                                         </td>
-                                        <td>{{ $tracking->order_remarks ?? 'N/A' }}</td>
-                                        <td>{{ $tracking->delivery_date ? \Carbon\Carbon::parse($tracking->delivery_date)->format('d-m-Y') : 'N/A' }}</td>
-                                        <td>{{ $tracking->updated_by_name ?? 'N/A' }}</td>
-                                        <td>{{ \Carbon\Carbon::parse($tracking->status_updated_at)->format('d-m-Y H:i:s') }}</td>
+                                        <td>{{ $tracking->order_remarks ?? '-' }}</td>
                                     </tr>
                                 @endforeach
                             </tbody>
                         </table>
+
                     </div>
 
                   </div>
