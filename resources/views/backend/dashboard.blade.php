@@ -90,12 +90,13 @@
                                 <h3 class="f-w-600" id="totalOrderCount">{{ $totalOrderCount }}</h3> 
                                 <div class="total-chart">
                                     <div class="total-order">
-                                        <div id="totalOrder" style="width: 200%; height: 250px;"></div>
+                                        <div id="totalOrder" style="width: 220%; height: 280px;"></div>
                                     </div>
                                 </div>
                             </div>
                         </div>
                 </div>
+
 
               
               <div class="col-xxl-6 box-col-12"> 
@@ -341,7 +342,8 @@
                       top: 10,
                       bottom: 10
                   }
-              }
+              },
+                legend: { show: false } 
           };
 
           var chart = new ApexCharts(document.querySelector("#totalOrder"), orderOptions);
