@@ -101,97 +101,98 @@
 
                <!-- Total Statisticsss -->
               <div class="col-xxl-6 box-col-12"> 
-                <div class="row">
-                  <div class="col-xl-5 col-sm-6">
-                    <div class="card height-equal">
-                      <div class="card-body"> 
-                        <ul class="product-costing">
-                          <li class="product-cost">
-                            <div class="product-icon bg-primary-light">
-                              <svg>
-                                <use href="{{ asset('admin/assets/svg/icon-sprite.svg#activity') }}"></use>
-                              </svg>
-                            </div>
-                            <div><span class="f-w-500 f-14 mb-0">Total Sales</span>
-                              <h2 class="f-w-600">₹98,459</h2>
-                            </div>
-                          </li>
-                          <li> <span class="f-light f-14 f-w-500">We have sale +18.2k this week.</span></li>
-                        </ul>
-                        <ul class="product-costing">
-                          <li class="product-cost">
-                            <div class="product-icon bg-warning-light">
-                              <svg>
-                                <use href="{{ asset('admin/assets/svg/icon-sprite.svg#people') }}"></use>
-                              </svg>
-                            </div>
-                            <div><span class="f-w-500 f-14 mb-0">Total Visitors</span>
-                              <h2 class="f-w-600">54,156</h2>
-                            </div>
-                          </li>
-                          <li> <span class="f-light f-14 f-w-500">We have total +3.5k visitors this week.</span></li>
-                        </ul>
-                        <ul class="product-costing">
-                          <li class="product-cost">
-                            <div class="product-icon bg-light">
-                              <svg>
-                                <use href="{{ asset('admin/assets/svg/icon-sprite.svg#task-square') }}"></use>
-                              </svg>
-                            </div>
-                            <div><span class="f-w-500 f-14 mb-0">Total Orders</span>
-                              <h2 class="f-w-600">5,125</h2>
-                            </div>
-                          </li>
-                          <li> <span class="f-light f-14 f-w-500">We have total +5k orders this week.</span></li>
-                        </ul>
-                        <ul class="product-costing">
-                          <li class="product-cost">
-                            <div class="product-icon bg-danger-light">
-                              <svg>
-                                <use href="{{ asset('admin/assets/svg/icon-sprite.svg#money-recive') }}"></use>
-                              </svg>
-                            </div>
-                            <div><span class="f-w-500 f-14 mb-0">Refunded</span>
-                              <h2 class="f-w-600">₹20,000</h2>
-                            </div>
-                          </li>
-                          <li> <span class="f-light f-14 f-w-500">We got +66k refund this week.</span></li>
-                        </ul>
+                  <div class="row">
+                      <div class="col-xl-5 col-sm-6">
+                          <div class="card height-equal">
+                              <div class="card-body"> 
+                                  <ul class="product-costing">
+                                      <li class="product-cost">
+                                          <div class="product-icon bg-primary-light">
+                                              <svg>
+                                                  <use href="{{ asset('admin/assets/svg/icon-sprite.svg#activity') }}"></use>
+                                              </svg>
+                                          </div>
+                                          <div>
+                                              <span class="f-w-500 f-14 mb-0">Total Sales</span>
+                                              <h2 class="f-w-600">₹{{ number_format($totalRevenueAmount_1, 2) }}</h2>
+                                          </div>
+                                      </li>
+                                      <li><span class="f-light f-14 f-w-500">We have sale +{{ number_format($totalRevenueAmount / 1000, 1) }}k this week.</span></li>
+                                  </ul>
+                                  
+                                  <ul class="product-costing">
+                                      <li class="product-cost">
+                                          <div class="product-icon bg-warning-light">
+                                              <svg>
+                                                  <use href="{{ asset('admin/assets/svg/icon-sprite.svg#task-square') }}"></use>
+                                              </svg>
+                                          </div>
+                                          <div>
+                                              <span class="f-w-500 f-14 mb-0">Total Orders</span>
+                                              <h2 class="f-w-600">{{ number_format($totalOrderCount) }}</h2>
+                                          </div>
+                                      </li>
+                                      <li><span class="f-light f-14 f-w-500">We have total +{{ number_format($totalOrderCount / 1000, 1) }}k orders this week.</span></li>
+                                  </ul>
+
+                                  <ul class="product-costing">
+                                      <li class="product-cost">
+                                          <div class="product-icon bg-warning-light">
+                                              <svg>
+                                                  <use href="{{ asset('admin/assets/svg/icon-sprite.svg#people') }}"></use>
+                                              </svg>
+                                          </div>
+                                          <div>
+                                              <span class="f-w-500 f-14 mb-0">Total Visitors</span>
+                                              <h2 class="f-w-600">{{ number_format($totalVisitors) }}</h2>
+                                          </div>
+                                      </li>
+                                      <li><span class="f-light f-14 f-w-500">We have total +{{ number_format($totalVisitors / 1000, 1) }}k visitors this week.</span></li>
+                                  </ul>
+
+                                  <ul class="product-costing">
+                                      <li class="product-cost">
+                                          <div class="product-icon bg-warning-light">
+                                              <svg>
+                                                  <use href="{{ asset('admin/assets/svg/icon-sprite.svg#money-recive') }}"></use>
+                                              </svg>
+                                          </div>
+                                          <div>
+                                              <span class="f-w-500 f-14 mb-0">Refunded</span>
+                                              <h2 class="f-w-600">{{ number_format($totalVisitors) }}</h2>
+                                          </div>
+                                      </li>
+                                      <li><span class="f-light f-14 f-w-500">We got +{{ number_format($totalVisitors / 1000, 1) }}k Refund this week.</span></li>
+                                  </ul>
+
+                              </div>
+                          </div>
                       </div>
-                    </div>
+
+                      <div class="col-xl-7 col-sm-6">
+                          <div class="card height-equal">
+                              <div class="card-header pb-0 total-revenue card-no-border"> 
+                                  <h4>Sale History</h4><a href="index.html">View All</a>
+                              </div>
+                              <div class="card-body"> 
+                                  <ul>
+                                      @foreach($categories as $index => $category)
+                                      <li class="sale-history-card">
+                                          <div class="history-price">
+                                              <a class="f-w-500 f-14 mb-0" href="category.html">{{ $category }}</a>
+                                              <span class="mb-0 txt-primary f-w-600 f-16">₹{{ number_format($revenuesByCategory[$index], 2) }}</span>
+                                          </div>
+                                          <div class="state-time">
+                                              <span class="f-w-500 f-14 f-light mb-0">Revenue from {{ $category }}</span>
+                                              <span class="f-w-400 f-14 f-light">Last Month</span>
+                                          </div>
+                                      </li>
+                                      @endforeach
+                                  </ul>
+                              </div>
+                          </div>
+                      </div>
                   </div>
-                  <div class="col-xl-7 col-sm-6">
-                    <div class="card height-equal">
-                      <div class="card-header pb-0 total-revenue card-no-border"> 
-                        <h4>Sale History </h4><a href="index.html">View All</a>
-                      </div>
-                      <div class="card-body"> 
-                        <ul>
-                          <li class="sale-history-card">
-                            <div class="history-price"><a class="f-w-500 f-14  mb-0" href="category.html">Oxford shirt with rolled sleeve</a><span class="mb-0 txt-primary f-w-600 f-16">₹1500.14</span></div>
-                            <div class="state-time"> <span class="f-w-500 f-14 f-light mb-0">United States</span><span class="f-w-400 f-14 f-light">50 min ago</span></div>
-                          </li>
-                          <li class="sale-history-card">
-                            <div class="history-price"><a class="f-w-500 f-14  mb-0" href="category.html">Jordans 1 high neck tshirt</a><span class="mb-0 txt-primary f-w-600 f-16">₹1800.87</span></div>
-                            <div class="state-time"> <span class="f-w-500 f-14 f-light mb-0">Canada</span><span class="f-w-400 f-14 f-light">40 min ago</span></div>
-                          </li>
-                          <li class="sale-history-card">
-                            <div class="history-price"><a class="f-w-500 f-14  mb-0" href="category.html">Graphic Print Men Round Neck Whi...</a><span class="mb-0 txt-primary f-w-600 f-16">₹2000.84</span></div>
-                            <div class="state-time"> <span class="f-w-500 f-14 f-light mb-0">United States</span><span class="f-w-400 f-14 f-light">35 min ago</span></div>
-                          </li>
-                          <li class="sale-history-card">
-                            <div class="history-price"><a class="f-w-500 f-14  mb-0" href="category.html">Full Sleeve Solid Women Denim Jac...</a><span class="mb-0 txt-primary f-w-600 f-16">₹1500.14</span></div>
-                            <div class="state-time"> <span class="f-w-500 f-14 f-light mb-0">Australia</span><span class="f-w-400 f-14 f-light">50 min ago</span></div>
-                          </li>
-                          <li class="sale-history-card">
-                            <div class="history-price"><a class="f-w-500 f-14  mb-0" href="category.html">Slim Women Black Jeans</a><span class="mb-0 txt-primary f-w-600 f-16">₹780.25</span></div>
-                            <div class="state-time"> <span class="f-w-500 f-14 f-light mb-0">UK</span><span class="f-w-400 f-14 f-light">28 min ago</span></div>
-                          </li>
-                        </ul>
-                      </div>
-                    </div>
-                  </div>
-                </div>
               </div>
 
 

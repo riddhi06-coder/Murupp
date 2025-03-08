@@ -185,13 +185,20 @@ class DashboardController extends Controller
         $totalRevenueAmount = array_sum($revenuesByCategory);
 
   
+        //====================================================================================================
+
+        $totalVisitors = User::count();
+
+    
+                    
+
         return view('backend.dashboard', compact(
             'months', 'revenues', 'totalRevenueAmount_1', 'orders', 'totalOrderCount',
             'months_current_year', 'orders_current_year', 'revenues_current_year',  
             'months_last_year', 'orders_last_year', 'revenues_last_year',
             'months_last_month', 'orders_last_month', 'revenues_last_month',
             'days_last_week', 'orders_last_week', 'revenues_last_week',
-            'hours_today', 'orders_today', 'revenues_today','categories', 'revenuesByCategory', 'totalRevenueAmount'
+            'hours_today', 'orders_today', 'revenues_today','categories', 'revenuesByCategory', 'totalRevenueAmount','totalVisitors'
         ));
     }        
     
