@@ -75,7 +75,7 @@
                     url: '{{ route("getReportData", ["sales"]) }}'
                 },
                 inventory: {
-                    headers: ["#", "Product Name", "Category", "Stock Available"], // Correct order: Product Name, Category, Stock Available
+                    headers: ["#", "Product Name", "Category", "Stock Available"], 
                     url: '{{ route("getReportData", ["inventory"]) }}'
                 },
                 customers: {
@@ -83,11 +83,11 @@
                     url: '{{ route("getReportData", ["customers"]) }}'
                 },
                 category: {
-                    headers: ["#", "Category Name", "Total Products", "Total Sales", "Last Updated"],
+                    headers: ["#", "Category Name", "Total Products", "Total Sales"],
                     url: '{{ route("getReportData", ["category"]) }}'
                 },
                 product: {
-                    headers: ["#", "Product Name", "Category", "Stock Left", "Total Sales"], // Correct order: Product Name, Category, Stock Left
+                    headers: ["#", "Product Name", "Category", "Stock Left", "Total Sales"], 
                     url: '{{ route("getReportData", ["product"]) }}'
                 }
             };

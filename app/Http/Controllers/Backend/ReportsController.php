@@ -14,6 +14,7 @@ use Carbon\Carbon;
 use App\Models\User;
 use App\Models\OrderDetail;
 use App\Models\ProductDetails;
+use App\Models\ProductCategory;
 
 
 class ReportsController extends Controller
@@ -47,9 +48,31 @@ class ReportsController extends Controller
                             ->get();
                 break;
 
-            // case 'category':
-            //     $data = Category::select('id', 'name as category_name', 'total_products', 'total_sales', 'last_updated')->get();
-            //     break;
+            case 'category':
+                $data = ProductCategory::select(
+                    'master_product_category.category_name',
+                    // Count total products in category
+                    \DB::raw('(
+                        SELECT COUNT(*) 
+                        FROM product_details
+                        WHERE product_details.category_id = master_product_category.id
+                    ) AS total_products_in_category'),
+                
+                    // Count total sales in category
+                    \DB::raw('(
+                        SELECT COUNT(*) 
+                        FROM order_details
+                        INNER JOIN product_details ON JSON_CONTAINS(order_details.product_ids, CAST(product_details.id AS CHAR))
+                        WHERE product_details.category_id = master_product_category.id
+                    ) AS total_sales_in_category')
+                )
+                ->whereNull('master_product_category.deleted_by')
+                ->get();
+                
+                
+                
+    
+                break;
 
             // case 'product':
             //     $data = Product::select('id', 'name as product_name', 'category', 'total_sales', 'stock_left')->get();
