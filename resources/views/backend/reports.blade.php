@@ -82,10 +82,10 @@
                 ]
             },
             inventory: {
-                headers: ["#", "Product Name", "Category", "Stock Available", "Price"],
+                headers: ["#", "Product Name", "Category", "Stock Available"],
                 data: [
-                    [1, "Laptop", "Electronics", "10", "₹50000"],
-                    [2, "Shoes", "Fashion", "25", "₹2000"]
+                    [1, "Laptop", "Electronics", "10"],
+                    [2, "Shoes", "Fashion", "25"]
                 ]
             },
             customers: {
