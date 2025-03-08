@@ -219,8 +219,18 @@
                     @endif
                 </li>
 
-
-
+                <li class="sidebar-list {{ request()->routeIs('reports.list') ? 'active' : '' }}">
+                  <i class="fa fa-thumb-tack"></i>
+                  <a class="sidebar-link" href="{{ route('reports.list') }}">
+                    <svg class="stroke-icon"> 
+                      <use href="{{ asset('admin/assets/svg/icon-sprite.svg#fill-file') }}"></use>
+                    </svg>
+                    <svg class="fill-icon">
+                      <use href="{{ asset('admin/assets/svg/icon-sprite.svg#fill-file') }}"></use>
+                    </svg>
+                    <span>Reports</span>
+                  </a>
+                </li>
 
 
               </ul>

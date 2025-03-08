@@ -19,6 +19,7 @@ use App\Http\Controllers\Backend\SEOController;
 use App\Http\Controllers\Backend\StockDetailsController;
 use App\Http\Controllers\Backend\OrderTrackingController;
 use App\Http\Controllers\Backend\DashboardController;
+use App\Http\Controllers\Backend\ReportsController;
 use App\Http\Controllers\Backend\Home\BannerDetailsController;
 use App\Http\Controllers\Backend\Home\NewArrivalsController;
 use App\Http\Controllers\Backend\Home\CollectionDetailsController;
@@ -177,6 +178,8 @@ Route::get('/user/view/{id}', [OrderTrackingController::class, 'view'])->name('u
 Route::get('/order-tracking-details/{order_id}', [OrderTrackingController::class, 'orderDetails'])->name('orders-tracking.details');
 
 
+// ==== Manage Report Generation
+Route::get('/reports', [ReportsController::class, 'reports'])->name('reports.list');
 
 
 // ======================= Frontend
