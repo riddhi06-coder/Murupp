@@ -9,11 +9,13 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Log; 
 
 use Carbon\Carbon;
 use App\Models\User;
 use App\Models\OrderDetail;
-
+use App\Models\ProductDetails;
+use App\Models\ProductCategory;
 
 class DashboardController extends Controller
 {
@@ -35,8 +37,8 @@ class DashboardController extends Controller
         })->toArray();
     
         $revenues = $monthlyData->pluck('total')->toArray();
-        $totalRevenueAmount = array_sum($revenues);
-    
+        $totalRevenueAmount_1 = array_sum($revenues);
+
 
      //======================================================================================================   
 
@@ -115,15 +117,81 @@ class DashboardController extends Controller
         //==================================================================================================
 
 
+        // Fetch revenue grouped by category (Decoding JSON product_id)
+        $categoryData = OrderDetail::get()->map(function ($order) {
+            if (is_null($order->product_ids) || empty($order->product_ids)) {
+                return collect();
+            }
 
+            // Decode JSON or explode string
+            $productIds = json_decode($order->product_ids, true);
+            if (!is_array($productIds)) {
+                $productIds = explode(',', trim($order->product_ids, '[]'));
+            }
 
+            return ProductDetails::whereIn('id', $productIds)->pluck('category_id');
+        })->flatten()->unique();
+
+        // Fetch category names from master_product_category
+        $categoryRevenue = [];
+        foreach ($categoryData as $categoryId) {
+            $categoryName = ProductCategory::where('id', $categoryId)->value('category_name');
+            
+            if (!$categoryName) {
+                continue;
+            }
+
+            $totalRevenue = OrderDetail::get()->map(function ($order) use ($categoryId) {
+                if (is_null($order->product_ids) || empty($order->product_ids)) {
+                    return 0; // Skip empty product_id orders
+                }
+
+                $productIds = json_decode($order->product_ids, true);
+                if (!is_array($productIds)) {
+                    $productIds = explode(',', trim($order->product_ids, '[]'));
+                }
+
+                $matchingProducts = ProductDetails::whereIn('id', $productIds)->where('category_id', $categoryId)->pluck('id');
+
+                if ($matchingProducts->isEmpty()) {
+                    return 0; 
+                }
+
+                // Decode order prices and sum only relevant ones
+                $prices = json_decode($order->prices, true);
+                if (!is_array($prices)) {
+                    $prices = explode(',', trim($order->prices, '[]'));
+                }
+
+                $total = 0;
+                foreach ($matchingProducts as $index => $productId) {
+                    if (isset($prices[$index])) {
+                        $total += (float) $prices[$index];
+                    }
+                }
+
+                return $total;
+            })->sum();
+
+            $categoryRevenue[] = [
+                'category' => $categoryName,
+                'total_revenue' => $totalRevenue
+            ];
+        }
+
+        // Convert data for the chart
+        $categories = collect($categoryRevenue)->pluck('category')->toArray();
+        $revenuesByCategory = collect($categoryRevenue)->pluck('total_revenue')->toArray();
+        $totalRevenueAmount = array_sum($revenuesByCategory);
+
+  
         return view('backend.dashboard', compact(
-            'months', 'revenues', 'totalRevenueAmount', 'orders', 'totalOrderCount',
+            'months', 'revenues', 'totalRevenueAmount_1', 'orders', 'totalOrderCount',
             'months_current_year', 'orders_current_year', 'revenues_current_year',  
             'months_last_year', 'orders_last_year', 'revenues_last_year',
             'months_last_month', 'orders_last_month', 'revenues_last_month',
             'days_last_week', 'orders_last_week', 'revenues_last_week',
-            'hours_today', 'orders_today', 'revenues_today'
+            'hours_today', 'orders_today', 'revenues_today','categories', 'revenuesByCategory', 'totalRevenueAmount'
         ));
     }        
     

@@ -69,7 +69,8 @@
                                 <div class="total-revenue mb-2"> 
                                     <span>Total Revenue</span>
                                 </div>
-                                <h3 class="f-w-600">₹{{ number_format($totalRevenueAmount, 2) }}</h3> 
+                               
+                                <h3 class="f-w-600">₹{{ number_format($totalRevenueAmount_1) }}</h3> 
                                 <div class="total-revenue-chart">
                                     <div id="revenue" style="width: 100%; height: 250px;"></div>
                                 </div>
@@ -193,32 +194,18 @@
                 </div>
               </div>
 
+              
               <div class="col-xxl-3 col-md-6 box-col-6">
-                <div class="card">
-                  <div class="card-header total-revenue card-no-border">
-                    <h4>Top Revenue Product</h4>
-                    <div class="sales-chart-dropdown-select">
-                      <div class="card-header-right-icon">
-                        <div class="dropdown">
-                          <button class="btn dropdown-toggle" id="dropdownMenuButtonup" data-bs-toggle="dropdown" aria-expanded="false">Today</button>
-                          <div class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownMenuButtonup" role="menu"><span class="dropdown-item">Last Month</span><span class="dropdown-item">Last Week  </span><span class="dropdown-item">Last Day </span></div>
-                        </div>
+                  <div class="card">
+                      <div class="card-header total-revenue card-no-border">
+                          <h4>Category Revenue</h4>
                       </div>
-                    </div>
+                      <div class="card-body pt-0">
+                          <div id="revenueByCategoryChart"></div>
+                      </div>
                   </div>
-                  <div class="card-body pt-0"> 
-                    <div class="revenueproduct" id="revenueproduct"> </div>
-                    <div class="sales-chart-dropdown"> 
-                      <ul class="balance-data flex-wrap flex">
-                        <li><span class="circle bg-primary"></span><span class="f-light ms-1">Men & Women Jeans</span></li>
-                        <li><span class="circle bg-warning"></span><span class="f-light ms-1">Men & Women T-shirts</span></li>
-                        <li><span class="circle bg-secondary"></span><span class="f-light ms-1">Men & Women Shoes</span></li>
-                        <li><span class="circle bg-light"></span><span class="f-light ms-1">Kurtas & Kurti</span></li>
-                      </ul>
-                    </div>
-                  </div>
-                </div>
               </div>
+
 
             </div>
           </div>
@@ -494,8 +481,65 @@
       });
     </script>
 
+    <!-- Category wise revenuee -->
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+          var options = {
+              chart: {
+                  type: "donut",
+                  height: 300
+              },
+              series: @json($revenuesByCategory),
+              labels: @json($categories),
+              colors: ["#FF5733", "#36A2EB", "#4CAF50", "#FFC107"],
+              dataLabels: {
+                  enabled: false
+              },
+              legend: {
+                  position: "bottom"
+              },
+              plotOptions: {
+                  pie: {
+                      donut: {
+                          size: "70%",
+                          labels: {
+                              show: true,
+                              value: {
+                                  show: true,
+                                  fontSize: "22px",
+                                  fontWeight: 600,
+                                  offsetY: 10,
+                                  formatter: function (val) {
+                                        return "₹" + val.toLocaleString("en-IN"); // Indian currency format
+                                    }
+                              },
+                              total: {
+                                  show: true,
+                                  label: "Total Revenue",
+                                  fontSize: "16px",
+                                  fontWeight: 500,
+                                  offsetY: -10,
+                                  formatter: function (w) {
+                                      return "₹" + w.globals.seriesTotals.reduce((a, b) => a + b, 0).toLocaleString("en-IN");
+                                  }
+                              }
+                          }
+                      }
+                  }
+              },
+              tooltip: {
+                  y: {
+                      formatter: function (val) {
+                          return "₹" + val.toLocaleString("en-IN");
+                      }
+                  }
+              }
+          };
 
-
+          var chart = new ApexCharts(document.querySelector("#revenueByCategoryChart"), options);
+          chart.render();
+      });
+    </script>
 
 
 
