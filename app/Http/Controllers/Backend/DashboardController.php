@@ -22,9 +22,7 @@ class DashboardController extends Controller
 
     public function dashboard()
     {
-
         //===================================================================================================================
-
 
         // for  Total Revenue Fetching.
         $monthlyData = OrderDetail::selectRaw('MONTH(created_at) as month, SUM(total_price) as total')
@@ -189,7 +187,6 @@ class DashboardController extends Controller
 
         $totalVisitors = User::count();
 
-    
         // Fetch top-selling products based on revenue
         $topProducts = OrderDetail::selectRaw('
                         JSON_EXTRACT(product_ids, "$[0]") as product_id, 
@@ -221,7 +218,7 @@ class DashboardController extends Controller
             'days_last_week', 'orders_last_week', 'revenues_last_week',
             'hours_today', 'orders_today', 'revenues_today','categories', 'revenuesByCategory', 'totalRevenueAmount','totalVisitors',
             'productNames', 'revenuesByProduct'
-            
+
         ));
     }        
     
