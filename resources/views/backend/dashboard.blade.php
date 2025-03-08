@@ -34,10 +34,6 @@
                   <div class="card-header sales-chart card-no-border pb-0">
                     <h4>Sales Chart </h4>
                     <div class="sales-chart-dropdown">
-                      <ul class="balance-data"> 
-                        <li> <span class="circle bg-warning"></span><span class="f-light ms-1">Revenue</span></li>
-                        <li><span class="circle bg-primary"> </span><span class="f-light ms-1">Orders</span></li>
-                      </ul>
                       <div class="sales-chart-dropdown-select">
                         <div class="card-header-right-icon online-store">
                           <div class="dropdown">
@@ -80,10 +76,11 @@
                             </div>
                         </div>
                     </div>
+                  </div>
+                </div>
 
-                    
-                    <!-- Total Order -->
-                    <div class="col-xl-12">
+                 <!-- Total Order -->
+                <div class="col-xl-12">
                         <div class="card"> 
                             <div class="card-body"> 
                                 <div class="total-revenue mb-2">
@@ -93,14 +90,11 @@
                                 <h3 class="f-w-600" id="totalOrderCount">{{ $totalOrderCount }}</h3> 
                                 <div class="total-chart">
                                     <div class="total-order">
-                                        <div id="totalOrder" style="width: 100%; height: 250px;"></div>
+                                        <div id="totalOrder" style="width: 200%; height: 250px;"></div>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
-                    
-                  </div>
                 </div>
 
               
@@ -225,7 +219,6 @@
                 </div>
               </div>
 
-             
             </div>
           </div>
           <!-- Container-fluid Ends -->
@@ -358,7 +351,46 @@
     <!-- Total Sales Chart graph ajaxx-->
     <script>
       document.addEventListener("DOMContentLoaded", function () {
-          var options = {
+          // Ensure data is not null/undefined, default to empty arrays
+          var ordersCurrentYear = @json($orders_current_year) || [];
+          var revenuesCurrentYear = @json($revenues_current_year) || [];
+          var monthsCurrentYear = @json($months_current_year) || [];
+
+          var ordersCurrentMonth = @json($orders_last_month) || [];
+          var revenuesCurrentMonth = @json($revenues_last_month) || [];
+          var monthsCurrentMonth = @json($months_last_month) || [];
+
+          var ordersLastYear = @json($orders_last_year) || [];
+          var revenuesLastYear = @json($revenues_last_year) || [];
+          var monthsLastYear = @json($months_last_year) || [];
+
+          var ordersLastWeek = @json($orders_last_week) || [];
+          var revenuesLastWeek = @json($revenues_last_week) || [];
+          var daysLastWeek = @json($days_last_week) || [];
+
+          var ordersToday = @json($orders_today) || [];
+          var revenuesToday = @json($revenues_today) || [];
+          var hoursToday = @json($hours_today) || [];
+
+          // **Default to Current Year, then Current Month, then Last Year**
+          var defaultOrders = ordersCurrentYear.length ? ordersCurrentYear :
+                              ordersCurrentMonth.length ? ordersCurrentMonth : ordersLastYear;
+          var defaultRevenues = revenuesCurrentYear.length ? revenuesCurrentYear :
+                                revenuesCurrentMonth.length ? revenuesCurrentMonth : revenuesLastYear;
+          var defaultCategories = monthsCurrentYear.length ? monthsCurrentYear :
+                                  monthsCurrentMonth.length ? monthsCurrentMonth : monthsLastYear;
+
+          // Debugging: Check if data exists
+          console.log("Default Orders:", defaultOrders);
+          console.log("Default Revenues:", defaultRevenues);
+          console.log("Default Categories:", defaultCategories);
+
+          // If still empty, warn the user
+          if (defaultOrders.length === 0 || defaultRevenues.length === 0) {
+              console.warn("No data available. Defaulting to Last Year data.");
+          }
+
+          var chartOptions = {
               chart: {
                   type: "line",
                   height: 350,
@@ -366,62 +398,99 @@
                   toolbar: { show: false }
               },
               series: [
-                  {
-                      name: "Total Orders",
-                      data: @json($orders), 
-                  },
-                  {
-                      name: "Total Revenue",
-                      data: @json($revenues), 
-                  }
+                  { name: "Total Orders", data: defaultOrders },
+                  { name: "Total Revenue", data: defaultRevenues }
               ],
               xaxis: {
-                  categories: @json($months), 
-                  title: { text: "Months" }
+                  categories: defaultCategories,
+                  title: { text: "Time Period" }
               },
               yaxis: {
                   title: { text: "Values" },
                   labels: {
                       formatter: function (val) {
-                          return val.toLocaleString("en-IN"); 
+                          return val.toLocaleString("en-IN");
                       }
                   }
               },
-              stroke: {
-                  curve: 'smooth', 
-                  width: 3
-              },
+              stroke: { curve: "smooth", width: 3 },
               colors: ["#28A745", "#FFC107"], 
               markers: {
                   size: 5,
-                  colors: ["#17A2B8", "#E83E8C"], 
+                  colors: ["#17A2B8", "#E83E8C"],
                   strokeColors: "#fff",
                   strokeWidth: 2
               },
               tooltip: {
                   theme: "light",
-                  y: {
-                      formatter: function (val) {
-                          return val.toLocaleString("en-IN"); 
-                      }
-                  }
+                  y: { formatter: function (val) { return val.toLocaleString("en-IN"); } }
               },
               grid: {
                   borderColor: "#ddd",
                   strokeDashArray: 4,
-                  padding: {
-                      left: 20,
-                      right: 20,
-                      top: 10,
-                      bottom: 10
-                  }
+                  padding: { left: 20, right: 20, top: 10, bottom: 10 }
               }
           };
 
-          var chart = new ApexCharts(document.querySelector("#saleschart"), options);
+          var chart = new ApexCharts(document.querySelector("#saleschart"), chartOptions);
           chart.render();
+
+          // **Dropdown filter event listener**
+          document.querySelectorAll(".dropdown-menu .dropdown-item").forEach(item => {
+              item.addEventListener("click", function () {
+                  let selectedPeriod = this.textContent.trim();
+                  let updatedData = { series: [], categories: [] };
+
+                  if (selectedPeriod === "Current Year") {
+                      updatedData.series = [
+                          { name: "Total Orders", data: ordersCurrentYear },
+                          { name: "Total Revenue", data: revenuesCurrentYear }
+                      ];
+                      updatedData.categories = monthsCurrentYear;
+                  } else if (selectedPeriod === "Last Month") {
+                      updatedData.series = [
+                          { name: "Total Orders", data: ordersCurrentMonth },
+                          { name: "Total Revenue", data: revenuesCurrentMonth }
+                      ];
+                      updatedData.categories = monthsCurrentMonth;
+                  } else if (selectedPeriod === "Last Week") {
+                      updatedData.series = [
+                          { name: "Total Orders", data: ordersLastWeek },
+                          { name: "Total Revenue", data: revenuesLastWeek }
+                      ];
+                      updatedData.categories = daysLastWeek;
+                  } else if (selectedPeriod === "Today") {
+                      updatedData.series = [
+                          { name: "Total Orders", data: ordersToday },
+                          { name: "Total Revenue", data: revenuesToday }
+                      ];
+                      updatedData.categories = hoursToday;
+                  } else {
+                      // Default: Show Current Year or Month
+                      updatedData.series = [
+                          { name: "Total Orders", data: defaultOrders },
+                          { name: "Total Revenue", data: defaultRevenues }
+                      ];
+                      updatedData.categories = defaultCategories;
+                  }
+
+                  // Debugging: Check updated data
+                  console.log("Updated Data for:", selectedPeriod);
+                  console.log("Orders:", updatedData.series[0].data);
+                  console.log("Revenue:", updatedData.series[1].data);
+                  console.log("Categories:", updatedData.categories);
+
+                  // Update Chart Properly
+                  chart.updateSeries(updatedData.series);
+                  chart.updateOptions({ xaxis: { categories: updatedData.categories } });
+
+                  // Update Button Label
+                  document.querySelector("#dropdownMenuButton1").textContent = selectedPeriod;
+              });
+          });
       });
     </script>
+
 
 
 
