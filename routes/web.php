@@ -180,6 +180,7 @@ Route::get('/order-tracking-details/{order_id}', [OrderTrackingController::class
 
 // ==== Manage Report Generation
 Route::get('/reports', [ReportsController::class, 'reports'])->name('reports.list');
+Route::get('/reports/{reportType}', [ReportsController::class, 'getReportData'])->name('getReportData');
 
 
 // ======================= Frontend

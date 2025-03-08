@@ -46,16 +46,12 @@
 
 
                         <div class="table-responsive custom-scrollbar">
-                            <table class="display" id="reportTable">
-                                <thead>
-                                    <tr id="tableHeaders">
-                                        <!-- Table Headers will be dynamically loaded -->
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <!-- Table Data will be dynamically loaded -->
-                                </tbody>
-                            </table>
+                        <table id="reportTable" class="table table-bordered">
+                            <thead>
+                                <tr id="tableHeaders"></tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
                         </div>
 
                     </div>
@@ -72,80 +68,83 @@
         @include('components.backend.main-js')
 
 
-    <script>
+        <script>
             const reportData = {
-            sales: {
-                headers: ["#", "Order ID", "Customer Name", "Total Amount", "Order Date"],
-                data: [
-                    [1, "ORD123", "John Doe", "₹5000", "2024-03-08"],
-                    [2, "ORD124", "Jane Smith", "₹3000", "2024-03-07"]
-                ]
-            },
-            inventory: {
-                headers: ["#", "Product Name", "Category", "Stock Available"],
-                data: [
-                    [1, "Laptop", "Electronics", "10"],
-                    [2, "Shoes", "Fashion", "25"]
-                ]
-            },
-            customers: {
-                headers: ["#", "Customer Name", "Email", "Total Orders", "Last Purchase"],
-                data: [
-                    [1, "John Doe", "john@example.com", "5", "2024-03-07"],
-                    [2, "Jane Smith", "jane@example.com", "3", "2024-03-06"]
-                ]
-            },
-            category: {
-                headers: ["#", "Category Name", "Total Products", "Total Sales", "Last Updated"],
-                data: [
-                    [1, "Electronics", "50", "₹500000", "2024-03-06"],
-                    [2, "Fashion", "120", "₹150000", "2024-03-07"]
-                ]
-            },
-            product: {  // NEW PRODUCT REPORT
-                headers: ["#", "Product Name", "Category", "Total Sales", "Stock Left"],
-                data: [
-                    [1, "iPhone 14", "Electronics", "₹1,50,000", "5"],
-                    [2, "Adidas Shoes", "Fashion", "₹25,000", "15"]
-                ]
-            }
-        };
+                sales: {
+                    headers: ["#", "Order ID", "Customer Name", "Total Amount", "Order Date"],
+                    url: '{{ route("getReportData", ["sales"]) }}' 
+                },
+                inventory: {
+                    headers: ["#", "Product Name", "Category", "Stock Available"],
+                    url: '{{ route("getReportData", ["inventory"]) }}'
+                },
+                customers: {
+                    headers: ["#", "Customer Name", "Email", "Total Orders", "Last Purchase"],
+                    url: '{{ route("getReportData", ["customers"]) }}'
+                },
+                category: {
+                    headers: ["#", "Category Name", "Total Products", "Total Sales", "Last Updated"],
+                    url: '{{ route("getReportData", ["category"]) }}'
+                },
+                product: {
+                    headers: ["#", "Product Name", "Category", "Total Sales", "Stock Left"],
+                    url: '{{ route("getReportData", ["product"]) }}'
+                }
+            };
 
-        function loadReport(reportType) {
-            // Check if DataTable is already initialized
-            if ($.fn.DataTable.isDataTable("#reportTable")) {
-                $("#reportTable").DataTable().destroy(); // Destroy only if exists
-            }
+            function loadReport(reportType) {
+                    // Check if DataTable is already initialized
+                    if ($.fn.DataTable.isDataTable("#reportTable")) {
+                        $("#reportTable").DataTable().destroy(); // Destroy only if exists
+                    }
 
-            // Update table headers
-            $("#tableHeaders").html(reportData[reportType].headers.map(h => `<th>${h}</th>`).join(""));
+                    // Update table headers
+                    $("#tableHeaders").html(reportData[reportType].headers.map(h => `<th>${h}</th>`).join(""));
 
-            // Update table body
-            $("#reportTable tbody").html(
-                reportData[reportType].data.map(row => `<tr>${row.map(d => `<td>${d}</td>`).join("")}</tr>`).join("")
-            );
+                    // Fetch data from the server
+                    $.get(reportData[reportType].url, function(data) {
+                        // Update table body with incremental IDs
+                        $("#reportTable tbody").html(
+                            data.map((row, index) => {
+                                const incrementalId = index + 1; 
 
-            // Re-initialize DataTable
-            $("#reportTable").DataTable({
-                destroy: true,
-                responsive: true,
-                autoWidth: false
+                                const formattedDate = formatDate(row.created_at); 
+                                row.created_at = formattedDate;
+                                const rowData = Object.values(row).map(d => `<td>${d}</td>`).join("");
+                                return `<tr><td>${incrementalId}</td>${rowData}</tr>`;
+                            }).join("")
+                        );
+
+                        // Re-initialize DataTable
+                        $("#reportTable").DataTable({
+                            destroy: true,
+                            responsive: true,
+                            autoWidth: false
+                        });
+                    });
+                }
+
+                // Function to format the date to DD-MM-YYYY
+                function formatDate(dateString) {
+                    const date = new Date(dateString);
+                    const day = String(date.getDate()).padStart(2, '0'); 
+                    const month = String(date.getMonth() + 1).padStart(2, '0'); 
+                    const year = date.getFullYear();
+                    return `${day}-${month}-${year}`;
+                }
+
+
+
+            // On dropdown change, load the selected report
+            $("#reportType").on("change", function () {
+                loadReport(this.value);
             });
-        }
 
-        // On dropdown change, load the selected report
-        $("#reportType").on("change", function () {
-            loadReport(this.value);
-        });
-
-        // Load default report on page load
-        $(document).ready(function () {
-            loadReport("sales"); // Default to Sales Report
-        });
-
-
-
-    </script>
+            // Load default report on page load
+            $(document).ready(function () {
+                loadReport("sales"); // Default to Sales Report
+            });
+        </script>
 
 
 </body>
