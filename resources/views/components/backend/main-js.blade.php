@@ -19,7 +19,7 @@
     <script src="{{ asset('admin/assets/js/editors/quill.js') }}"></script>
     <script src="{{ asset('admin/assets/js/notify/bootstrap-notify.min.js') }}"></script>
     <!-- calendar js-->
-    <script src="{{ asset('admin/assets/js/dashboard/default.js') }}"></script>
+    <!-- <script src="{{ asset('admin/assets/js/dashboard/default.js') }}"></script> -->
     <script src="{{ asset('admin/assets/js/notify/index.js') }}"></script>
     <script src="{{ asset('admin/assets/js/typeahead/handlebars.js') }}"></script>
     <script src="{{ asset('admin/assets/js/typeahead/typeahead.bundle.js') }}"></script>

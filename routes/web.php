@@ -18,6 +18,7 @@ use App\Http\Controllers\Backend\ProductDetailsController;
 use App\Http\Controllers\Backend\SEOController;
 use App\Http\Controllers\Backend\StockDetailsController;
 use App\Http\Controllers\Backend\OrderTrackingController;
+use App\Http\Controllers\Backend\DashboardController;
 use App\Http\Controllers\Backend\Home\BannerDetailsController;
 use App\Http\Controllers\Backend\Home\NewArrivalsController;
 use App\Http\Controllers\Backend\Home\CollectionDetailsController;
@@ -66,11 +67,16 @@ Route::post('/update-password', [LoginController::class, 'updatePassword'])->nam
 Route::get('/register', [LoginController::class, 'register'])->name('admin.register');
 Route::post('/register', [LoginController::class, 'authenticate_register'])->name('admin.register.authenticate');
     
-// Admin Routes with Middleware
+// // Admin Routes with Middleware
+// Route::group(['middleware' => ['auth:web', \App\Http\Middleware\PreventBackHistoryMiddleware::class]], function () {
+//         Route::get('/dashboard', function () {
+//             return view('backend.dashboard'); 
+//         })->name('admin.dashboard');
+// });
+
+
 Route::group(['middleware' => ['auth:web', \App\Http\Middleware\PreventBackHistoryMiddleware::class]], function () {
-        Route::get('/dashboard', function () {
-            return view('backend.dashboard'); 
-        })->name('admin.dashboard');
+    Route::get('/dashboard', [DashboardController::class, 'dashboard'])->name('admin.dashboard');
 });
 
 // ==== Manage User List in User Management

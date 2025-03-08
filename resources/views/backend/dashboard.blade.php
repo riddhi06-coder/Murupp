@@ -3,6 +3,8 @@
     
 <head>
     @include('components.backend.head')
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/apexcharts/4.3.0/apexcharts.min.css" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/apexcharts/4.3.0/apexcharts.min.js"></script>
 </head>
 	   
 		@include('components.backend.header')
@@ -66,29 +68,23 @@
                 <div class="col-xl-6 col-md-12 box-col-5 total-revenue-total-order">
                   <div class="row">
                     <!-- Total Revenue -->
-                    <div class="col-md-6">
-                      <div class="card"> 
-                        <div class="card-body"> 
-                          <div class="total-revenue mb-2"> 
-                            <span>Total Revenue</span>
-                            <a href="index.html">View Report</a>
-                          </div>
-                          <h3 class="f-w-600">₹97,250.89</h3>
-                          <div class="total-chart">
-                            <div class="data-grow d-flex gap-2">
-                              <i class="font-primary" data-feather="arrow-up-right"></i>
-                              <span class="f-w-500">60.00% from last year</span>
+                    <div class="col-xl-12">
+                        <div class="card"> 
+                            <div class="card-body"> 
+                                <div class="total-revenue mb-2"> 
+                                    <span>Total Revenue</span>
+                                </div>
+                                <h3 class="f-w-600">₹{{ number_format($totalRevenueAmount, 2) }}</h3> 
+                                    <div class="total-revenue-chart">
+                                        <div id="revenue" style="width: 100%; height: 250px;"></div>
+                                    </div>
                             </div>
-                            <div class="total-revenue-chart"> 
-                              <div id="revenue"></div>
-                            </div>
-                          </div>
                         </div>
-                      </div>
                     </div>
+
                     
                     <!-- Total Order -->
-                    <div class="col-md-6">
+                    <div class="col-xl-12">
                       <div class="card"> 
                         <div class="card-body"> 
                           <div class="total-revenue mb-2">
@@ -245,15 +241,64 @@
     </div>
 
         
-    <script src="{{ asset('admin/assets/js/chart/apex-chart/moment.min.js') }}"></script>
-    <script src="{{ asset('admin/assets/js/chart/apex-chart/apex-chart.js') }}"></script>
-    <script src="{{ asset('admin/assets/js/chart/apex-chart/stock-prices.js') }}"></script>
-
-    <script src="{{ asset('admin/assets/js/animation/wow/wow.min.js') }}"></script>
+    
     @include('components.backend.main-js')
 
+    
+    <!-- Total Revenue graphh ajaxx-->
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+          var revenueOptions = {
+              chart: {
+                  type: "scatter",  
+                  height: 250, 
+                  width: "100%",
+                  toolbar: { show: false }
+              },
+              series: [{
+                  name: "Revenue",
+                  data: @json($revenues)  
+              }],
+              xaxis: {
+                  categories: @json($months), 
+                  title: { text: "Months" },
+                  labels: {
+                      rotate: -45, 
+                      style: { fontSize: '12px' }
+                  }
+              },
+              yaxis: {
+                  title: { text: "Revenue (₹)" }
+              },
+              colors: ["#008FFB"],
+              markers: {
+                  size: 6, 
+                  colors: ["#008FFB"],
+                  strokeColors: "#fff",
+                  strokeWidth: 2
+              },
+              tooltip: {
+                  shared: false,
+                  y: {
+                      formatter: function (val) {
+                          return "₹" + val.toFixed(2);
+                      }
+                  }
+              },
+              grid: {
+                  padding: {
+                      left: 10,
+                      right: 10,
+                      top: 10,
+                      bottom: 10
+                  }
+              }
+          };
 
-
+          var chart = new ApexCharts(document.querySelector("#revenue"), revenueOptions);
+          chart.render();
+      });
+    </script>
 
         
 </body>
