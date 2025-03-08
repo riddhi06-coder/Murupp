@@ -40,11 +40,11 @@ class ReportsController extends Controller
                 break;
 
             case 'customers':
-                $data = User::select('users.id', 'users.name as customer_name', 'users.email', 
+                $data = User::select('users.name as customer_name', 'users.email', 
                                         DB::raw('COUNT(order_details.id) as total_orders'), 
                                         DB::raw('MAX(order_details.created_at) as last_purchase'))
-                            ->leftJoin('order_details', 'users.id', '=', 'order_details.user_id') // Assuming 'user_id' is the foreign key in 'order_details'
-                            ->groupBy('users.id', 'users.name', 'users.email') // Group by user details to get the aggregate count and max date
+                            ->leftJoin('order_details', 'users.id', '=', 'order_details.user_id') 
+                            ->groupBy('users.id', 'users.name', 'users.email') 
                             ->get();
                 break;
 
@@ -86,6 +86,7 @@ class ReportsController extends Controller
                     )
                     ->join('master_product_category', 'product_details.category_id', '=', 'master_product_category.id') 
                     ->whereNull('master_product_category.deleted_by')
+                    ->whereNull('product_details.deleted_by')
                     ->get();
                 break;
                 
