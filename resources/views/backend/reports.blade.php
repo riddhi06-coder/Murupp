@@ -67,7 +67,7 @@
             
         @include('components.backend.main-js')
 
-        
+
         <script>
             const reportData = {
                 sales: {
@@ -113,22 +113,29 @@
                                 row.created_at = formatDate(row.created_at);
                             }
 
-                            // For inventory, adjust the columns to match the correct order
+                            // Handle Inventory Data: Product Name, Category, Stock Available
                             if (reportType === "inventory") {
-                                // The order should be: Product Name, Category, Stock Available
                                 const productName = row.product_name || '--';
                                 const category = row.category_name || '--';
                                 const stockAvailable = row.available_quantity !== null ? row.available_quantity : '--';
                                 return `<tr><td>${incrementalId}</td><td>${productName}</td><td>${category}</td><td>${stockAvailable}</td></tr>`;
                             }
 
-                            // For product, adjust the columns to match the correct order
+                            // Handle Product Data: Product Name, Category, Stock Left
                             if (reportType === "product") {
-                                // The order should be: Product Name, Category, Stock Left
                                 const productName = row.product_name || '--';
                                 const category = row.category_name || '--';
                                 const stockLeft = row.stock_left !== null ? row.stock_left : '--';
                                 return `<tr><td>${incrementalId}</td><td>${productName}</td><td>${category}</td><td>${stockLeft}</td></tr>`;
+                            }
+
+                            // Handle Customer Data: Customer Name, Email, Total Orders, Last Purchase
+                            if (reportType === "customers") {
+                                const customerName = row.customer_name || '--';
+                                const email = row.email || '--';
+                                const totalOrders = row.total_orders !== null ? row.total_orders : '--';
+                                const lastPurchase = row.last_purchase ? formatDate(row.last_purchase) : '--';
+                                return `<tr><td>${incrementalId}</td><td>${customerName}</td><td>${email}</td><td>${totalOrders}</td><td>${lastPurchase}</td></tr>`;
                             }
 
                             // Map the row data into table cells for other report types
