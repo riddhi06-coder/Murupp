@@ -26,7 +26,7 @@
           </div>
 
 
-         <!-- Container-fluid starts -->
+        <!-- Container-fluid starts -->
           <div class="container-fluid">
             <div class="row"> 
               <div class="col-xl-6 box-col-7"> 
@@ -99,7 +99,7 @@
                 </div>
 
 
-              
+               <!-- Total Statisticsss -->
               <div class="col-xxl-6 box-col-12"> 
                 <div class="row">
                   <div class="col-xl-5 col-sm-6">
@@ -109,7 +109,7 @@
                           <li class="product-cost">
                             <div class="product-icon bg-primary-light">
                               <svg>
-                                <use href="../assets/svg/icon-sprite.svg#activity"></use>
+                                <use href="{{ asset('admin/assets/svg/icon-sprite.svg#activity') }}"></use>
                               </svg>
                             </div>
                             <div><span class="f-w-500 f-14 mb-0">Total Sales</span>
@@ -122,7 +122,7 @@
                           <li class="product-cost">
                             <div class="product-icon bg-warning-light">
                               <svg>
-                                <use href="../assets/svg/icon-sprite.svg#people"></use>
+                                <use href="{{ asset('admin/assets/svg/icon-sprite.svg#people') }}"></use>
                               </svg>
                             </div>
                             <div><span class="f-w-500 f-14 mb-0">Total Visitors</span>
@@ -135,7 +135,7 @@
                           <li class="product-cost">
                             <div class="product-icon bg-light">
                               <svg>
-                                <use href="../assets/svg/icon-sprite.svg#task-square"></use>
+                                <use href="{{ asset('admin/assets/svg/icon-sprite.svg#task-square') }}"></use>
                               </svg>
                             </div>
                             <div><span class="f-w-500 f-14 mb-0">Total Orders</span>
@@ -148,7 +148,7 @@
                           <li class="product-cost">
                             <div class="product-icon bg-danger-light">
                               <svg>
-                                <use href="../assets/svg/icon-sprite.svg#money-recive"></use>
+                                <use href="{{ asset('admin/assets/svg/icon-sprite.svg#money-recive') }}"></use>
                               </svg>
                             </div>
                             <div><span class="f-w-500 f-14 mb-0">Refunded</span>
@@ -194,7 +194,8 @@
                 </div>
               </div>
 
-              
+
+               <!-- Catgeory Revenue -->
               <div class="col-xxl-3 col-md-6 box-col-6">
                   <div class="card">
                       <div class="card-header total-revenue card-no-border">
