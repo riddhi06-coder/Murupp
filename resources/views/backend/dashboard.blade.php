@@ -326,7 +326,7 @@
               },
               plotOptions: {
                   bar: {
-                      columnWidth: "30%", 
+                      columnWidth: "15%", 
                       borderRadius: 6 
                   }
               },
