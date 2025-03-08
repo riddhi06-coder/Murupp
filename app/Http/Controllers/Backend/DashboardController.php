@@ -57,7 +57,7 @@ class DashboardController extends Controller
 
         // 🟢 Fetching Data for Last Year
         $lastYearData = OrderDetail::selectRaw('MONTH(created_at) as month, COUNT(id) as total_orders, SUM(total_price) as total_revenue')
-        ->whereYear('created_at', now()->subYear()->year) // Filter for last year
+        ->whereYear('created_at', now()->subYear()->year) 
         ->groupBy('month')
         ->orderBy('month')
         ->get();
@@ -68,7 +68,7 @@ class DashboardController extends Controller
 
         // 🟡 Fetching Data for Last Month
         $lastMonthData = OrderDetail::selectRaw('DAY(created_at) as day, COUNT(id) as total_orders, SUM(total_price) as total_revenue')
-            ->whereMonth('created_at', now()->subMonth()->month) // Filter for last month
+            ->whereMonth('created_at', now()->subMonth()->month) 
             ->groupBy('day')
             ->orderBy('day')
             ->get();
@@ -90,7 +90,7 @@ class DashboardController extends Controller
 
         // 🔴 Fetching Data for Today (Hourly)
         $todayData = OrderDetail::selectRaw('HOUR(created_at) as hour, COUNT(id) as total_orders, SUM(total_price) as total_revenue')
-            ->whereDate('created_at', now()->toDateString()) // Filter for today
+            ->whereDate('created_at', now()->toDateString()) 
             ->groupBy('hour')
             ->orderBy('hour')
             ->get();
@@ -102,7 +102,7 @@ class DashboardController extends Controller
 
         // 🟢 Fetching Data for Current Year
         $currentYearData = OrderDetail::selectRaw('MONTH(created_at) as month, COUNT(id) as total_orders, SUM(total_price) as total_revenue')
-        ->whereYear('created_at', now()->year) // Filter for the current year
+        ->whereYear('created_at', now()->year) 
         ->groupBy('month')
         ->orderBy('month')
         ->get();
