@@ -325,11 +325,11 @@
               },
               plotOptions: {
                   bar: {
-                      columnWidth: "15%", 
+                      columnWidth: "35%", 
                       borderRadius: 6 
                   }
               },
-              colors: ["#FF5733"], 
+              colors: ["#FF5733", "#36A2EB", "#4CAF50", "#FFC107", "#9B59B6"],
               tooltip: {
                   theme: "light",
                   y: {
@@ -354,6 +354,81 @@
           chart.render();
       });
     </script>
+
+    <!-- Total Sales Chart graph ajaxx-->
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+          var options = {
+              chart: {
+                  type: "line",
+                  height: 350,
+                  zoom: { enabled: false },
+                  toolbar: { show: false }
+              },
+              series: [
+                  {
+                      name: "Total Orders",
+                      data: @json($orders), 
+                  },
+                  {
+                      name: "Total Revenue",
+                      data: @json($revenues), 
+                  }
+              ],
+              xaxis: {
+                  categories: @json($months), 
+                  title: { text: "Months" }
+              },
+              yaxis: {
+                  title: { text: "Values" },
+                  labels: {
+                      formatter: function (val) {
+                          return val.toLocaleString("en-IN"); 
+                      }
+                  }
+              },
+              stroke: {
+                  curve: 'smooth', 
+                  width: 3
+              },
+              colors: ["#28A745", "#FFC107"], 
+              markers: {
+                  size: 5,
+                  colors: ["#17A2B8", "#E83E8C"], 
+                  strokeColors: "#fff",
+                  strokeWidth: 2
+              },
+              tooltip: {
+                  theme: "light",
+                  y: {
+                      formatter: function (val) {
+                          return val.toLocaleString("en-IN"); 
+                      }
+                  }
+              },
+              grid: {
+                  borderColor: "#ddd",
+                  strokeDashArray: 4,
+                  padding: {
+                      left: 20,
+                      right: 20,
+                      top: 10,
+                      bottom: 10
+                  }
+              }
+          };
+
+          var chart = new ApexCharts(document.querySelector("#saleschart"), options);
+          chart.render();
+      });
+    </script>
+
+
+
+
+
+
+
 
 
 
