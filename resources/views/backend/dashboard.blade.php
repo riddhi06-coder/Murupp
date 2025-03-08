@@ -85,24 +85,20 @@
                     
                     <!-- Total Order -->
                     <div class="col-xl-12">
-                      <div class="card"> 
-                        <div class="card-body"> 
-                          <div class="total-revenue mb-2">
-                            <span>Total Order</span>
-                            <a href="index.html">View Report</a>
-                          </div>
-                          <h3 class="f-w-600">35,452</h3>
-                          <div class="total-chart">
-                            <div class="data-grow d-flex gap-2">
-                              <i class="font-secondary" data-feather="arrow-down-left"></i>
-                              <span class="f-w-500">15.00% from last week</span>
+                        <div class="card"> 
+                            <div class="card-body"> 
+                                <div class="total-revenue mb-2">
+                                    <span>Total Orders</span>
+                                    <a href="index.html">View Report</a>
+                                </div>
+                                <h3 class="f-w-600" id="totalOrderCount">{{ number_format($totalOrderCount) }}</h3> 
+                                <div class="total-chart">
+                                    <div class="total-order">
+                                        <div id="totalOrder" style="width: 100%; height: 250px;"></div>
+                                    </div>
+                                </div>
                             </div>
-                            <div class="total-order">
-                              <div id="totalOrder"></div>
-                            </div>
-                          </div>
                         </div>
-                      </div>
                     </div>
                     
                   </div>
@@ -299,6 +295,68 @@
           chart.render();
       });
     </script>
+
+    <!-- Total Total Orders graph ajaxx-->
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+          var orderOptions = {
+              chart: {
+                  type: "bar", 
+                  height: 300,
+                  width: "140%",
+                  toolbar: { show: false },
+                  zoom: { enabled: false }
+              },
+              series: [{
+                  name: "Total Orders",
+                  data: @json($orders) 
+              }],
+              xaxis: {
+                  categories: @json($months), 
+                  title: { text: "Months" },
+                  labels: { rotate: -45 }
+              },
+              yaxis: {
+                  title: { text: "Total Orders" },
+                  labels: {
+                      formatter: function (val) {
+                          return val.toLocaleString("en-IN"); 
+                      }
+                  }
+              },
+              plotOptions: {
+                  bar: {
+                      columnWidth: "30%", 
+                      borderRadius: 6 
+                  }
+              },
+              colors: ["#FF5733"], 
+              tooltip: {
+                  theme: "light",
+                  y: {
+                      formatter: function (val) {
+                          return val.toLocaleString("en-IN") + " Orders"; 
+                      }
+                  }
+              },
+              grid: {
+                  borderColor: "#ddd",
+                  strokeDashArray: 4,
+                  padding: {
+                      left: 20,
+                      right: 20,
+                      top: 10,
+                      bottom: 10
+                  }
+              }
+          };
+
+          var chart = new ApexCharts(document.querySelector("#totalOrder"), orderOptions);
+          chart.render();
+      });
+    </script>
+
+
 
         
 </body>

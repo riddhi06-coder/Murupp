@@ -20,23 +20,37 @@ class DashboardController extends Controller
 
     public function dashboard()
     {
-        // Fetch total revenue for each month dynamically
+        // for  Total Revenue Fetching.
         $monthlyData = OrderDetail::selectRaw('MONTH(created_at) as month, SUM(total_price) as total')
             ->groupBy('month')
             ->orderBy('month')
             ->get();
     
-        // Extract months and revenues for chart
         $months = $monthlyData->pluck('month')->map(function ($month) {
             return date("F", mktime(0, 0, 0, $month, 1)); 
         })->toArray();
     
         $revenues = $monthlyData->pluck('total')->toArray();
-    
-        // Calculate total revenue amount
         $totalRevenueAmount = array_sum($revenues);
     
-        return view('backend.dashboard', compact('months', 'revenues', 'totalRevenueAmount'));
+
+        
+
+        // For  Total Orders Fetching.
+        $monthlyOrders = OrderDetail::selectRaw('MONTH(created_at) as month, COUNT(id) as total_orders')
+                        ->groupBy('month')
+                        ->orderBy('month')
+                        ->get();
+
+        $months = $monthlyOrders->pluck('month')->map(function ($month) {
+                                    return date("F", mktime(0, 0, 0, $month, 1)); 
+                                })->toArray();
+
+        $orders = $monthlyOrders->pluck('total_orders')->toArray();
+        $totalOrderCount = array_sum($orders);
+
+
+        return view('backend.dashboard', compact('months', 'revenues', 'totalRevenueAmount','orders', 'totalOrderCount'));
     }
     
     
