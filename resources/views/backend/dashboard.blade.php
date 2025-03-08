@@ -293,7 +293,7 @@
       document.addEventListener("DOMContentLoaded", function () {
           var orderOptions = {
               chart: {
-                  type: "bar", 
+                  type: "bar",
                   height: 300,
                   width: "140%",
                   toolbar: { show: false },
@@ -301,10 +301,10 @@
               },
               series: [{
                   name: "Total Orders",
-                  data: @json($orders) 
+                  data: @json($orders)
               }],
               xaxis: {
-                  categories: @json($months), 
+                  categories: @json($months),
                   title: { text: "Months" },
                   labels: { rotate: -45 }
               },
@@ -312,22 +312,23 @@
                   title: { text: "Total Orders" },
                   labels: {
                       formatter: function (val) {
-                          return val.toLocaleString("en-IN"); 
+                          return val.toLocaleString("en-IN");
                       }
                   }
               },
               plotOptions: {
                   bar: {
-                      columnWidth: "35%", 
-                      borderRadius: 6 
+                      columnWidth: "35%",
+                      borderRadius: 6,
+                      distributed: true  // Ensures each bar gets a different color
                   }
               },
-              colors: ["#FF5733", "#36A2EB", "#4CAF50", "#FFC107", "#9B59B6"],
+              colors: ["#FF5733", "#36A2EB", "#4CAF50", "#FFC107", "#9B59B6", "#E91E63", "#8E44AD", "#2ECC71", "#F39C12", "#3498DB"],
               tooltip: {
                   theme: "light",
                   y: {
                       formatter: function (val) {
-                          return val.toLocaleString("en-IN") + " Orders"; 
+                          return val.toLocaleString("en-IN") + " Orders";
                       }
                   }
               },
