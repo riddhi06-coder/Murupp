@@ -91,7 +91,7 @@
                                     <span>Total Orders</span>
                                     <a href="index.html">View Report</a>
                                 </div>
-                                <h3 class="f-w-600" id="totalOrderCount">{{ number_format($totalOrderCount) }}</h3> 
+                                <h3 class="f-w-600" id="totalOrderCount">{{ $totalOrderCount }}</h3> 
                                 <div class="total-chart">
                                     <div class="total-order">
                                         <div id="totalOrder" style="width: 100%; height: 250px;"></div>
