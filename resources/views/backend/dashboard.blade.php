@@ -75,9 +75,9 @@
                                     <span>Total Revenue</span>
                                 </div>
                                 <h3 class="f-w-600">₹{{ number_format($totalRevenueAmount, 2) }}</h3> 
-                                    <div class="total-revenue-chart">
-                                        <div id="revenue" style="width: 100%; height: 250px;"></div>
-                                    </div>
+                                <div class="total-revenue-chart">
+                                    <div id="revenue" style="width: 100%; height: 250px;"></div>
+                                </div>
                             </div>
                         </div>
                     </div>
