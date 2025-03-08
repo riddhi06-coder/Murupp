@@ -67,15 +67,15 @@
             
         @include('components.backend.main-js')
 
-
+        
         <script>
             const reportData = {
                 sales: {
                     headers: ["#", "Order ID", "Customer Name", "Total Amount", "Order Date"],
-                    url: '{{ route("getReportData", ["sales"]) }}' 
+                    url: '{{ route("getReportData", ["sales"]) }}'
                 },
                 inventory: {
-                    headers: ["#", "Product Name", "Category", "Stock Available"],
+                    headers: ["#", "Product Name", "Category", "Stock Available"], // Correct order: Product Name, Category, Stock Available
                     url: '{{ route("getReportData", ["inventory"]) }}'
                 },
                 customers: {
@@ -87,53 +87,75 @@
                     url: '{{ route("getReportData", ["category"]) }}'
                 },
                 product: {
-                    headers: ["#", "Product Name", "Category", "Total Sales", "Stock Left"],
+                    headers: ["#", "Product Name", "Category", "Stock Left", "Total Sales"], // Correct order: Product Name, Category, Stock Left
                     url: '{{ route("getReportData", ["product"]) }}'
                 }
             };
 
             function loadReport(reportType) {
-                    // Check if DataTable is already initialized
-                    if ($.fn.DataTable.isDataTable("#reportTable")) {
-                        $("#reportTable").DataTable().destroy(); // Destroy only if exists
-                    }
+                // Check if DataTable is already initialized
+                if ($.fn.DataTable.isDataTable("#reportTable")) {
+                    $("#reportTable").DataTable().destroy(); // Destroy only if exists
+                }
 
-                    // Update table headers
-                    $("#tableHeaders").html(reportData[reportType].headers.map(h => `<th>${h}</th>`).join(""));
+                // Update table headers
+                $("#tableHeaders").html(reportData[reportType].headers.map(h => `<th>${h}</th>`).join(""));
 
-                    // Fetch data from the server
-                    $.get(reportData[reportType].url, function(data) {
-                        // Update table body with incremental IDs
-                        $("#reportTable tbody").html(
-                            data.map((row, index) => {
-                                const incrementalId = index + 1; 
+                // Fetch data from the server
+                $.get(reportData[reportType].url, function(data) {
+                    // Update table body with incremental IDs
+                    $("#reportTable tbody").html(
+                        data.map((row, index) => {
+                            const incrementalId = index + 1;
 
-                                const formattedDate = formatDate(row.created_at); 
-                                row.created_at = formattedDate;
-                                const rowData = Object.values(row).map(d => `<td>${d}</td>`).join("");
-                                return `<tr><td>${incrementalId}</td>${rowData}</tr>`;
-                            }).join("")
-                        );
+                            // Format the date in DD-MM-YYYY format if it exists (for sales reports)
+                            if (row.created_at) {
+                                row.created_at = formatDate(row.created_at);
+                            }
 
-                        // Re-initialize DataTable
-                        $("#reportTable").DataTable({
-                            destroy: true,
-                            responsive: true,
-                            autoWidth: false
-                        });
+                            // For inventory, adjust the columns to match the correct order
+                            if (reportType === "inventory") {
+                                // The order should be: Product Name, Category, Stock Available
+                                const productName = row.product_name || '--';
+                                const category = row.category_name || '--';
+                                const stockAvailable = row.available_quantity !== null ? row.available_quantity : '--';
+                                return `<tr><td>${incrementalId}</td><td>${productName}</td><td>${category}</td><td>${stockAvailable}</td></tr>`;
+                            }
+
+                            // For product, adjust the columns to match the correct order
+                            if (reportType === "product") {
+                                // The order should be: Product Name, Category, Stock Left
+                                const productName = row.product_name || '--';
+                                const category = row.category_name || '--';
+                                const stockLeft = row.stock_left !== null ? row.stock_left : '--';
+                                return `<tr><td>${incrementalId}</td><td>${productName}</td><td>${category}</td><td>${stockLeft}</td></tr>`;
+                            }
+
+                            // Map the row data into table cells for other report types
+                            const rowData = Object.values(row).map(d => {
+                                return d === null || d === undefined ? `<td>--</td>` : `<td>${d}</td>`;
+                            }).join("");
+                            return `<tr><td>${incrementalId}</td>${rowData}</tr>`;
+                        }).join("")
+                    );
+
+                    // Re-initialize DataTable
+                    $("#reportTable").DataTable({
+                        destroy: true,
+                        responsive: true,
+                        autoWidth: false
                     });
-                }
+                });
+            }
 
-                // Function to format the date to DD-MM-YYYY
-                function formatDate(dateString) {
-                    const date = new Date(dateString);
-                    const day = String(date.getDate()).padStart(2, '0'); 
-                    const month = String(date.getMonth() + 1).padStart(2, '0'); 
-                    const year = date.getFullYear();
-                    return `${day}-${month}-${year}`;
-                }
-
-
+            // Function to format the date to DD-MM-YYYY
+            function formatDate(dateString) {
+                const date = new Date(dateString);
+                const day = String(date.getDate()).padStart(2, '0'); // Ensure 2-digit day
+                const month = String(date.getMonth() + 1).padStart(2, '0'); // Ensure 2-digit month
+                const year = date.getFullYear();
+                return `${day}-${month}-${year}`;
+            }
 
             // On dropdown change, load the selected report
             $("#reportType").on("change", function () {
@@ -145,6 +167,7 @@
                 loadReport("sales"); // Default to Sales Report
             });
         </script>
+
 
 
 </body>

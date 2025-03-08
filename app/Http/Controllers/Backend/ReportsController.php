@@ -13,6 +13,7 @@ use Illuminate\Support\Str;
 use Carbon\Carbon;
 use App\Models\User;
 use App\Models\OrderDetail;
+use App\Models\ProductDetails;
 
 
 class ReportsController extends Controller
@@ -31,7 +32,10 @@ class ReportsController extends Controller
                 break;
 
             case 'inventory':
-                $data = OrderDetail::select('id', 'name as product_name', 'category', 'stock_available')->get();
+                $data = ProductDetails::select('product_name', 'master_product_category.category_name', 'available_quantity')
+                                        ->leftJoin('master_product_category', 'product_details.category_id', '=', 'master_product_category.id')
+                                        ->whereNull('product_details.deleted_by')
+                                        ->get();
                 break;
 
             // case 'customers':
