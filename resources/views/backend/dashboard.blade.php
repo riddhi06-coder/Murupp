@@ -55,7 +55,6 @@
                     </div>
                   </div>
 
-
                   <div class="card-body p-2 pt-0">
                     <div class="sales-wrapper">
                       <div id="saleschart"> </div>
