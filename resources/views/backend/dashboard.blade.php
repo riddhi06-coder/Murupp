@@ -176,14 +176,14 @@
                               </div>
                               <div class="card-body"> 
                                   <ul>
-                                      @foreach($categories as $index => $category)
+                                      @foreach($productNames as $index => $product)
                                       <li class="sale-history-card">
                                           <div class="history-price">
-                                              <a class="f-w-500 f-14 mb-0" href="category.html">{{ $category }}</a>
-                                              <span class="mb-0 txt-primary f-w-600 f-16">₹{{ number_format($revenuesByCategory[$index], 2) }}</span>
+                                              <a class="f-w-500 f-14 mb-0" href="product/{{ $product }}">{{ $product }}</a>
+                                              <span class="mb-0 txt-primary f-w-600 f-16">₹{{ number_format($revenuesByProduct[$index], 2) }}</span>
                                           </div>
                                           <div class="state-time">
-                                              <span class="f-w-500 f-14 f-light mb-0">Revenue from {{ $category }}</span>
+                                              <span class="f-w-500 f-14 f-light mb-0">Revenue from {{ $product }}</span>
                                               <span class="f-w-400 f-14 f-light">Last Month</span>
                                           </div>
                                       </li>
@@ -197,17 +197,18 @@
 
 
                <!-- Catgeory Revenue -->
-              <div class="col-xxl-3 col-md-6 box-col-6">
-                  <div class="card">
-                      <div class="card-header total-revenue card-no-border">
-                          <h4>Category Revenue</h4>
-                      </div>
-                      <div class="card-body pt-0">
-                          <div id="revenueByCategoryChart"></div>
-                      </div>
-                  </div>
+              <div class="d-flex justify-content-center">
+                <div class="col-xxl-3 col-md-6 box-col-6">
+                    <div class="card">
+                        <div class="card-header total-revenue card-no-border">
+                            <h4>Category Revenue</h4>
+                        </div>
+                        <div class="card-body pt-0">
+                            <div id="revenueByCategoryChart"></div>
+                        </div>
+                    </div>
+                </div>
               </div>
-
 
             </div>
           </div>

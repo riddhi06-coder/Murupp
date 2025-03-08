@@ -190,7 +190,28 @@ class DashboardController extends Controller
         $totalVisitors = User::count();
 
     
-                    
+        // Fetch top-selling products based on revenue
+        $topProducts = OrderDetail::selectRaw('
+                        JSON_EXTRACT(product_ids, "$[0]") as product_id, 
+                        SUM(total_price) as total_revenue
+                    ')
+                    ->whereNotNull('product_ids')
+                    ->groupBy('product_id')
+                    ->orderByDesc('total_revenue')
+                    ->limit(5) // Fetch Top 5 Products
+                    ->get()
+                    ->map(function ($order) {
+                        $product = ProductDetails::find($order->product_id);
+                        return [
+                            'product_name' => $product ? $product->product_name : 'Unknown Product',
+                            'total_revenue' => $order->total_revenue
+                        ];
+                    });
+
+
+        $productNames = collect($topProducts)->pluck('product_name')->toArray();
+        $revenuesByProduct = collect($topProducts)->pluck('total_revenue')->toArray();
+                        
 
         return view('backend.dashboard', compact(
             'months', 'revenues', 'totalRevenueAmount_1', 'orders', 'totalOrderCount',
@@ -198,7 +219,9 @@ class DashboardController extends Controller
             'months_last_year', 'orders_last_year', 'revenues_last_year',
             'months_last_month', 'orders_last_month', 'revenues_last_month',
             'days_last_week', 'orders_last_week', 'revenues_last_week',
-            'hours_today', 'orders_today', 'revenues_today','categories', 'revenuesByCategory', 'totalRevenueAmount','totalVisitors'
+            'hours_today', 'orders_today', 'revenues_today','categories', 'revenuesByCategory', 'totalRevenueAmount','totalVisitors',
+            'productNames', 'revenuesByProduct'
+            
         ));
     }        
     
