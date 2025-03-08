@@ -68,6 +68,7 @@
         @include('components.backend.main-js')
 
 
+
         <script>
             const reportData = {
                 sales: {
@@ -108,37 +109,16 @@
                         data.map((row, index) => {
                             const incrementalId = index + 1;
 
-                            // Format the date in DD-MM-YYYY format if it exists (for sales reports)
-                            if (row.created_at) {
-                                row.created_at = formatDate(row.created_at);
-                            }
-
-                            // Handle Inventory Data: Product Name, Category, Stock Available
-                            if (reportType === "inventory") {
-                                const productName = row.product_name || '--';
-                                const category = row.category_name || '--';
-                                const stockAvailable = row.available_quantity !== null ? row.available_quantity : '--';
-                                return `<tr><td>${incrementalId}</td><td>${productName}</td><td>${category}</td><td>${stockAvailable}</td></tr>`;
-                            }
-
-                            // Handle Product Data: Product Name, Category, Stock Left
+                            // Handle Product Data: Product Name, Category, Stock Left, and Total Sales Count
                             if (reportType === "product") {
                                 const productName = row.product_name || '--';
                                 const category = row.category_name || '--';
-                                const stockLeft = row.stock_left !== null ? row.stock_left : '--';
-                                return `<tr><td>${incrementalId}</td><td>${productName}</td><td>${category}</td><td>${stockLeft}</td></tr>`;
+                                const stockLeft = row.available_quantity !== null ? row.available_quantity : '--'; // Use available_quantity
+                                const totalSales = row.total_sales_count !== null ? row.total_sales_count : '--'; // Use the new total sales count
+                                return `<tr><td>${incrementalId}</td><td>${productName}</td><td>${category}</td><td>${stockLeft}</td><td>${totalSales}</td></tr>`;
                             }
 
-                            // Handle Customer Data: Customer Name, Email, Total Orders, Last Purchase
-                            if (reportType === "customers") {
-                                const customerName = row.customer_name || '--';
-                                const email = row.email || '--';
-                                const totalOrders = row.total_orders !== null ? row.total_orders : '--';
-                                const lastPurchase = row.last_purchase ? formatDate(row.last_purchase) : '--';
-                                return `<tr><td>${incrementalId}</td><td>${customerName}</td><td>${email}</td><td>${totalOrders}</td><td>${lastPurchase}</td></tr>`;
-                            }
-
-                            // Map the row data into table cells for other report types
+                            // Other report types are handled similarly
                             const rowData = Object.values(row).map(d => {
                                 return d === null || d === undefined ? `<td>--</td>` : `<td>${d}</td>`;
                             }).join("");
@@ -153,15 +133,6 @@
                         autoWidth: false
                     });
                 });
-            }
-
-            // Function to format the date to DD-MM-YYYY
-            function formatDate(dateString) {
-                const date = new Date(dateString);
-                const day = String(date.getDate()).padStart(2, '0'); // Ensure 2-digit day
-                const month = String(date.getMonth() + 1).padStart(2, '0'); // Ensure 2-digit month
-                const year = date.getFullYear();
-                return `${day}-${month}-${year}`;
             }
 
             // On dropdown change, load the selected report

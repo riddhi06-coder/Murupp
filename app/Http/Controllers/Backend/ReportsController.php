@@ -69,14 +69,27 @@ class ReportsController extends Controller
                 ->whereNull('master_product_category.deleted_by')
                 ->get();
                 
-                
-                
-    
                 break;
 
-            // case 'product':
-            //     $data = Product::select('id', 'name as product_name', 'category', 'total_sales', 'stock_left')->get();
-            //     break;
+
+            case 'product':
+                    $data = ProductDetails::select(
+                        'product_details.product_name as product_name', 
+                        'product_details.category_id', 
+                        'master_product_category.category_name', 
+                        'product_details.available_quantity',
+                        \DB::raw('(
+                            SELECT COUNT(*)
+                            FROM order_details
+                            WHERE JSON_CONTAINS(order_details.product_ids, CAST(product_details.id AS CHAR))
+                        ) AS total_sales_count')
+                    )
+                    ->join('master_product_category', 'product_details.category_id', '=', 'master_product_category.id') 
+                    ->whereNull('master_product_category.deleted_by')
+                    ->get();
+                break;
+                
+                
 
             default:
                 return response()->json(['error' => 'Invalid report type'], 400);
