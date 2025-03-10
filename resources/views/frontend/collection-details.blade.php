@@ -470,13 +470,9 @@
                     availability: availability
                 },
                 success: function (response) {
-                    // let pathParts = window.location.pathname.split("/").filter(part => part !== "");
-                    // let projectDirectory = pathParts.length > 0 ? "/" + pathParts[0] : "";
 
-                    // let baseUrl = window.location.origin + "/" + window.location.pathname.split("/")[1];
                     let assetBaseUrl = "{{ rtrim(asset(''), '/') }}"; 
                     
-
                     let filteredProductsHTML = '';
 
                     if (response.filteredProducts.length > 0) {

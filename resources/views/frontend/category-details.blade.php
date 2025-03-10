@@ -474,13 +474,14 @@
                         availability: availability
                     },
                     success: function (response) {
+                        let assetBaseUrl = "{{ rtrim(asset(''), '/') }}"; 
                         let filteredProductsHTML = '';
 
                         if (response.filteredProducts.length > 0) {
                             response.filteredProducts.forEach(product => {
                                 let productImages = JSON.parse(product.thumbnail_image || '[]');
-                                let imgSrc1 = productImages.length > 0 ? `/murupp/product/thumbnails/${productImages[0]}` : 'default-image.jpg';
-                                let imgSrc2 = productImages.length > 1 ? `/murupp/product/thumbnails/${productImages[1]}` : imgSrc1;
+                                let imgSrc1 = productImages.length > 0 ? `${assetBaseUrl}/murupp/product/thumbnails/${productImages[0]}` : 'default-image.jpg';
+                                let imgSrc2 = productImages.length > 1 ? `${assetBaseUrl}/murupp/product/thumbnails/${productImages[1]}` : imgSrc1;
 
                                 filteredProductsHTML += `
                                     <div class="card-product grid">
