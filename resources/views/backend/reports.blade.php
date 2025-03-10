@@ -154,19 +154,23 @@
                     headers.push($(this).text().trim());
                 });
 
-                // Capture table body rows
-                $("#reportTable tbody tr").each(function () {
+                // Capture entire data from DataTables API
+                const table = $("#reportTable").DataTable();
+                const data = table.rows().data(); // Fetch all rows, not just visible ones
+
+                data.each(function (rowData) {
                     const row = [];
-                    $(this).find('td').each(function () {
-                        row.push($(this).text().trim());
+                    rowData.forEach(cell => {
+                        row.push(cell);
                     });
-                    rows.push(row.join(","));
+                    rows.push(row.join(",")); 
                 });
 
                 // Combine headers and rows to form CSV
                 const csv = [headers.join(','), ...rows].join('\n');
                 return csv;
             }
+
 
             // Function to trigger CSV export
             function exportToCSV() {
@@ -181,6 +185,7 @@
                 const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
                 saveAs(blob, fileName); 
             }
+
 
             // On dropdown change, load the selected report
             $("#reportType").on("change", function () {
