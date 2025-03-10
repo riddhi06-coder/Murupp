@@ -52,7 +52,6 @@ class CollectionController extends Controller
     
         // Fetch price range for the category
         $priceRange = ProductDetails::whereNull('deleted_by')
-            ->where('category_id', $category->id)
             ->selectRaw('MIN(CAST(REPLACE(product_price, ",", "") AS UNSIGNED)) as min_price, 
                          MAX(CAST(REPLACE(product_price, ",", "") AS UNSIGNED)) as max_price')
             ->first();
