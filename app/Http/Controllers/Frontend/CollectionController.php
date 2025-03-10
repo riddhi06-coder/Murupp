@@ -61,12 +61,12 @@ class CollectionController extends Controller
     
         // Get stock availability count
         $inStockCount = ProductDetails::whereNull('deleted_by')
-            ->where('category_id', $category->id)
+            // ->where('category_id', $category->id)
             ->where('available_quantity', '>', 0)
             ->count();
     
         $outStockCount = ProductDetails::whereNull('deleted_by')
-            ->where('category_id', $category->id)
+            // ->where('category_id', $category->id)
             ->where('available_quantity', '=', 0)
             ->count();
     
