@@ -286,6 +286,9 @@ Route::group(['prefix'=> '', 'middleware'=>[\App\Http\Middleware\PreventBackHist
 
     Route::get('/products/filter', [CategoryDetailsController::class, 'filterProducts'])->name('products.filter');
 
+    Route::get('/collection-changes/filters', [CollectionController::class, 'filter_collection_Products'])->name('changes.filter');
+
+
 
 });
 

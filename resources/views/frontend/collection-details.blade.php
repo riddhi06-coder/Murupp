@@ -177,6 +177,8 @@
                         </ul> -->
 
                     </div>
+                        <!-- Filtered Products Section -->
+                        <div class="tf-grid-layout wrapper-shop tf-col-3" id="filteredResults"></div>
                 </div>
             </div>
         </section>
@@ -382,168 +384,173 @@
 
 <!------ for price slider dynamic range---->
 <script>
-document.addEventListener("DOMContentLoaded", function () {
-    let priceSlider = document.getElementById("price-slider");
+    document.addEventListener("DOMContentLoaded", function () {
+        let priceSlider = document.getElementById("price-slider");
 
-    let minPrice = parseInt(document.getElementById("price-value-range").dataset.min) || 0;
-    let maxPrice = parseInt(document.getElementById("price-value-range").dataset.max) || 10000; // Default max price
+        let minPrice = parseInt(document.getElementById("price-value-range").dataset.min) || 0;
+        let maxPrice = parseInt(document.getElementById("price-value-range").dataset.max) || 10000; // Default max price
 
-    noUiSlider.create(priceSlider, {
-        start: [minPrice, maxPrice],
-        connect: true,
-        step: 1,
-        range: {
-            min: minPrice,
-            max: maxPrice,
-        },
-        format: {
-            from: function (value) {
-                return parseInt(value);
+        noUiSlider.create(priceSlider, {
+            start: [minPrice, maxPrice],
+            connect: true,
+            step: 1,
+            range: {
+                min: minPrice,
+                max: maxPrice,
             },
-            to: function (value) {
-                return parseInt(value);
+            format: {
+                from: function (value) {
+                    return parseInt(value);
+                },
+                to: function (value) {
+                    return parseInt(value);
+                },
             },
-        },
+        });
+
+        // Update min & max price values when the slider is moved
+        priceSlider.noUiSlider.on("update", function (values) {
+            document.getElementById("price-min-value").innerText = `₹${values[0]}`;
+            document.getElementById("price-max-value").innerText = `₹${values[1]}`;
+        });
+
+        // Trigger filtering on change (when user stops moving the slider)
+        priceSlider.noUiSlider.on("change", function (values) {
+            let min = values[0];
+            let max = values[1];
+
+            filterProducts(min, max);
+        });
+
+        function filterProducts(min, max) {
+            fetch(`/filter-products?min_price=${min}&max_price=${max}`)
+                .then(response => response.json())
+                .then(data => {
+                    console.log("Filtered Products:", data.filteredProducts);
+                    // You can update the product list dynamically here
+                })
+                .catch(error => console.error("Error:", error));
+        }
     });
-
-    // Update min & max price values when the slider is moved
-    priceSlider.noUiSlider.on("update", function (values) {
-        document.getElementById("price-min-value").innerText = `₹${values[0]}`;
-        document.getElementById("price-max-value").innerText = `₹${values[1]}`;
-    });
-
-    // Trigger filtering on change (when user stops moving the slider)
-    priceSlider.noUiSlider.on("change", function (values) {
-        let min = values[0];
-        let max = values[1];
-
-        filterProducts(min, max);
-    });
-
-    function filterProducts(min, max) {
-        fetch(`/filter-products?min_price=${min}&max_price=${max}`)
-            .then(response => response.json())
-            .then(data => {
-                console.log("Filtered Products:", data.filteredProducts);
-                // You can update the product list dynamically here
-            })
-            .catch(error => console.error("Error:", error));
-    }
-});
 </script>
 
 <!------ Ajax for filetered results fetching----> 
 <script>
-$(document).ready(function () {
-    $('#apply-filters').click(function () {
-        let minPrice = $('#price-min-value').text().trim().replace('₹', '');
-        let maxPrice = $('#price-max-value').text().trim().replace('₹', '');
-        let sizes = [];
+    $(document).ready(function () {
+        $('#apply-filters').click(function () {
+            let minPrice = $('#price-min-value').text().trim().replace('₹', '');
+            let maxPrice = $('#price-max-value').text().trim().replace('₹', '');
+            let sizes = [];
 
-        $('.size-check.selected').each(function () {
-            sizes.push($(this).text().trim());
-        });
+            $('.size-check.selected').each(function () {
+                sizes.push($(this).text().trim());
+            });
 
-        let availability = $('input[name="availability"]:checked').attr('id');
-        let categoryId = $('#category-id').val();
+            let availability = $('input[name="availability"]:checked').attr('id');
+            let categoryId = $('#category-id').val();
 
-        // Extract slug from the URL (last segment of pathname)
-        let currentUrl = window.location.pathname;
-        let slug = currentUrl.split('/').pop();
+            let selectedCategories = [];
+            $('.category-checkbox:checked').each(function () {
+                selectedCategories.push($(this).val());// Get the slug value
+            });
 
-        $.ajax({
-            url: "{{ route('products.filter') }}",
-            method: "GET",
-            data: {
-                category_id: categoryId,
-                slug: slug, // Passing slug to the controller
-                min_price: minPrice,
-                max_price: maxPrice,
-                sizes: sizes,
-                availability: availability
-            },
-            success: function (response) {
-                let filteredProductsHTML = '';
+            // Extract slug from the URL (last segment of pathname)
+            let currentUrl = window.location.pathname;
+            let slug = currentUrl.split('/').pop();
 
-                if (response.filteredProducts.length > 0) {
-                    response.filteredProducts.forEach(product => {
-                        let productImages = JSON.parse(product.thumbnail_image || '[]');
-                        let imgSrc1 = productImages.length > 0 ? `/murupp/product/thumbnails/${productImages[0]}` : 'default-image.jpg';
-                        let imgSrc2 = productImages.length > 1 ? `/murupp/product/thumbnails/${productImages[1]}` : imgSrc1;
+            $.ajax({
+                url: "{{ route('changes.filter') }}",
+                method: "GET",
+                data: {
+                    categories: selectedCategories,
+                    slug: slug, // Passing slug to the controller
+                    min_price: minPrice,
+                    max_price: maxPrice,
+                    sizes: sizes,
+                    availability: availability
+                },
+                success: function (response) {
+                    let filteredProductsHTML = '';
 
-                        filteredProductsHTML += `
-                            <div class="card-product grid">
-                                <div class="card-product-wrapper">
-                                    <a href="/product-detail/${product.slug}" class="product-img">
-                                        <img class="img-product" src="${imgSrc1}" alt="image-product">
-                                        <img class="img-hover" src="${imgSrc2}" alt="image-product">
-                                    </a>
-                                    <div class="list-product-btn">
-                                        <a href="javascript:void(0);" onclick="addToWishlist(${product.id}, this)" class="box-icon wishlist btn-icon-action">
-                                            <span class="icon icon-heart"></span>
-                                            <span class="tooltip">Wishlist</span>
+                    if (response.filteredProducts.length > 0) {
+                        response.filteredProducts.forEach(product => {
+                            let productImages = JSON.parse(product.thumbnail_image || '[]');
+                            let imgSrc1 = productImages.length > 0 ? `/murupp/product/thumbnails/${productImages[0]}` : 'default-image.jpg';
+                            let imgSrc2 = productImages.length > 1 ? `/murupp/product/thumbnails/${productImages[1]}` : imgSrc1;
+
+                            filteredProductsHTML += `
+                                <div class="card-product grid">
+                                    <div class="card-product-wrapper">
+                                        <a href="/product-detail/${product.slug}" class="product-img">
+                                            <img class="img-product" src="${imgSrc1}" alt="image-product">
+                                            <img class="img-hover" src="${imgSrc2}" alt="image-product">
                                         </a>
+                                        <div class="list-product-btn">
+                                            <a href="javascript:void(0);" onclick="addToWishlist(${product.id}, this)" class="box-icon wishlist btn-icon-action">
+                                                <span class="icon icon-heart"></span>
+                                                <span class="tooltip">Wishlist</span>
+                                            </a>
+                                        </div>
+                                    </div>
+                                    <div class="card-product-info">
+                                        <a href="/product-detail/${product.slug}" class="title link">${product.product_name}</a>
+                                        <span class="price current-price"><i class="fa fa-inr" aria-hidden="true"></i> INR ${product.product_price}</span>
                                     </div>
                                 </div>
-                                <div class="card-product-info">
-                                    <a href="/product-detail/${product.slug}" class="title link">${product.product_name}</a>
-                                    <span class="price current-price"><i class="fa fa-inr" aria-hidden="true"></i> INR ${product.product_price}</span>
-                                </div>
-                            </div>
-                        `;
-                    });
-                } 
-                else {
-                    filteredProductsHTML = '<p>No products found.</p>';
+                            `;
+                        });
+                    } 
+                    else {
+                        filteredProductsHTML = '<p>No products found.</p>';
+                    }
+
+                    // Display filtered products
+                    $('#filteredResults').html(filteredProductsHTML);
+                    $('#gridLayout').hide();
+                    $('#filteredResults').show();
+
+                    // Update applied filters
+                    let appliedFiltersHTML = '';
+                    if (response.appliedFilters.length > 0) {
+                        appliedFiltersHTML = response.appliedFilters.map(filter => 
+                            `<span class="filter-tag">${filter} <i class="icon icon-close remove-filter"></i></span>`
+                        ).join('');
+                        $('#remove-all').show();
+                    } else {
+                        $('#remove-all').hide();
+                    }
+
+                    $('#applied-filters').html(appliedFiltersHTML);
+
+                    // Close the offcanvas
+                    let filterOffcanvas = document.getElementById('filterShop');
+                    let bsOffcanvas = bootstrap.Offcanvas.getInstance(filterOffcanvas);
+                    if (bsOffcanvas) {
+                        bsOffcanvas.hide();
+                    } else {
+                        let newOffcanvas = new bootstrap.Offcanvas(filterOffcanvas);
+                        newOffcanvas.hide();
+                    }
                 }
+            });
+        });
 
-                // Display filtered products
-                $('#filteredResults').html(filteredProductsHTML);
-                $('#gridLayout').hide();
-                $('#filteredResults').show();
+        // Handle size selection
+        $('.size-check').click(function () {
+            $(this).toggleClass('selected');
+        });
 
-                // Update applied filters
-                let appliedFiltersHTML = '';
-                if (response.appliedFilters.length > 0) {
-                    appliedFiltersHTML = response.appliedFilters.map(filter => 
-                        `<span class="filter-tag">${filter} <i class="icon icon-close remove-filter"></i></span>`
-                    ).join('');
-                    $('#remove-all').show();
-                } else {
-                    $('#remove-all').hide();
-                }
+        // Remove specific filters
+        $(document).on('click', '.remove-filter', function () {
+            $(this).parent().remove();
+            // $('#apply-filters').click(); // Reapply filters
+        });
 
-                $('#applied-filters').html(appliedFiltersHTML);
-
-                // Close the offcanvas
-                let filterOffcanvas = document.getElementById('filterShop');
-                let bsOffcanvas = bootstrap.Offcanvas.getInstance(filterOffcanvas);
-                if (bsOffcanvas) {
-                    bsOffcanvas.hide();
-                } else {
-                    let newOffcanvas = new bootstrap.Offcanvas(filterOffcanvas);
-                    newOffcanvas.hide();
-                }
-            }
+        // // Reset filters
+        $('#reset-filter, #remove-all').click(function () {
+            location.reload();
         });
     });
-
-    // Handle size selection
-    $('.size-check').click(function () {
-        $(this).toggleClass('selected');
-    });
-
-    // Remove specific filters
-    $(document).on('click', '.remove-filter', function () {
-        $(this).parent().remove();
-        // $('#apply-filters').click(); // Reapply filters
-    });
-
-    // // Reset filters
-    $('#reset-filter, #remove-all').click(function () {
-        location.reload();
-    });
-});
 </script>
 
 
