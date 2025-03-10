@@ -86,9 +86,6 @@ class CollectionController extends Controller
     public function filter_collection_Products(Request $request)
     {
     
-        // dd($request);
-        Log::info('Filter request received', ['request_data' => $request->all()]);
-
         // Get category ID based on slug
         $categoryId = null;
         if ($request->has('slug')) {
@@ -124,13 +121,11 @@ class CollectionController extends Controller
 
             if (!empty($categoryIds)) {
                 $query->whereIn('product_details.category_id', $categoryIds);
-                Log::info('Category filter applied', ['category_ids' => $categoryIds]);
             }
         }
 
         if (!empty($categoryId)) {
             $query->where('product_details.category_id', $categoryId);
-            Log::info('Category filter applied', ['category_id' => $categoryId]);
         }
 
         // Apply Price Filter
@@ -139,7 +134,6 @@ class CollectionController extends Controller
                 DB::raw('CAST(REPLACE(product_details.product_price, ",", "") AS UNSIGNED)'), 
                 [$request->min_price, $request->max_price]
             );
-            Log::info('Price filter applied', ['min_price' => $request->min_price, 'max_price' => $request->max_price]);
         }
 
         // Apply Size Filter
@@ -156,7 +150,6 @@ class CollectionController extends Controller
                     }
                 });
             }
-            Log::info('Size filter applied', ['sizes' => $request->sizes, 'matching_size_ids' => $sizeIds]);
         }
 
         // Apply Stock Availability Filter
@@ -166,7 +159,6 @@ class CollectionController extends Controller
             } elseif ($request->availability == 'outStock') {
                 $query->where('product_details.available_quantity', '=', 0);
             }
-            Log::info('Stock availability filter applied', ['availability' => $request->availability]);
         }
 
         // Fetch Filtered Products
@@ -178,7 +170,6 @@ class CollectionController extends Controller
             'master_product_fabrics.fabrics_name'
         ])->distinct()->get();
 
-        Log::info('Filtered products retrieved', ['count' => count($filteredProducts)]);
 
         // Separate Query for Price Range
         $priceRangeQuery = DB::table('product_details')
@@ -196,24 +187,20 @@ class CollectionController extends Controller
             MAX(CAST(REPLACE(product_price, ",", "") AS UNSIGNED)) as max_price'
         )->first();
 
-        Log::info('Price range calculated', ['min_price' => $priceRange->min_price, 'max_price' => $priceRange->max_price]);
 
         // Get available sizes from master_product_size
         $sizes = DB::table('master_product_size')->whereNull('deleted_by')->pluck('size');
-        Log::info('Available sizes retrieved', ['sizes' => $sizes]);
 
         // Separate Queries for Stock Availability Count
         $inStockCount = DB::table('product_details')
             ->whereNull('deleted_by')
             ->where('available_quantity', '>', 0)
             ->count();
-        Log::info('In-stock products count', ['count' => $inStockCount]);
 
         $outStockCount = DB::table('product_details')
             ->whereNull('deleted_by')
             ->where('available_quantity', '=', 0)
             ->count();
-        Log::info('Out-of-stock products count', ['count' => $outStockCount]);
 
         // Prepare applied filters
         $appliedFilters = [];
@@ -235,7 +222,6 @@ class CollectionController extends Controller
             $appliedFilters[] = "Availability: $availabilityText";
         }
 
-        Log::info('Applied filters', ['filters' => $appliedFilters]);
 
         return response()->json([
             'filteredProducts' => $filteredProducts,

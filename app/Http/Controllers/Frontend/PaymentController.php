@@ -23,8 +23,8 @@ class PaymentController extends Controller
 
     public function processPayment(Request $request) {
 
-        $api = new Api(env('RAZORPAY_KEY'), env('RAZORPAY_SECRET'));
-    
+        $api = new Api(config('services.razorpay.key'), config('services.razorpay.secret'));
+
         $orderData = [
             'receipt'         => 'test_order_' . rand(),
             'amount'          => intval(str_replace(',', '', $request->amount)) * 100,
@@ -37,7 +37,7 @@ class PaymentController extends Controller
             // dd($order);
             return response()->json([
                 'order_id'     => $order['id'],
-                'razorpay_key' => env('RAZORPAY_KEY'),
+                'razorpay_key' => config('services.razorpay.key'),
                 'amount'       => $request->amount,
                 'currency'     => 'INR',
                 'mode'         => 'test'
@@ -51,16 +51,45 @@ class PaymentController extends Controller
     public function verifyPayment(Request $request) {
         // dd($request);
         try {
-            $api = new Api(env('RAZORPAY_KEY'), env('RAZORPAY_SECRET'));
+            $api = new Api(config('services.razorpay.key'), config('services.razorpay.secret'));
     
+            \Log::info("Received Razorpay Payment Data", $request->all());
+
+             // Check if essential data is present
+            if (!$request->has(['razorpay_order_id', 'razorpay_payment_id', 'razorpay_signature'])) {
+                \Log::error("Missing Razorpay payment parameters.");
+                return response()->json([
+                    'status' => 'Payment Verification Error',
+                    'error'  => 'Missing Razorpay payment parameters.'
+                ], 400);
+            }
+
+
+
             $expectedSignature = hash_hmac(
                 'sha256',
                 $request->razorpay_order_id . "|" . $request->razorpay_payment_id,
-                env('RAZORPAY_SECRET')
+                config('services.razorpay.secret')
             );
+
+            // Log signature comparison
+            \Log::info("Expected Signature: " . $expectedSignature);
+            \Log::info("Received Signature: " . $request->razorpay_signature);
+
+            // Verify signature
+            if ($expectedSignature !== $request->razorpay_signature) {
+                \Log::error("Signature Mismatch! Possible tampering.");
+                return response()->json([
+                    'status' => 'Payment Verification Failed',
+                    'error'  => 'Invalid Signature'
+                ], 403);
+            }
+            
     
-            $status = ($expectedSignature === $request->razorpay_signature) ? 1 : 2;
-    
+            // If signature matches, proceed with order processing
+            $status = 1; // Successful payment
+            $orderData = $request->order_data;
+        
             $orderData = $request->order_data; 
 
             if (!empty($orderData) && isset($orderData['cart_items'])) {
