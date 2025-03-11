@@ -112,7 +112,7 @@ class RegistrationController extends Controller
                 }
             });
     
-            return redirect()->route('frontend.index')->with('message', 'Login Successfull!!.');
+            return redirect()->route('frontend.index')->with('message', 'Login Successfully!');
         } else {
             return redirect()->route('user.login')->with([
                 'Input' => $request->only('email', 'password'), 
