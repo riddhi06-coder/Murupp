@@ -28,6 +28,12 @@ class CartController extends Controller
             return redirect()->back()->with('error', 'Product not found.');
         }
 
+        // Check available quantity
+        if ($product->available_quantity < 1) {
+            return redirect()->back()->with('error', 'This product is out of stock.');
+        }
+
+
         $quantityToAdd = $request->input('quantity', 1);
         $selectedColor = $request->input('color1');
         $selectedPrint = $request->input('print_option');
