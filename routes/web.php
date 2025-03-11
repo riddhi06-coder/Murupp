@@ -281,8 +281,10 @@ Route::group(['prefix'=> '', 'middleware'=>[\App\Http\Middleware\PreventBackHist
         return response()->json($results);
     });
 
+    //===== For Category Page Filter
     Route::get('/products/filter', [CategoryDetailsController::class, 'filterProducts'])->name('products.filter');
 
+    //===== For Collection Page Filter
     Route::get('/collection-changes/filters', [CollectionController::class, 'filter_collection_Products'])->name('changes.filter');
 
 
