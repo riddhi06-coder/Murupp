@@ -58,7 +58,7 @@ class WishlistController extends Controller
     
         if ($wishlistItem) {
             $wishlistItem->delete(); 
-            return redirect()->back()->with('message', 'Removed successfully!.');
+            return redirect()->back()->with('message', 'Product removed Successfully!');
         }
     
         return redirect()->back()->with('error', 'Product not found in wishlist.');
