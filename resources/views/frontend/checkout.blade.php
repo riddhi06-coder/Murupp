@@ -128,7 +128,7 @@
                                         <div class="payment-item">
                                             <label for="credit-card-method" class="payment-header" >
                                                 <input type="radio" name="payment-method" class="tf-check-rounded" id="credit-card-method" checked>
-                                                <span class="text-title">Online Pyament</span>
+                                                <span class="text-title">Online Payment</span>
                                             </label>
                                         </div>
                                     </div>
