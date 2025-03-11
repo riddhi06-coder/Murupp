@@ -105,6 +105,7 @@
                     $("#reportTable").DataTable().destroy(); // Destroy only if exists
                 }
 
+
                 // Update table headers
                 $("#tableHeaders").html(reportData[reportType].headers.map(h => `<th>${h}</th>`).join(""));
 
@@ -112,12 +113,32 @@
                 $.get(reportData[reportType].url, function(data) {
                     // Store the data for CSV export
                     window.reportDataForExport = data;
+                    let tableBodyHtml = "";
 
                     // Update table body with incremental IDs
                     $("#reportTable tbody").html(
                         data.map((row, index) => {
-                            const incrementalId = index + 1;
+                            const incrementalId = index + 1;     
+                                 
+                             // 🟢 Handle Sales Report
+                            if (reportType === "sales") {
+                                const orderId = row.order_id
+                                    ? `<a href="/order-tracking-details/${row.order_id}" class="order-link" target="_blank">${row.order_id}</a>`
+                                    : '--';
+                                const customerName = row.customer_name || '--';
+                                const totalAmount = row.total_price || '--';
+                                const orderDate = row.created_at || '--';
 
+                                return `<tr>
+                                    <td>${incrementalId}</td>
+                                    <td>${orderId}</td>
+                                    <td>${customerName}</td>
+                                    <td>${totalAmount}</td>
+                                    <td>${orderDate}</td>
+                                </tr>`;
+                            }
+
+                            
                             // Handle Product Data: Product Name, Category, Stock Left, and Total Sales Count
                             if (reportType === "product") {
                                 const productName = row.product_name || '--';
@@ -156,12 +177,16 @@
 
                 // Capture entire data from DataTables API
                 const table = $("#reportTable").DataTable();
-                const data = table.rows().data(); // Fetch all rows, not just visible ones
+                const data = table.rows().nodes(); // Fetch all rows
 
-                data.each(function (rowData) {
+                $(data).each(function () {
                     const row = [];
-                    rowData.forEach(cell => {
-                        row.push(cell);
+                    $(this).find("td").each(function () {
+                        if ($(this).find("a").length) {
+                            row.push($(this).find("a").text().trim()); // Extract only text from links
+                        } else {
+                            row.push($(this).text().trim());
+                        }
                     });
                     rows.push(row.join(",")); 
                 });
@@ -170,7 +195,6 @@
                 const csv = [headers.join(','), ...rows].join('\n');
                 return csv;
             }
-
 
             // Function to trigger CSV export
             function exportToCSV() {
@@ -185,7 +209,6 @@
                 const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
                 saveAs(blob, fileName); 
             }
-
 
             // On dropdown change, load the selected report
             $("#reportType").on("change", function () {
@@ -203,7 +226,7 @@
             });
         </script>
 
-
+      
 
 
 </body>

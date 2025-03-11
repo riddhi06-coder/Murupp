@@ -48,21 +48,10 @@
         /* Ensure icons remain visible even when hovering over the product image */
         .product-img-container:hover .image-icons {
             opacity: 1 !important;
-        }
-
-        .card-product .card-product-wrapper:hover .product-img .img-hover {
-            display: block;
             z-index: 1;
-            opacity: 1;
-            -webkit-transform: scale(1.05);
-            transform: scale(1.05);
         }
 
-        .card-product .card-product-wrapper .img-hover {
-            position: absolute;
-            inset: 0;
-            opacity: 1  !important;
-        }
+    
     </style>
 
 </head>
