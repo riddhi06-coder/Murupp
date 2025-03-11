@@ -150,6 +150,13 @@ class PaymentController extends Controller
                         'status_updated_by' => Auth::check() ? Auth::id() : null,
                     ]);
 
+                    // Reduce available_quantity in product_details table
+                    foreach ($productIds as $index => $productId) {
+                        DB::table('product_details')
+                            ->where('id', $productId)
+                            ->decrement('available_quantity', $quantities[$index]);
+                    }
+
                     if (Auth::check()) {
                         DB::table('carts')
                             ->where('user_id', Auth::id())
