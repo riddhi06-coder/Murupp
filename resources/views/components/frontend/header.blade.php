@@ -167,9 +167,9 @@
                                                 Don’t have an account? <a href="{{ route('user.registration') }}">Register</a>
                                             </p>
                                         </div>
-                                        <div class="sub-bot">
+                                        <!-- <div class="sub-bot">
                                             <span class="body-text-">Support</span>
-                                        </div>
+                                        </div> -->
                                     @endif
                                 </div>
                             </li>

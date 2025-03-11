@@ -64,6 +64,7 @@ class RegistrationController extends Controller
         return view('frontend.login');
     }
 
+
     public function authenticate_login(Request $request)
     {
         $request->validate([
@@ -73,25 +74,54 @@ class RegistrationController extends Controller
             'email.required' => 'Email Id is required',
             'password.required' => 'Password is required',
         ]);
-
+    
         $credentials = $request->only('email', 'password');
         $remember_me = $request->has('remember_me'); 
-
+    
         if (Auth::attempt($credentials, $remember_me)) {
             $request->session()->regenerate();
-
-            if ($remember_me) {
-                $user = Auth::user();
-                $user->setRememberToken(Str::random(60)); 
-                $user->save();
+    
+            $user = User::where('email', $request->email)->first();
+    
+            if (!$user) {
+                return redirect()->route('user.login')->with('error', 'Something went wrong! Please try again.');
             }
+    
+            $userId = $user->id;
+    
+            $guestSession = DB::table('guest_user_details')
+                ->orderBy('inserted_at', 'desc') 
+                ->value('session_id');
+    
+    
+            if (!$guestSession) {
+                return redirect()->route('frontend.index')->with('message', 'Login Successfully!!.');
+            }
+    
+            $cartQuery = Carts::where('session_id', $guestSession);
+    
+            $cartItems = $cartQuery->get();
 
-            return redirect()->route('frontend.index')->with('message', 'Login Successfully!');
+            DB::transaction(function () use ($cartItems, $userId) {
+                foreach ($cartItems as $cart) {
+    
+                    $cart->update([
+                        'user_id' => $userId,
+                        'session_id' => null
+                    ]);
+                }
+            });
+    
+            return redirect()->route('frontend.index')->with('message', 'Login Successfull!!.');
+        } else {
+            return redirect()->route('user.login')->with([
+                'Input' => $request->only('email', 'password'), 
+                'message' => 'Credentials do not match our records!'
+            ]);
         }
-
-        return redirect()->route('user.login')->with(['message' => 'Credentials do not match our records!']);
     }
-
+    
+    
     public function logout(Request $request) {
         Session::flush();
         Auth::logout();
