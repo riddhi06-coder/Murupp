@@ -44,7 +44,7 @@
                                             </div>
                                         </div>
                                         <div class="fade-item fade-item-3 box-btn-slider">
-                                            <a href="#" class="tf-btn btn-fill btn-white">
+                                            <a href="{{ route('collection.view', ['slug' => $banner->slug]) }}" class="tf-btn btn-fill btn-white">
                                                 <span class="text">Shop Now</span>
                                                 <i class="icon icon-arrowUpRight"></i>
                                             </a>

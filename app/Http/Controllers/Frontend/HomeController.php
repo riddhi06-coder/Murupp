@@ -24,7 +24,15 @@ class HomeController extends Controller
     // === Home
     public function home(Request $request)
     {
-        $banners = BannerDetails::whereNull('deleted_at')->orderBy('created_at', 'asc')->get();
+        // $banners = BannerDetails::whereNull('deleted_at')->orderBy('created_at', 'asc')->get();
+
+        $banners = BannerDetails::whereNull('banner_details.deleted_at')
+                    ->leftJoin('master_collections', 'banner_details.banner_heading', '=', 'master_collections.collection_name')
+                    ->orderBy('banner_details.created_at', 'asc')
+                    ->select('banner_details.*', 'master_collections.slug')
+                    ->get();
+
+
         $newArrivals = NewArrival::whereNull('new_arrivals.deleted_at')
                                 ->leftJoin('product_details', 'product_details.id', '=', 'new_arrivals.product_name') 
                                 ->leftJoin('master_collections', 'master_collections.id', '=', 'product_details.collection_id') 

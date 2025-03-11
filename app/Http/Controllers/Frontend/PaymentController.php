@@ -166,7 +166,6 @@ class PaymentController extends Controller
                         \Log::info("Cart items deleted for user: " . Auth::id());
                     }
 
-
                 } catch (\Exception $e) {
                     \Log::error("Order Insert Error: " . $e->getMessage());
                     dd("Error: " . $e->getMessage());
