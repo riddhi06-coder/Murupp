@@ -23,27 +23,26 @@ class PoliciesController extends Controller
 {
     public function terms(Request $request)
     { 
-        $terms = Terms::all();
+        $terms = Terms::whereNull('deleted_by')->get();
         return view('frontend.terms', compact('terms'));
     }
 
     public function shipping(Request $request)
     { 
-        $terms = Shipping::all();
+        $terms = Shipping::whereNull('deleted_by')->get();
         return view('frontend.shipping', compact('terms'));
     }
 
     public function return(Request $request)
     { 
-        $terms = Returns::all();
+        $terms = Returns::whereNull('deleted_by')->get();
        
         return view('frontend.refund', compact('terms'));
     }
     
     public function privacy(Request $request)
     { 
-        $terms = Privacy::all();
-        // dd($terms);
+        $terms = Privacy::whereNull('deleted_by')->get();
         return view('frontend.privacy', compact('terms'));
     }
 }

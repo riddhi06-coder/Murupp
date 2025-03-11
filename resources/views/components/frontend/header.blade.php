@@ -340,7 +340,7 @@
                                             </div>
                                             <label for="agreeCheckbox">
                                                 I agree with 
-                                                <a href="{{ route('terms.condition')}}" title="Terms of Service">Terms & Conditions</a>
+                                                <a href="{{ route('terms.condition')}}" title="Terms of Service">Terms of Service</a>
                                             </label>
                                         </div>
 

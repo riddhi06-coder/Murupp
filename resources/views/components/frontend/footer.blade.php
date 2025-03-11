@@ -85,7 +85,7 @@
                                                 <a href="{{ route('privacy.policy') }}" class="footer-menu_item">Privacy Policy</a>
                                             </li>
                                             <li class="text-caption-1">
-                                                <a href="{{ route('terms.condition') }}" class="footer-menu_item">Terms & Conditions</a>
+                                                <a href="{{ route('terms.condition') }}" class="footer-menu_item">Terms of Service</a>
                                             </li>
                                         </ul>
                                     </div>

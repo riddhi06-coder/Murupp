@@ -84,8 +84,10 @@ class CollectionsController extends Controller
         try {
 
             $collection = MasterCollections::findOrFail($id);
+            $slug = Str::slug($request->collection_name, '-');
             $collection->update([
                 'collection_name' => $request->collection_name,
+                'slug' => $slug,
                 'modified_by' => Auth::user()->id, 
                 'modified_at' => Carbon::now(),
             ]);
