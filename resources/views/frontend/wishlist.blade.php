@@ -99,7 +99,7 @@
                     <div class="tf-grid-layout wrapper-shop tf-col-3" id="gridLayout">
                     @if ($products->count() > 0)
                         @foreach ($products as $product)
-                            <div class="card-product grid">
+                            <div class="card-product grid" data-id="{{ $product->id }}">
                                 <div class="card-product-wrapper">
                                     <div class="product-img-container">
                                         <a href="{{ route('product.show', ['slug' => $product->slug]) }}" class="product-img">
@@ -115,12 +115,6 @@
                                         </a>
                                         <!-- Icons (Cross & Shopping Bag) -->
                                         <div class="image-icons">
-                                            <a href="{{ route('cart.add', ['id' => $product->id]) }}" class="nav-icon-item">
-                                                <svg class="bag-icon icon" width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                    <path d="M16.5078 10.8734V6.36686C16.5078 5.17166 16.033 4.02541 15.1879 3.18028C14.3428 2.33514 13.1965 1.86035 12.0013 1.86035C10.8061 1.86035 9.65985 2.33514 8.81472 3.18028C7.96958 4.02541 7.49479 5.17166 7.49479 6.36686V10.8734M4.11491 8.62012H19.8877L21.0143 22.1396H2.98828L4.11491 8.62012Z"
-                                                        stroke="#ffffff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
-                                                </svg>
-                                            </a>
                                             <span class="close-icon">&#10006;</span> 
                                         </div>
                                 </div>
@@ -148,6 +142,36 @@
 
 
         @include('components.frontend.main-js')
+
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+        <script>
+            $(document).ready(function () {
+                $(".image-icons .close-icon").on("click", function () {
+                    let productCard = $(this).closest(".card-product");
+                    let productId = productCard.data("id"); // Get product ID
+
+                    // Create a hidden form dynamically and submit it
+                    let form = $('<form>', {
+                        action: "{{ route('wishlist.delete') }}", // Replace with your actual delete route
+                        method: "POST"
+                    }).append($('<input>', {
+                        type: "hidden",
+                        name: "_token",
+                        value: "{{ csrf_token() }}"
+                    })).append($('<input>', {
+                        type: "hidden",
+                        name: "id",
+                        value: productId
+                    }));
+
+                    $('body').append(form);
+                    form.submit();
+                });
+            });
+        </script>
+
+
 
 </script>
 

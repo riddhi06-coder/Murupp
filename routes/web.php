@@ -263,6 +263,9 @@ Route::group(['prefix'=> '', 'middleware'=>[\App\Http\Middleware\PreventBackHist
     //==== Wishlist Functionality
     Route::post('/wishlist/add/{id}', [WishlistController::class, 'add'])->name('wishlist.add');
 
+    Route::post('/wishlist/delete', [WishlistController::class, 'delete'])->name('wishlist.delete');
+
+
     //==== Cart Functionality    
     Route::get('/cart/add/{id}', [CartController::class, 'add'])->name('cart.add');
 
