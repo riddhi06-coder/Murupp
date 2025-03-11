@@ -151,7 +151,6 @@ Route::resource('co-ords', CoordsController::class);
 // ==== Manage Blazers/Jackets in Category Page
 Route::resource('jackets', JacketsController::class);
 
-
 // ==== Manage Terms of Use
 Route::resource('terms', TermsController::class);
 
@@ -177,11 +176,9 @@ Route::get('/users', [OrderTrackingController::class, 'user_list'])->name('users
 Route::get('/user/view/{id}', [OrderTrackingController::class, 'view'])->name('user.view');
 Route::get('/order-tracking-details/{order_id}', [OrderTrackingController::class, 'orderDetails'])->name('orders-tracking.details');
 
-
 // ==== Manage Report Generation
 Route::get('/reports', [ReportsController::class, 'reports'])->name('reports.list');
 Route::get('/reports/{reportType}', [ReportsController::class, 'getReportData'])->name('getReportData');
-
 
 // ======================= Frontend
 
@@ -250,7 +247,6 @@ Route::group(['prefix'=> '', 'middleware'=>[\App\Http\Middleware\PreventBackHist
     //===== Wishlist Page
     Route::get('/wish-list', [ProductController::class, 'wish_list'])->name('wish.list');
 
-
     //===== Category Page
     Route::get('/category/{slug}', [CategoryDetailsController::class, 'category_details'])->name('product.category');
 
@@ -262,9 +258,7 @@ Route::group(['prefix'=> '', 'middleware'=>[\App\Http\Middleware\PreventBackHist
 
     //==== Wishlist Functionality
     Route::post('/wishlist/add/{id}', [WishlistController::class, 'add'])->name('wishlist.add');
-
     Route::post('/wishlist/delete', [WishlistController::class, 'delete'])->name('wishlist.delete');
-
 
     //==== Cart Functionality    
     Route::get('/cart/add/{id}', [CartController::class, 'add'])->name('cart.add');
