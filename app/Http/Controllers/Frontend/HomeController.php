@@ -16,7 +16,7 @@ use App\Models\Testimonial;
 use App\Models\SocialMedia;
 use App\Models\Footer;
 use App\Models\Wishlist;
-
+use App\Models\About;
 
 class HomeController extends Controller
 {
@@ -75,13 +75,19 @@ class HomeController extends Controller
         return view('frontend.index', compact('banners','newArrivals','collectionDetail','shopCategories','productPolicies','testimonials','socialMedia','wishlistItems','user'));
     }
 
+    // === About Us
+    public function about_us(Request $request)
+    { 
+        $terms = About::whereNull('deleted_by')->get();
+        return view('frontend.about_us', compact('terms'));
+    }
 
 
-        // === Thank you
-        public function thankyou(Request $request)
-        {
-         
-            return view('frontend.thankyou');
-        }
+    // === Thank you
+    public function thankyou(Request $request)
+    {
+        
+        return view('frontend.thankyou');
+    }
     
 }

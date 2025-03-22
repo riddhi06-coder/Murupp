@@ -195,6 +195,9 @@ Route::group(['prefix'=> '', 'middleware'=>[\App\Http\Middleware\PreventBackHist
 
     // ==== Home
     Route::get('/home', [HomeController::class, 'home'])->name('frontend.index');
+
+    // ==== About Us
+    Route::get('/about-us', [HomeController::class, 'about_us'])->name('frontend.about.us');
     
     //===== Thankyou Page
     Route::get('/thank-you', [HomeController::class, 'thankyou'])->name('thank.you');

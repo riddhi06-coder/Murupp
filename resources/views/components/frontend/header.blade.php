@@ -79,7 +79,7 @@
                         <nav class="box-navigation text-center">
                             <ul class="box-nav-ul d-flex align-items-center justify-content-center">
 
-                                <li class="menu-item"><a href="#" class="item-link">About Us</a></li>
+                                <li class="menu-item"><a href="{{ route('frontend.about.us') }}" class="item-link">About Us</a></li>
                                 @php
                                     $collections = DB::table('master_collections')->whereNull('deleted_by')->orderBy('id', 'asc')->get();
                                 @endphp
