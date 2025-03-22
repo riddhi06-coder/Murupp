@@ -20,6 +20,8 @@ use App\Http\Controllers\Backend\StockDetailsController;
 use App\Http\Controllers\Backend\OrderTrackingController;
 use App\Http\Controllers\Backend\DashboardController;
 use App\Http\Controllers\Backend\ReportsController;
+use App\Http\Controllers\Backend\AboutController;
+
 use App\Http\Controllers\Backend\Home\BannerDetailsController;
 use App\Http\Controllers\Backend\Home\NewArrivalsController;
 use App\Http\Controllers\Backend\Home\CollectionDetailsController;
@@ -37,6 +39,7 @@ use App\Http\Controllers\Backend\Policy\TermsController;
 use App\Http\Controllers\Backend\Policy\ShippingController;
 use App\Http\Controllers\Backend\Policy\ReturnController;
 use App\Http\Controllers\Backend\Policy\PrivacyController;
+
 
 
 use App\Http\Controllers\Frontend\HomeController;
@@ -86,6 +89,12 @@ Route::post('/update-status', [UserDetailsController::class, 'updateStatus'])->n
 
 // ==== Manage User Permissions in User Management
 Route::resource('user-permissions', UserPermissionsController::class);
+
+
+// ==== Manage About Us
+Route::resource('about', AboutController::class);
+
+
 
 // ==== Manage Collections in Store Management
 Route::resource('collections', CollectionsController::class);

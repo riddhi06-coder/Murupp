@@ -58,6 +58,20 @@
                   </ul>
               </li>
 
+              <li class="sidebar-list {{ request()->routeIs('about.index') ? 'active' : '' }}">
+                    <i class="fa fa-thumb-tack"></i>
+                    <a class="sidebar-link" href="{{ route('about.index') }}">
+                        <svg class="stroke-icon"> 
+                            <use href="{{ asset('admin/assets/svg/icon-sprite.svg#stroke-table') }}"></use>
+                        </svg>
+                        <svg class="fill-icon">
+                            <use href="{{ asset('admin/assets/svg/icon-sprite.svg#stroke-table') }}"></use>
+                        </svg>
+                        <span>About US</span>
+                    </a>
+                </li>
+
+
                 <li class="sidebar-list {{ request()->routeIs('collections.index', 'product-category.index', 'product-fabrics.index', 'fabric-composition.index', 'product-sizes.index', 'product-prints.index', 'product-details.index') ? 'active' : '' }}">
                   <i class="fa fa-thumb-tack"> </i>
                   <a class="sidebar-link sidebar-title" href="#">
