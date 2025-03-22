@@ -22,7 +22,6 @@ class AboutController extends Controller
     public function index()
     {
         $aboutData = About::whereNull('deleted_by')->get(); 
-        // dd($aboutData);
         return view('backend.about.index', compact('aboutData'));
     }
     
@@ -69,5 +68,62 @@ class AboutController extends Controller
         }
     }
     
+
+    public function edit($id)
+    {
+        $banner_details = About::findOrFail($id); 
+        return view('backend.about.edit', compact('banner_details'));
+    }
+    
+
+    public function update(Request $request, $id)
+    {
+        $request->validate([
+            'banner_image' => 'nullable|mimes:jpg,jpeg,png,webp|max:2048',
+            'description' => 'required|string',
+        ], [
+            'banner_image.mimes' => 'Only .jpg, .jpeg, .png, .webp formats are allowed.',
+            'banner_image.max' => 'The file size must be less than 2MB.',
+            'description.required' => 'The Description field is required.',
+        ]);
+
+        try {
+            $about = About::findOrFail($id);
+            $imageName = $about->banner_image;
+
+            if ($request->hasFile('banner_image')) {
+                $image = $request->file('banner_image');
+                $imageName = time() . rand(10, 999) . '.' . $image->getClientOriginalExtension();
+                $image->move(public_path('/murupp/about'), $imageName);
+            }
+
+            $about->update([
+                'banner_image' => $imageName,
+                'description' => $request->description,
+                'modified_by' => Auth::id(),
+                'modified_at' => Carbon::now(),
+            ]);
+
+            return redirect()->route('about.index')->with('message', 'Details Updated successfully!');
+        } catch (Exception $e) {
+            return redirect()->back()->withErrors(['error' => 'Failed to update. Please try again.'])->withInput();
+        }
+    }
+
+
+    public function destroy(string $id)
+    {
+        $data['deleted_by'] =  Auth::user()->id;
+        $data['deleted_at'] =  Carbon::now();
+        try {
+            $industries = About::findOrFail($id);
+            $industries->update($data);
+
+            return redirect()->route('about.index')->with('message', 'Details deleted successfully!');
+        } catch (Exception $ex) {
+            return redirect()->back()->with('error', 'Something Went Wrong - ' . $ex->getMessage());
+        }
+    }
+
 
 }
