@@ -63,61 +63,76 @@
                             <div class="wrap">
                                 <h5 class="title">Information:</h5>
                                 <form class="info-box">
-                                <div class="grid-2">
-                                    <input type="hidden" id="full-address" value="{{ $order->address ?? '' }}">
+                                    <div class="grid-2">
+                                        <input type="hidden" id="full-address" value="{{ $order->address ?? '' }}">
 
-                                    <div>
-                                        <input type="text" id="first-name" placeholder="First Name*" 
-                                            value="{{ old('first_name', isset($order) && $order->customer_name ? explode(' ', $order->customer_name)[0] : ($user->first_name ?? '')) }}">
-                                        <small class="error-message"></small>
+                                        <div>
+                                            <input type="text" id="first-name" placeholder="First Name*" 
+                                                value="{{ old('first_name', isset($order) && $order->customer_name ? explode(' ', $order->customer_name)[0] : ($user->first_name ?? '')) }}">
+                                            <small class="error-message"></small>
+                                        </div>
+                                        <div>
+                                            <input type="text" id="last-name" placeholder="Last Name*" 
+                                                value="{{ old('last_name', isset($order) && $order->customer_name ? explode(' ', $order->customer_name)[1] ?? '' : ($user->last_name ?? '')) }}">
+                                            <small class="error-message"></small>
+                                        </div>
                                     </div>
-                                    <div>
-                                        <input type="text" id="last-name" placeholder="Last Name*" 
-                                            value="{{ old('last_name', isset($order) && $order->customer_name ? explode(' ', $order->customer_name)[1] ?? '' : ($user->last_name ?? '')) }}">
-                                        <small class="error-message"></small>
+                                    <div class="grid-2">
+                                        <div>
+                                            <input type="text" id="email" placeholder="Email Address*" 
+                                                value="{{ old('email', isset($order) ? $order->customer_email : ($user->email ?? '')) }}">
+                                            <small class="error-message"></small>
+                                        </div>
+                                        <div>
+                                            <input type="text" id="phone" placeholder="Phone Number*" 
+                                                value="{{ old('phone', isset($order) ? $order->customer_phone : ($user->phone ?? '')) }}">
+                                            <small class="error-message"></small>
+                                        </div>
                                     </div>
-                                </div>
-                                <div class="grid-2">
-                                    <div>
-                                        <input type="text" id="email" placeholder="Email Address*" 
-                                            value="{{ old('email', isset($order) ? $order->customer_email : ($user->email ?? '')) }}">
-                                        <small class="error-message"></small>
+                                    <div class="grid-2">
+                                        <div>
+                                            <input type="text" id="street" placeholder="Street*" 
+                                                value="{{ old('street', isset($order) ? $order->street : '') }}">
+                                            <small class="error-message"></small>
+                                        </div>
+                                        <div>
+                                            <input type="text" id="city" placeholder="Town/City*" 
+                                                value="{{ old('city', isset($order) ? $order->city : '') }}">
+                                            <small class="error-message"></small>
+                                        </div>
                                     </div>
-                                    <div>
-                                        <input type="text" id="phone" placeholder="Phone Number*" 
-                                            value="{{ old('phone', isset($order) ? $order->customer_phone : ($user->phone ?? '')) }}">
-                                        <small class="error-message"></small>
+                                    <div class="grid-2">
+                                        <div>
+                                            <input type="text" id="state" placeholder="State*" 
+                                                value="{{ old('state', isset($order) ? $order->state : '') }}">
+                                            <small class="error-message"></small>
+                                        </div>
+                                        <div>
+                                            <input type="text" id="postal-code" placeholder="Postal Code*" 
+                                                value="{{ old('postal_code', isset($order) ? $order->postal_code : '') }}">
+                                            <small class="error-message"></small>
+                                        </div>
                                     </div>
-                                </div>
-                                <div class="grid-2">
-                                    <div>
-                                        <input type="text" id="street" placeholder="Street*" 
-                                            value="{{ old('street', isset($order) ? $order->street : '') }}">
-                                        <small class="error-message"></small>
+                                    <div class="tf-select">
+                                        <input type="text" placeholder="Country*" value="India" readonly>
                                     </div>
-                                    <div>
-                                        <input type="text" id="city" placeholder="Town/City*" 
-                                            value="{{ old('city', isset($order) ? $order->city : '') }}">
-                                        <small class="error-message"></small>
-                                    </div>
-                                </div>
-                                <div class="grid-2">
-                                    <div>
-                                        <input type="text" id="state" placeholder="State*" 
-                                            value="{{ old('state', isset($order) ? $order->state : '') }}">
-                                        <small class="error-message"></small>
-                                    </div>
-                                    <div>
-                                        <input type="text" id="postal-code" placeholder="Postal Code*" 
-                                            value="{{ old('postal_code', isset($order) ? $order->postal_code : '') }}">
-                                        <small class="error-message"></small>
-                                    </div>
-                                </div>
-                                <div class="tf-select">
-                                    <input type="text" placeholder="Country*" value="India" readonly>
-                                </div>
-                                <textarea placeholder="Write note...">{{ old('note', isset($order) ? $order->note : '') }}</textarea>
-                            </form>
+                                    <fieldset>
+                                        <textarea id="billing_address" name="billing_address" placeholder="Billing Address*" required>{{ old('billing_address', isset($order) ? $order->billing_address : '') }}</textarea>
+                                    </fieldset>
+
+                                    <fieldset>
+                                        <input type="checkbox" id="same_as_billing">
+                                        <label for="same_as_billing">Same as Billing Address</label>
+                                    </fieldset>
+
+                                    <fieldset>
+                                        <textarea id="shipping_address" name="shipping_address" placeholder="Shipping Address">{{ old('shipping_address', isset($order) ? $order->shipping_address : '') }}</textarea>
+                                    </fieldset>
+
+                                    <fieldset>
+                                        <textarea id="note" name="note" placeholder="Write note...">{{ old('note', isset($order) ? $order->note : '') }}</textarea>
+                                    </fieldset>
+                                </form>
 
 
                             </div>
@@ -480,6 +495,22 @@
                 
                 return $remaining . ',' . $lastThree;
             }
+    </script>
+
+    <!-----For Shipping address to be same as billing address---->
+    <script>
+        document.getElementById('same_as_billing').addEventListener('change', function() {
+            let billingAddress = document.getElementById('billing_address').value;
+            let shippingAddress = document.getElementById('shipping_address');
+
+            if (this.checked) {
+                shippingAddress.value = billingAddress;
+                shippingAddress.readOnly = true; // Prevent manual changes
+            } else {
+                shippingAddress.value = '';
+                shippingAddress.readOnly = false;
+            }
+        });
     </script>
 
 
