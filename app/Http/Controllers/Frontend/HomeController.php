@@ -123,7 +123,7 @@ class HomeController extends Controller
         });
     
         
-        return redirect()->route('thankyou');
+        return redirect()->route('thank.you');
     }
 
 }
