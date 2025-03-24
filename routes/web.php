@@ -202,6 +202,10 @@ Route::group(['prefix'=> '', 'middleware'=>[\App\Http\Middleware\PreventBackHist
     //===== Thankyou Page
     Route::get('/thank-you', [HomeController::class, 'thankyou'])->name('thank.you');
 
+    //===== Contact Us
+    Route::get('/contact-us', [HomeController::class, 'contact'])->name('contact.us');
+    Route::post('/form-contact', [HomeController::class, 'contact_form'])->name('form.contact');
+    
     //===== customize request form
     Route::post('/contact-submission', [ProductController::class, 'send_contact'])->name('contact.send');
 

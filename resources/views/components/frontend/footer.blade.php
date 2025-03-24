@@ -70,10 +70,10 @@
                                     <div class="tf-collapse-content">
                                         <ul class="footer-menu-list">
                                             <li class="text-caption-1">
-                                                <a href="#" class="footer-menu_item">About Us</a>
+                                                <a href="{{ route('frontend.about.us') }}" class="footer-menu_item">About Us</a>
                                             </li>
                                             <li class="text-caption-1">
-                                                <a href="#" class="footer-menu_item">Contact us</a>
+                                                <a href="{{ route('contact.us') }}" class="footer-menu_item">Contact us</a>
                                             </li>
                                             <li class="text-caption-1">
                                                 <a href="{{ route('shipping.delivery') }}" class="footer-menu_item">Shipping & Delivery</a>

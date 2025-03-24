@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\DB;
 use App\Models\BannerDetails;
 use App\Models\NewArrival;
@@ -90,4 +91,39 @@ class HomeController extends Controller
         return view('frontend.thankyou');
     }
     
+
+    // === Contact Us
+    public function contact(Request $request)
+    {
+        return view('frontend.contact');
+    }
+
+    // === For Contact Us form submission
+    public function contact_form(Request $request)
+    {
+
+        $request->validate([
+            'name'    => ['required', 'string', 'max:255', 'regex:/^[a-zA-Z\s]+$/'], 
+            'email'   => 'required|email', 
+            'message' => 'required|string',
+        ], [
+            'name.regex'  => 'The name must not contain special characters or numbers.',
+        ]);
+    
+        $emailData = [
+            'name'    => $request->name,
+            'email'   => $request->email,
+            'message' => $request->message,
+        ];
+
+        Mail::send('frontend.contact-us-mail', ['emailData' => $emailData], function ($message) use ($request, $emailData) {
+            $subject = "Contact Details " . ($emailData['name'] ?? 'name');
+            $message->to('riddhi@matrixbricks.com')
+                    ->subject($subject);
+        });
+    
+        
+        return redirect()->route('thankyou');
+    }
+
 }
