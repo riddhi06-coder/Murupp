@@ -122,7 +122,7 @@
 
                                     <fieldset>
                                         <input type="checkbox" id="same_as_billing">
-                                        <label for="same_as_billing">Same as Billing Address</label>
+                                        <label for="same_as_billing"><strong>Same as Billing Address</strong></label>
                                     </fieldset>
 
                                     <fieldset>

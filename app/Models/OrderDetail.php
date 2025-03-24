@@ -21,7 +21,19 @@ class OrderDetail extends Model
         'customer_phone',
         'images',
         'sizes',
+
         'address',
+
+        'street',
+        'town',
+        'state',
+        'country',
+        'pincode',
+        'billing_address',
+        'shipping_address',
+        'description',
+
+        
         'total_price',
         'status',
         'product_ids',
