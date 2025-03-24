@@ -61,7 +61,7 @@
                                 $order = OrderDetail::where('user_id', $user->id ?? null)->latest()->first();
                             @endphp
                             <div class="wrap">
-                                <h5 class="title">Information</h5>
+                                <h5 class="title">Information:</h5>
                                 <form class="info-box">
                                 <div class="grid-2">
                                     <input type="hidden" id="full-address" value="{{ $order->address ?? '' }}">
@@ -122,14 +122,29 @@
 
                             </div>
                             <div class="wrap">
-                                <h5 class="title">Choose payment Option:</h5>
+                                <h5 class="title">Payment Option:</h5>
                                 <form class="form-payment">
-                                    <div class="payment-box" id="payment-box">
-                                        <div class="payment-item">
+                                    <div class="payment-box" id="payment-box" >
+                                        <div class="payment-item payment-choose-card active">
                                             <label for="credit-card-method" class="payment-header" >
                                                 <input type="radio" name="payment-method" class="tf-check-rounded" id="credit-card-method" checked>
                                                 <span class="text-title">Online Payment</span>
                                             </label>
+                                            <div id="credit-card-payment" class="collapse show" data-bs-parent="#payment-box">
+                                                <div class="payment-body">
+                                                    <p class="text-secondary">Make your payment directly into our bank account. Your order will not be shipped until the funds have cleared in our account.</p>
+                                                </div>  
+                                                <div class="list-card d-flex justify-content-center align-items-center gap-3 mt-3">
+                                                    <img src="{{ asset('frontend/assets/images/payment/american-express.png') }}" alt="American Express" style="width: 60px; height: 50px; object-fit: contain;">
+                                                    <img src="{{ asset('frontend/assets/images/payment/visa.png') }}" alt="Visa" style="width: 60px; height: 50px; object-fit: contain;">
+                                                    <img src="{{ asset('frontend/assets/images/payment/Bhim_upi.webp') }}" alt="Bhim UPI" style="width: 80px; height: 50px; object-fit: contain;">
+                                                    <img src="{{ asset('frontend/assets/images/payment/gpay-icon.webp') }}" alt="Google Pay" style="width: 100px; height: 50px; object-fit: contain;">
+                                                    <img src="{{ asset('frontend/assets/images/payment/mastercard.jpg') }}" alt="Mastercard" style="width: 80px; height: 50px; object-fit: contain;">
+                                                    <img src="{{ asset('frontend/assets/images/payment/paypal.png') }}" alt="PayPal" style="width: 80px; height: 50px; object-fit: contain;">
+                                                    <img src="{{ asset('frontend/assets/images/payment/phone_pay.webp') }}" alt="PhonePe" style="width: 80px; height: 50px; object-fit: contain;">
+                                                </div>
+
+                                            </div><br>
                                         </div>
                                     </div>
                                     <button class="tf-btn btn-reset"  id="payNowButton">Pay Now</button>
