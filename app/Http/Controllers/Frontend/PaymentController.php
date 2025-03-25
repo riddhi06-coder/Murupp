@@ -153,7 +153,33 @@ class PaymentController extends Controller
                     Log::info("Order Inserted Successfully: ", ['order_id' => $order->id]);
 
 
+                    OrderStatus::create([
+                        'user_id'           => Auth::check() ? Auth::id() : null,
+                        'order_id'          => $order->order_id,
+                        'order_status' => ($status == 2) ? 'Pending' : 'Order Placed',
+                        'status_updated_at' => Carbon::now(),
+                        'status_updated_by' => Auth::check() ? Auth::id() : null,
+                    ]);
 
+                    // Reduce available_quantity in product_details table
+                    foreach ($productIds as $index => $productId) {
+                        DB::table('product_details')
+                            ->where('id', $productId)
+                            ->decrement('available_quantity', $quantities[$index]);
+                    }
+
+                    if (Auth::check()) {
+                        DB::table('carts')
+                            ->where('user_id', Auth::id())
+                            ->whereIn('product_id', $productIds) 
+                            ->delete();
+                
+                        \Log::info("Cart items deleted for user: " . Auth::id());
+                    }
+
+
+                    // Invoce Generation and sending mail 
+                    
                     $invoiceNumber = mt_rand(10000000, 99999999); 
                     $invoiceFileName = 'invoice_' . $invoiceNumber . '.pdf';
                     $pdfDirectory = public_path('/murupp/invoices');
@@ -196,37 +222,7 @@ class PaymentController extends Controller
                     });
                     
                     Log::info("Invoice Email Sent to: " . $emailData['email']);
-                    
-                    // Open the PDF in a new tab
-                    return response()->file($pdfPath);
-                    
-
-
-
-                    OrderStatus::create([
-                        'user_id'           => Auth::check() ? Auth::id() : null,
-                        'order_id'          => $order->order_id,
-                        'order_status' => ($status == 2) ? 'Pending' : 'Order Placed',
-                        'status_updated_at' => Carbon::now(),
-                        'status_updated_by' => Auth::check() ? Auth::id() : null,
-                    ]);
-
-                    // Reduce available_quantity in product_details table
-                    foreach ($productIds as $index => $productId) {
-                        DB::table('product_details')
-                            ->where('id', $productId)
-                            ->decrement('available_quantity', $quantities[$index]);
-                    }
-
-                    if (Auth::check()) {
-                        DB::table('carts')
-                            ->where('user_id', Auth::id())
-                            ->whereIn('product_id', $productIds) 
-                            ->delete();
-                
-                        \Log::info("Cart items deleted for user: " . Auth::id());
-                    }
-
+                     
 
                 } catch (\Exception $e) {
                     \Log::error("Order Insert Error: " . $e->getMessage());
