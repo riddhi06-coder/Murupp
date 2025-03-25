@@ -8,6 +8,9 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Auth;
+use Barryvdh\DomPDF\Facade\Pdf;
+use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Mail;
 use Razorpay\Api\Api;
 use Session;
 use Exception;
@@ -149,6 +152,57 @@ class PaymentController extends Controller
             
                     Log::info("Order Inserted Successfully: ", ['order_id' => $order->id]);
 
+
+
+                    $invoiceNumber = mt_rand(10000000, 99999999); 
+                    $invoiceFileName = 'invoice_' . $invoiceNumber . '.pdf';
+                    $pdfDirectory = public_path('/murupp/invoices');
+                    
+                    // Ensure directory exists
+                    if (!File::exists($pdfDirectory)) {
+                        File::makeDirectory($pdfDirectory, 0777, true, true);
+                    }
+                    
+                    $pdfPath = $pdfDirectory . '/' . $invoiceFileName;
+                    \Log::info("Order Data Before PDF Generation", ['order' => $order]);
+                    
+                                 
+                    // Save invoice number in the database
+                    $order->update(['invoice_id' => $invoiceNumber]);
+                    
+                    // Generate and save PDF
+                    $pdf = Pdf::loadView('frontend.invoice_pdf', ['order' => json_decode(json_encode($order), true)]);
+
+                    $pdf->save($pdfPath);
+       
+                    
+                    Log::info("Invoice PDF Generated: " . $invoiceFileName);
+                    
+                    // Prepare email data
+                    $emailData = [
+                        'name' => $order->customer_name,
+                        'email' => $order->customer_email,
+                        'invoice_number' => $invoiceNumber,
+                    ];
+                    
+                    // Send the email
+                    Mail::send('frontend.invoice_mail', ['order' => $order], function ($message) use ($order, $pdfPath, $invoiceFileName) {
+                        $message->to($order->customer_email)
+                                ->subject('Your Invoice - ' . $order->invoice_id)
+                                ->attach($pdfPath, [
+                                    'as' => $invoiceFileName,
+                                    'mime' => 'application/pdf',
+                                ]);
+                    });
+                    
+                    Log::info("Invoice Email Sent to: " . $emailData['email']);
+                    
+                    // Open the PDF in a new tab
+                    return response()->file($pdfPath);
+                    
+
+
+
                     OrderStatus::create([
                         'user_id'           => Auth::check() ? Auth::id() : null,
                         'order_id'          => $order->order_id,
@@ -173,6 +227,7 @@ class PaymentController extends Controller
                         \Log::info("Cart items deleted for user: " . Auth::id());
                     }
 
+
                 } catch (\Exception $e) {
                     \Log::error("Order Insert Error: " . $e->getMessage());
                     dd("Error: " . $e->getMessage());
@@ -190,10 +245,6 @@ class PaymentController extends Controller
             ], 500);
         }
     }
-    
-    
-    
-
     
 
 }
