@@ -118,6 +118,7 @@
                                     </div>
                                     <fieldset>
                                         <textarea id="billing_address" name="billing_address" placeholder="Billing Address*" required>{{ old('billing_address', isset($order) ? $order->billing_address : '') }}</textarea>
+                                        <small class="error-message"></small>
                                     </fieldset>
 
                                     <fieldset>
@@ -127,14 +128,13 @@
 
                                     <fieldset>
                                         <textarea id="shipping_address" name="shipping_address" placeholder="Shipping Address">{{ old('shipping_address', isset($order) ? $order->shipping_address : '') }}</textarea>
+                                        <small class="error-message"></small>
                                     </fieldset>
 
                                     <fieldset>
                                         <textarea id="note" name="note" placeholder="Write note...">{{ old('note', isset($order) ? $order->note : '') }}</textarea>
                                     </fieldset>
                                 </form>
-
-
                             </div>
                             <div class="wrap">
                                 <h5 class="title">Payment Option:</h5>
@@ -297,9 +297,17 @@
                     first_name: document.querySelector("input[placeholder='First Name*']").value,
                     last_name: document.querySelector("input[placeholder='Last Name*']").value,
                     email: document.querySelector("input[placeholder='Email Address*']").value,
-                    phone: document.querySelector("input[placeholder='Phone Number*']").value
+                    phone: document.querySelector("input[placeholder='Phone Number*']").value,
+
+                    street: document.querySelector("input[placeholder='Street*']").value,
+                    city: document.querySelector("input[placeholder='Town/City*']").value, 
+                    state: document.querySelector("input[placeholder='State*']").value,
+                    postal_code: document.querySelector("input[placeholder='Postal Code*']").value,
+                    country: 'India',
+                    billing_address: document.querySelector("textarea#billing_address").value, 
+                    shipping_address: document.querySelector("textarea#shipping_address").value, 
+                    description: document.querySelector("textarea#note").value 
                 },
-                address: `${document.getElementById("street").value}, ${document.getElementById("city").value}, ${document.getElementById("state").value} - ${document.getElementById("postal-code").value}, India`,
                 cart_items: []
             };
 
@@ -314,8 +322,8 @@
                     product_name: productElement.innerText,
                     quantity: quantityElement ? parseInt(quantityElement.innerText) : 1,
                     price: item.querySelector(".price").innerText.replace("₹", "").trim(),
-                    image: imageElement ? imageElement.getAttribute("src") : "", // Handle missing images
-                    size: sizeElement ? sizeElement.innerText : "N/A" // Handle missing size
+                    image: imageElement ? imageElement.getAttribute("src") : "", 
+                    size: sizeElement ? sizeElement.innerText : "N/A"
                 });
             });
 
@@ -394,6 +402,8 @@
             const city = document.getElementById("city");
             const state = document.getElementById("state");
             const postalCode = document.getElementById("postal-code");
+            const billingAddress = document.getElementById("billing_address");
+            const shippingAddress = document.getElementById("shipping_address");
 
             const nameRegex = /^[A-Za-z\s]+$/;
             if (!nameRegex.test(firstName.value.trim())) {
@@ -453,6 +463,23 @@
                 isValid = false;
             } else {
                 clearError(postalCode);
+            }
+
+
+            if (billingAddress.value.trim() === "") {
+            showError(billingAddress, "Billing Address is required.");
+            isValid = false;
+            } else {
+                clearError(billingAddress);
+            }
+
+            if (!document.getElementById('same_as_billing').checked) {
+                if (shippingAddress.value.trim() === "") {
+                    showError(shippingAddress, "Shipping Address is required.");
+                    isValid = false;
+                } else {
+                    clearError(shippingAddress);
+                }
             }
 
             return isValid;

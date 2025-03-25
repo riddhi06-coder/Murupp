@@ -127,6 +127,18 @@ class PaymentController extends Controller
                         'customer_name'  => $orderData['customer_info']['first_name'] . ' ' . $orderData['customer_info']['last_name'],
                         'customer_email' => $orderData['customer_info']['email'],
                         'customer_phone' => $orderData['customer_info']['phone'],
+
+
+                        'street' => $orderData['customer_info']['street'],
+                        'city' => $orderData['customer_info']['city'],
+                        'state' => $orderData['customer_info']['state'],
+                        'postal_code' => $orderData['customer_info']['postal_code'],
+                        'country' => $orderData['customer_info']['country'],
+                        'billing_address' => $orderData['customer_info']['billing_address'],
+                        'shipping_address' => $orderData['customer_info']['shipping_address'],
+                        'description' => $orderData['customer_info']['description'],
+
+
                         'total_price'    => array_sum($prices),
                         'status'         => $status ?? 'pending', 
                         'product_ids'    => json_encode($productIds, JSON_UNESCAPED_UNICODE),
@@ -135,7 +147,6 @@ class PaymentController extends Controller
                         'prices'         => json_encode($prices, JSON_UNESCAPED_UNICODE),
                         'images'         => json_encode($images, JSON_UNESCAPED_UNICODE),
                         'sizes'          => json_encode($sizes, JSON_UNESCAPED_UNICODE),
-                        'address'        => $orderData['address'],
                         'created_at'     => Carbon::now(),
                         'created_by'     => Auth::check() ? Auth::id() : null,
                     ]);
