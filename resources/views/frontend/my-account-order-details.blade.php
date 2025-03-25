@@ -123,20 +123,24 @@
 
                             <div class="tf-grid-layout md-col-2 gap-15">
                                 <div class="item">
-                                    <div class="text-2 text_black-2">Customer Name</div>
-                                    <div class="text-2 mt_4 fw-6">{{ $order->customer_name }}</div>
+                                    <div class="text-2 text_black-2 fw-6">Customer Name</div>
+                                    <div class="text-2 mt_4">{{ $order->customer_name ?? '-' }}</div>
                                 </div>
                                 <div class="item">
-                                    <div class="text-2 text_black-2">Customer Email</div>
-                                    <div class="text-2 mt_4 fw-6">{{ $order->customer_email }}</div>
+                                    <div class="text-2 text_black-2 fw-6">Customer Email</div>
+                                    <div class="text-2 mt_4">{{ $order->customer_email ?? '-' }}</div>
                                 </div>
                                 <div class="item">
-                                    <div class="text-2 text_black-2">Customer Phone</div>
-                                    <div class="text-2 mt_4 fw-6">{{ $order->customer_phone }}</div>
+                                    <div class="text-2 text_black-2 fw-6">Customer Phone</div>
+                                    <div class="text-2 mt_4">{{ $order->customer_phone ?? '-' }}</div>
                                 </div>
                                 <div class="item">
-                                    <div class="text-2 text_black-2">Address</div>
-                                    <div class="text-2 mt_4 fw-6">{{ $order->address }}</div>
+                                    <div class="text-2 text_black-2 fw-6">Billing Address</div>
+                                    <div class="text-2 mt_4">{{ $order->billing_address ?? '-' }}</div>
+                                </div>
+                                <div class="item">
+                                    <div class="text-2 text_black-2 fw-6">Shipping Address</div>
+                                    <div class="text-2 mt_4">{{ $order->shipping_address ?? '-' }}</div>
                                 </div>
                             </div>
 
@@ -265,7 +269,7 @@
                                                     <li>Date: <span class="fw-7"> 
                                                         {{ \Carbon\Carbon::parse($order->created_at)->format('d/m/Y, h:i A') ?? 'N/A' }}
                                                     </span></li>
-                                                    <li>Total: <span class="fw-7"><i class="fa fa-inr" aria-hidden="true"></i> {{ number_format($order->total_price ?? 0) }}</span></li>
+                                                    <li>Total: <span class="fw-7"><i class="fa fa-inr" aria-hidden="true"></i> {{ number_format_indian($order->total_price ?? 0) }}</span></li>
                                                     <li>Payment Method: <span class="fw-7"> Online Payment</span></li>
                                                 </ul>
                                             </div>

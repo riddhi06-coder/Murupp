@@ -107,11 +107,10 @@
             $user = Auth::user();
 
             // Fetch orders for the logged-in user
-            $orders = DB::table('order_details')
-                ->where('user_id', $user->id)
-                ->orderBy('id', 'asc')
-                ->get();
-
+            $orders = OrderDetail::where('user_id', $user->id)
+                                ->orderBy('created_at', 'desc')
+                                ->get();
+                                
             return view('frontend.my-account-orders', compact('user', 'orders'));
         }
 

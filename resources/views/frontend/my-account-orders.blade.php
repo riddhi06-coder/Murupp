@@ -6,14 +6,6 @@
     @include('components.frontend.head')
 
         <style>
-            /* Table Styling */
-            #ordersTable {
-                border-collapse: collapse;
-                width: 80%;
-                background-color: #fff;
-                font-size: 16px;
-            }
-
             #ordersTable th, #ordersTable td {
                 border: 1px solid #ddd;
                 padding: 12px;
@@ -36,8 +28,20 @@
             }
 
             /* Fixing column widths */
-            #ordersTable th:first-child, #ordersTable td:first-child {
-                width: 20%;
+            #ordersTable {
+                width: 100%;
+                table-layout: fixed; 
+                white-space: nowrap;
+            }
+
+            #ordersTable th, #ordersTable td {
+                text-align: left;
+                padding: 14px;
+            }
+
+            /* Set specific column widths */
+            #ordersTable th:nth-child(1), #ordersTable td:nth-child(1) {
+                width: 30%;
             }
 
             #ordersTable th:nth-child(2), #ordersTable td:nth-child(2) {
@@ -45,20 +49,16 @@
             }
 
             #ordersTable th:nth-child(3), #ordersTable td:nth-child(3) {
-                width: 15%;
+                width: 22%;
             }
 
             #ordersTable th:nth-child(4), #ordersTable td:nth-child(4) {
-                width: 25%;
-            }
-
-            #ordersTable th:last-child, #ordersTable td:last-child {
-                width: 20%;
+                width: 18%;
             }
 
             /* Search Box Styling */
             .dataTables_filter {
-                margin-bottom: 15px; /* Adds gap between search box and table */
+                margin-bottom: 15px; 
             }
 
             .dataTables_filter input {
@@ -188,11 +188,12 @@
                                                     items
                                                 </td>
                                                 <td>
-                                                    <a href="{{ route('my.account.order.details', ['order_id' => $order->order_id]) }}" class="tf-btn btn-fill radius-4">
-                                                        <span class="text">View</span>
+                                                    <a href="{{ route('my.account.order.details', ['order_id' => $order->order_id]) }}" 
+                                                    class="tf-btn btn-fill radius-4" 
+                                                    style="padding: 5px 10px; font-size: 12px; min-width: 100px; height: auto;">
+                                                        <span class="text" style="font-size: 14px;">View</span>
                                                     </a>
                                                 </td>
-
                                             </tr>
                                         @endforeach
                                     </tbody>
@@ -224,27 +225,39 @@
 
         <!-- DataTables -->
         <script>
-           $.noConflict();
+            jQuery.noConflict();
             jQuery(document).ready(function ($) {
                 if (!$.fn.DataTable) {
                     console.error("DataTable plugin not loaded!");
                     return;
                 }
 
-                $('#ordersTable').DataTable({
-                    "responsive": true,
-                    "autoWidth": false,
-                    "lengthMenu": [[5, 10, 25, -1], [5, 10, 25, "All"]],
-                    "language": {
-                        "search": "Search:",
-                        "lengthMenu": "Show _MENU_ entries",
-                        "info": "Showing _START_ to _END_ of _TOTAL_ orders",
-                        "infoFiltered": "(filtered from _MAX_ total orders)"
+                let table = $('#ordersTable').DataTable({
+                    responsive: false, // Prevents collapsing into dropdown
+                    autoWidth: false,
+                    lengthMenu: [[5, 10, 25, -1], [5, 10, 25, "All"]],
+                    scrollX: true, // Enables horizontal scrolling if needed
+                    paging: true, // Enable pagination
+                    lengthChange: true, // Allow user to change number of items per page
+                    ordering: true,
+                    order: [[1, 'desc']], // Sort by date (descending)
+                    columnDefs: [
+                        { targets: [3], orderable: false } // Disable sorting for "Actions" column
+                    ],
+                    language: {
+                        search: "Search Orders:",
+                        info: "Showing _START_ to _END_ of _TOTAL_ orders (Page _PAGE_ of _PAGES_)",
+                        emptyTable: "No orders found",
+                        zeroRecords: "No matching orders"
                     }
                 });
-            });
 
+                // Display total orders count
+                let totalOrders = table.rows().count();
+                $("#totalOrdersCount").text("Total Orders: " + totalOrders);
+            });
         </script>
+
 
         <!-----Number format function---->
         <script>
