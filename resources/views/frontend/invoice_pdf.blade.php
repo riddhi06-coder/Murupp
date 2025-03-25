@@ -1,252 +1,263 @@
 <!DOCTYPE html>
 <html lang="en">
+ 
 <head>
-   <meta charset="UTF-8">
-   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-   <title>Invoice</title>
-   <style>
-      body {
-         font-family: Arial, sans-serif;
-         margin: 0;
-         padding: 0;
-         background-color: #f5f5f5;
-         color: #333;
-      }
-
-      .container {
-         max-width: 850px;
-         margin: 30px auto;
-         background: #fff;
-         padding: 25px;
-         box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
-         border-radius: 10px;
-      }
-
-      /* Header Section */
-      .invoice-header {
-         border-bottom: 3px solid #333;
-         padding-bottom: 15px;
-         margin-bottom: 25px;
-         display: flex;
-         justify-content: space-between;
-         align-items: center;
-      }
-
-      .invoice-logo img {
-         max-width: 180px;
-         height: auto;
-      }
-
-      .invoice-details {
-         text-align: right;
-      }
-
-      .invoice-details h1 {
-         font-size: 28px;
-         margin: 0;
-         color: #333;
-         font-weight: bold;
-      }
-
-      .invoice-details p {
-         margin: 3px 0;
-         font-size: 14px;
-         font-weight: 600;
-         color: #666;
-      }
-
-      /* Customer & Address Section */
-      .customer-info {
-         padding: 15px;
-         border: 1px solid #ddd;
-         border-radius: 6px;
-         background: #f8f8f8;
-         margin-bottom: 20px;
-      }
-
-      .customer-row {
-         display: flex;
-         justify-content: space-between;
-         align-items: center;
-         font-size: 14px;
-         padding: 5px 0;
-      }
-
-      .customer-row .left {
-         text-align: left;
-         font-weight: 600;
-      }
-
-      .customer-row .right {
-         text-align: right;
-         font-weight: 600;
-      }
-
-      /* Address Section */
-      .address-section {
-         display: flex;
-         justify-content: space-between;
-         padding: 15px;
-         border: 1px solid #ddd;
-         border-radius: 6px;
-         background: #f8f8f8;
-         margin-bottom: 20px;
-      }
-
-      .bill-section, .ship-section {
-         width: 48%;
-      }
-
-      .bill-section h2, .ship-section h2 {
-         font-size: 16px;
-         font-weight: bold;
-         margin-bottom: 10px;
-         color: #333;
-      }
-
-      .bill-section p, .ship-section p {
-         font-size: 14px;
-         line-height: 1.6;
-         margin: 0;
-      }
-
-      .bold-text {
-         font-weight: bold;
-         font-size: 15px;
-         color: #333;
-      }
-
-      /* Table Section */
-      .table {
-         width: 100%;
-         border-collapse: collapse;
-         margin-bottom: 20px;
-      }
-
-      .table th, .table td {
-         border: 1px solid #ddd;
-         padding: 12px;
-         text-align: left;
-         font-size: 14px;
-      }
-
-      .table th {
-         background-color: #333;
-         color: white;
-         font-weight: bold;
-         text-transform: uppercase;
-      }
-
-      .table tr:nth-child(even) {
-         background-color: #f9f9f9;
-      }
-
-      .table td {
-         font-size: 14px;
-      }
-
-      /* Total Row */
-      .table tfoot tr td {
-         font-weight: bold;
-         text-align: right;
-         padding: 12px;
-         background: #333;
-         color: white;
-         font-size: 16px;
-      }
-
-      /* Footer */
-      .footer {
-         text-align: center;
-         font-size: 14px;
-         color: #000;
-         padding: 8px 0;
-         border-top: 1px solid #ddd;
-         font-weight: bold;
-         max-width: 850px;
-         margin: 10px auto 0;
-      }
-   </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Invoice</title>
+ 
 </head>
+ 
+<style>
+    @font-face {
+        font-family: 'DejaVu Sans';
+        font-style: normal;
+        font-weight: normal;
+        src: url("{{ storage_path('fonts/DejaVuSans.ttf') }}") format('truetype');
+    }
+ 
+    body {
+        font-family: 'DejaVu Sans', sans-serif;
+        font-size: 14px;
+        line-height: 1.6;
+        color: #333;
+    }
+ 
+    h2 {
+        margin-bottom: 5px !important;
+    }
+ 
+    p {
+        margin-top: 0;
+        margin-bottom: 10px;
+    }
+ 
+    .table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-bottom: 20px;
+    }
+ 
+    .table th, .table td {
+        border: 1px solid #0a0a0a;
+        padding: 8px;
+        text-align: left;
+    }
+ 
+    .table th {
+        background-color: #f4f4f4;
+        font-weight: bold;
+    }
+ 
+    .table td {
+        font-size: 14px;
+    }
+ 
+    .totals {
+        text-align: right;
+        margin-top: 20px;
+    }
+ 
+    .totals p {
+        margin: 4px 0;
+        font-size: 14px;
+    }
+ 
+    .totals p:last-child {
+        font-weight: bold;
+    }
+ 
+    .footer {
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        background-color: #000000;
+        padding: 10px;
+        margin-top: 20px;
+        text-align: center;
+        font-size: 15px;
+        color: #fff;
+    }
+ 
+    @media only screen and (max-width: 600px) {
+        @font-face {
+        font-family: 'DejaVu Sans';
+            font-style: normal;
+            font-weight: normal;
+            src: url("{{ storage_path('fonts/DejaVuSans.ttf') }}") format('truetype');
+        }
+ 
+        body {
+            font-family: 'DejaVu Sans', sans-serif;
+            font-size: 14px;
+            line-height: 1.6;
+            color: #333;
+        }
+ 
+        h2 {
+            margin-bottom: 15px !important;
+        }
+ 
+        p {
+            margin-top: 0;
+            margin-bottom: 10px;
+        }
+ 
+        table {
+            width: 100%;
+        }
+ 
+        .table th, .table td {
+            font-size: 12px;
+            padding: 6px;
+        }
+ 
+        td, th {
+            display: block;
+            width: 100%;
+        }
+ 
+        .table thead {
+            display: none; /* Hide table header */
+        }
+ 
+        .table tr {
+            display: block;
+            margin-bottom: 10px;
+            border: 1px solid #ddd;
+            padding: 8px;
+        }
+ 
+        .table td {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            text-align: right;
+            font-size: 12px;
+        }
+ 
+        .table td::before {
+            content: attr(data-label);
+            font-weight: bold;
+            text-align: left;
+            flex: 1;
+        }
+ 
+        .totals {
+            text-align: center;
+        }
+ 
+        .footer {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background-color: #000000;
+            padding: 10px;
+            margin-top: 20px;
+            text-align: center;
+            font-size: 15px;
+            color: #fff;
+        }
+    }
+</style>
+ 
 <body>
-   <div class="container">
-      <!-- Invoice Header -->
-      <div class="invoice-header">
-         <div class="invoice-logo">
-            <img src="{{ asset('frontend/assets/images/logo/logo.webp') }}" alt="Murupp">
-         </div>
-         <div class="invoice-details">
-            <h1>INVOICE</h1>
-            <p># {{ data_get($order, 'invoice_id', 'N/A') }}</p>
-         </div>
-      </div>
-
-      <!-- Customer Information -->
-      <div class="customer-info">
-         <div class="customer-row">
-            <div class="left"><strong>Name:</strong> {{ data_get($order, 'customer_name', 'N/A') }}</div>
-            <div class="right"><strong>Email:</strong> {{ data_get($order, 'customer_email', 'N/A') }}</div>
-         </div>
-         <div class="customer-row">
-            <div class="left"><strong>Phone:</strong> {{ data_get($order, 'customer_phone', 'N/A') }}</div>
-            <div class="right"><strong>Order ID:</strong> {{ data_get($order, 'invoice_id', 'N/A') }}</div>
-         </div>
-      </div>
-
-      <!-- Address Section -->
-      <div class="address-section">
-         <div class="bill-section">
-            <h2>Billing Details</h2>
-            <p class="bold-text">{{ data_get($order, 'customer_name', 'N/A') }}</p>
-            <p>{{ data_get($order, 'billing_address', 'N/A') }}</p>
-         </div>
-
-         <div class="ship-section">
-            <h2>Shipping Address</h2>
-            <p>{{ data_get($order, 'shipping_address', 'N/A') }}</p>
-         </div>
-      </div>
-
-      <!-- Table Section -->
-      <table class="table">
-         <thead>
+    <table width="100%">
+        <tr>
+            <td width="50%" style="text-align: left;">
+                <img src="{{ asset('frontend/assets/images/logo/logo.webp') }}" alt="Logo" style="width: 150px;">
+            </td>
+            <td width="50%" style="text-align: right;">
+                <h1>INVOICE</h1>
+                <p># {{ data_get($order, 'invoice_id', 'N/A') }}</p>
+            </td>
+        </tr>
+    </table>
+ 
+    <table width="100%">
+        <tr>
+            <!-- Left Column: Bill To -->
+            <td width="50%" style="vertical-align: top;">
+                <h2>Billing Address :</h2>
+                <p>
+                    @foreach(explode(',', data_get($order, 'billing_address', 'N/A')) as $part)
+                        {{ trim($part) }}<br>
+                    @endforeach
+                </p>
+            </td>
+ 
+            <!-- Right Column: From -->
+            <td width="50%" style="vertical-align: top; text-align: right;">
+                <h2>Shipping Address :</h2>
+                <p>
+                    @foreach(explode(',', data_get($order, 'shipping_address', 'N/A')) as $part)
+                        {{ trim($part) }}<br>
+                    @endforeach
+                </p>
+            </td>
+        </tr>
+    </table>
+ 
+    <table width="100%">
+        <tr>
+            <!-- Left Column: Bill To -->
+            <td width="50%" style="vertical-align: top;">
+                <h2>Customer Details :</h2>
+                <p>
+                    Customer Name: {{ data_get($order, 'customer_name', 'N/A') }}<br>
+                    Email: {{ data_get($order, 'customer_email', 'N/A') }}<br>
+                    Phone: +91 {{ data_get($order, 'customer_phone', 'N/A') }}<br>
+                </p>
+            </td>
+        </tr>
+    </table><br>
+ 
+    {{-- Table --}}
+    <table class="table">
+        <thead>
             <tr>
-               <th>#</th>
-               <th>Product Name</th>
-               <th>Qty</th>
-               <th>Rate</th>
-               <th>Amount</th>
+                <th>#</th>
+                <th>Product Name</th>
+                <th>Qty</th>
+                <th>Rate</th>
+                <th>Amount</th>
             </tr>
-         </thead>
-         <tbody>
+        </thead>
+        <tbody>
             @php
-               $items = json_decode(data_get($order, 'product_names', '[]'), true);
-               $quantities = json_decode(data_get($order, 'quantities', '[]'), true);
-               $prices = json_decode(data_get($order, 'prices', '[]'), true);
+                $items = json_decode(data_get($order, 'product_names', '[]'), true);
+                $quantities = json_decode(data_get($order, 'quantities', '[]'), true);
+                $prices = json_decode(data_get($order, 'prices', '[]'), true);
             @endphp
-
             @foreach($items as $index => $item)
-               <tr>
-                  <td>{{ $index + 1 }}</td>
-                  <td>{{ $item }}</td>
-                  <td>{{ $quantities[$index] ?? 'N/A' }}</td>
-                  <td>INR {{ number_format($prices[$index] ?? 0, 2) }}</td>
-                  <td>INR {{ number_format(($prices[$index] ?? 0) * ($quantities[$index] ?? 1), 2) }}</td>
-               </tr>
+                <tr>
+                    <td>{{ $index + 1 }}</td>
+                    <td>{{ $item }}</td>
+                    <td>{{ $quantities[$index] ?? 'N/A' }}</td>
+                    <td>₹ {{ number_format($prices[$index] ?? 0) }}</td>
+                    <td>₹ {{ number_format(($prices[$index] ?? 0) * ($quantities[$index] ?? 1)) }}</td>
+                </tr>
             @endforeach
-         </tbody>
-         <tfoot>
+        </tbody>
+        <tfoot>
             <tr>
-               <td colspan="4">Total</td>
-               <td>INR {{ number_format(data_get($order, 'total_price', 0), 2) }}</td>
+                <td colspan="4" style="text-align: right;"><b>Sub Total</b></td>
+                <td>₹ {{ number_format(data_get($order, 'total_price', 0)) }}</td>
             </tr>
-         </tfoot>
-      </table>
-   </div> <!-- Closing container div -->
+            <tr>
+                <td colspan="4" style="text-align: right;"><b>Total</b></td>
+                <td>₹ {{ number_format(data_get($order, 'total_price', 0)) }}</td>
+            </tr>
+        </tfoot>
+    </table>
 
-   <!-- Footer moved outside the container -->
-   <div class="footer">
-      © {{ date('Y') }} Murupp. All rights reserved.
-   </div>
+ 
+    {{-- Footer --}}
+    <div class="footer">
+        <b>© {{ date('Y') }} Murupp. All rights reserved. </b>
+    </div>
 </body>
+ 
 </html>
