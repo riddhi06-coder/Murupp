@@ -41,6 +41,7 @@ composer require nunomaduro/collision --dev
  10.x     | 7.x       | 10.x      | 2.x
  11.x     | 8.x       | 10.x      | 2.x
  11.x     | 8.x       | 11.x      | 3.x
+ 12.x     | 8.x       | 11.x      | 3.x
 
 As an example, here is how to require Collision on Laravel 8.x:
 
@@ -60,7 +61,7 @@ You need to register the handler in your code:
 
 Thank you for considering to contribute to Collision. All the contribution guidelines are mentioned [here](CONTRIBUTING.md).
 
-You can have a look at the [CHANGELOG](CHANGELOG.md) for constant updates & detailed information about the changes. You can also follow the twitter account for latest announcements or just come say hi!: [@enunomaduro](https://twitter.com/enunomaduro)
+You can also follow the twitter account for latest announcements or just come say hi!: [@enunomaduro](https://twitter.com/enunomaduro)
 
 ## License
 
