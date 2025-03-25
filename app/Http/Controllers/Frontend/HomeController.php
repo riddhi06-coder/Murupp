@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\frontend;
+namespace App\Http\Controllers\Frontend;
 
 use App\Http\Controllers\Controller;
 
@@ -96,6 +96,7 @@ class HomeController extends Controller
     public function contact(Request $request)
     {
         return view('frontend.contact');
+
     }
 
     // === For Contact Us form submission
