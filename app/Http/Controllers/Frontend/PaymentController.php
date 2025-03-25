@@ -169,7 +169,7 @@ class PaymentController extends Controller
                                  
                     // Save invoice number in the database
                     $order->update(['invoice_id' => $invoiceNumber]);
-                    
+
                     // Generate and save PDF
                     $pdf = Pdf::loadView('frontend.invoice_pdf', ['order' => json_decode(json_encode($order), true)]);
 
@@ -245,6 +245,5 @@ class PaymentController extends Controller
             ], 500);
         }
     }
-    
 
 }
