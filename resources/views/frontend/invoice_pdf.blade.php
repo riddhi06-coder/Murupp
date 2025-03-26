@@ -166,15 +166,11 @@
 <body>
     <table width="100%">
         <tr>
-            <td width="80%" style="text-align: left;">
-                <!-- <img src="https://anvayafoundation.com/Murupp/public/frontend/assets/images/logo/logo.webp" alt="Logo" style="width: 150px;"> -->
-
+            <td width="120%" style="text-align: left;">
                 <img src="data:image/jpeg;base64,{{ base64_encode(file_get_contents(public_path('/frontend/assets/images/logo/logo.webp'))) }}" alt="Logo" style="width: 150px;">
- 
-
             </td>
             <td width="50%" style="text-align: right;">
-                <h1 style="margin-bottom: 0;">INVOICE</h1>
+                <h3 style="margin-bottom: 0;">INVOICE</h3>
                 <p style="margin-top: 0;"># {{ data_get($order, 'invoice_id', '-') }}</p>
             </td>
 
