@@ -74,6 +74,37 @@
                             
                                 </div>
                             @endif
+
+
+                            <!-- @if(!Auth::check())
+                                <div class="wrap">
+                                    <div class="title-login">
+                                        <p>Already have an account?</p>
+                                        <a href="{{ route('user.login') }}" class="text-button">Login here</a>
+                                    </div>
+
+                                    <form id="otpForm" class="login-box">
+                                        @csrf
+                                        <div class="grid-1">
+                                            <input type="tel" name="mobile" id="mobile" placeholder="Enter Mobile Number" required><br><br>
+                                            <button type="button" id="sendOtpBtn" class="tf-btn">
+                                                <span class="text">Send OTP</span>
+                                            </button>
+                                        </div>
+
+                                        <div id="otpSection" style="display: none;">
+                                            <input type="text" name="otp" id="otp" placeholder="Enter OTP" required>
+                                            <button class="tf-btn" type="submit">
+                                                <span class="text">Verify OTP</span>
+                                            </button>
+                                        </div>
+                                    </form>
+
+                                    <div id="otpMessage"></div>
+                                </div>
+                            @endif -->
+
+
                             @php
                                 use App\Models\OrderDetail;
 

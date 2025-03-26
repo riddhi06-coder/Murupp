@@ -273,22 +273,22 @@
                                             </div>
                                             <div class="tf-payment">
                                                 <a href="#">
-                                                    <img src="{{ asset('frontend/assets/images/payment/img-1.png') }}" alt="">
+                                                    <img src="{{ asset('frontend/assets/images/payment/american-express.png') }}" alt="">
                                                 </a>
                                                 <a href="#">
-                                                    <img src="{{ asset('frontend/assets/images/payment/img-2.png') }}" alt="">
+                                                    <img src="{{ asset('frontend/assets/images/payment/visa.png') }}" alt="">
                                                 </a>
                                                 <a href="#">
-                                                    <img src="{{ asset('frontend/assets/images/payment/img-3.png') }}" alt="">
+                                                    <img src="{{ asset('frontend/assets/images/payment/Bhim_upi.webp') }}" alt="">
                                                 </a>
                                                 <a href="#">
-                                                    <img src="{{ asset('frontend/assets/images/payment/img-4.png') }}" alt="">
+                                                    <img src="{{ asset('frontend/assets/images/payment/gpay-icon.webp') }}" alt="">
                                                 </a>
                                                 <a href="#">
-                                                    <img src="{{ asset('frontend/assets/images/payment/img-5.png') }}" alt="">
+                                                    <img src="{{ asset('frontend/assets/images/payment/mastercard.jpg') }}" alt="">
                                                 </a>
                                                 <a href="#">
-                                                    <img src="{{ asset('frontend/assets/images/payment/img-6.png') }}" alt="">
+                                                    <img src="{{ asset('frontend/assets/images/payment/paypal.png') }}" alt="">
                                                 </a>
                                             </div>
                                         </div>

@@ -19,7 +19,7 @@
 <script>
     // Initialize Notyf
     var notyf = new Notyf({
-        duration: 5000, // Notification duration
+        duration: 1000, // Notification duration
         ripple: true, // Adds a ripple effect
         position: {
             x: 'right',

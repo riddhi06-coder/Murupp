@@ -169,22 +169,22 @@
                                         <p class="text-caption-1">Payment:</p>
                                         <ul>
                                             <li>
-                                                <img src="{{ asset('frontend/assets/images/payment/img-1.png') }}" alt="">
+                                                <img src="{{ asset('frontend/assets/images/payment/american-express.png') }}" alt="">
                                             </li>
                                             <li>
-                                                <img src="{{ asset('frontend/assets/images/payment/img-2.png') }}" alt="">
+                                                <img src="{{ asset('frontend/assets/images/payment/visa.png') }}" alt="">
                                             </li>
                                             <li>
-                                                <img src="{{ asset('frontend/assets/images/payment/img-3.png') }}" alt="">
+                                                <img src="{{ asset('frontend/assets/images/payment/Bhim_upi.webp') }}" alt="">
                                             </li>
                                             <li>
-                                                <img src="{{ asset('frontend/assets/images/payment/img-4.png') }}" alt="">
+                                                <img src="{{ asset('frontend/assets/images/payment/gpay-icon.webp') }}" alt="">
                                             </li>
                                             <li>
-                                                <img src="{{ asset('frontend/assets/images/payment/img-5.png') }}" alt="">
+                                                <img src="{{ asset('frontend/assets/images/payment/mastercard.jpg') }}" alt="">
                                             </li>
                                             <li>
-                                                <img src="{{ asset('frontend/assets/images/payment/img-6.png') }}" alt="">
+                                                <img src="{{ asset('frontend/assets/images/payment/paypal.png') }}" alt="">
                                             </li>
                                         </ul>
                                     </div>
