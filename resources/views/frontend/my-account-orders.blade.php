@@ -246,7 +246,7 @@
                     ],
                     language: {
                         search: "Search Orders:",
-                        info: "Showing _START_ to _END_ of _TOTAL_ orders (Page _PAGE_ of _PAGES_)",
+                        info: "Showing _START_ to _END_ of _TOTAL_ orders",
                         emptyTable: "No orders found",
                         zeroRecords: "No matching orders"
                     }

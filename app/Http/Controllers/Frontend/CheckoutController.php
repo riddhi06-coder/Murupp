@@ -43,5 +43,11 @@ class CheckoutController extends Controller
     
         return view('frontend.checkout', compact('cartItems', 'total'));
     }
+
+
+    public function order_confirmation(Request $request)
+    {
+        return view('frontend.order-confirmation');
+    }
     
 }

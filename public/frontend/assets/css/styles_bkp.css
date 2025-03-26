@@ -1287,8 +1287,8 @@ a:focus, a:hover {
 .text-line-clamp-1 {
   -webkit-line-clamp: 1;
   -webkit-box-orient: vertical;
-  display: -webkit-box;
-  overflow: hidden;
+  /* display: -webkit-box; */
+  /* overflow: hidden; */
 }
 
 .text-line-clamp-2 {
@@ -5524,7 +5524,7 @@ form .cols > * {
 }
 
 .modal-shopping-cart .modal-content {
-  max-width: 708px !important;
+  max-width: 608px !important;
   cursor: default !important;
   display: flex;
   flex-direction: row;
@@ -5695,10 +5695,10 @@ form .cols > * {
   border-bottom: 1px solid var(--line);
 }
 .modal-shopping-cart .tf-mini-cart-item .tf-mini-cart-image {
-  width: 100px;
-  height: 100px;
+  /* width: 100px; */
+  /* height: 100px; */
   flex-shrink: 0;
-  border-radius: 8px;
+  /* border-radius: 8px; */
   overflow: hidden;
 }
 .modal-shopping-cart .tf-mini-cart-item .tf-mini-cart-image img {
@@ -8611,7 +8611,7 @@ form .cols > * {
 }
 
 .wg-quantity {
-  width: 180px;
+  width: 103px;
   height: 48px;
   display: flex;
   justify-content: space-between;
@@ -8621,7 +8621,7 @@ form .cols > * {
   overflow: hidden;
 }
 .wg-quantity input {
-  width: 88px;
+  width: 30px;
   height: 44px;
   padding: 0;
   background-color: transparent;
@@ -8633,12 +8633,12 @@ form .cols > * {
   color: var(--main);
 }
 .wg-quantity .btn-quantity {
-  width: 44px;
-  height: 38px;
+  width: 69px;
+  height: 45px;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 38px;
+  font-size: 34px;
   color: var(--main);
   cursor: pointer;
   -webkit-transition: all 0.3s ease;
@@ -15745,7 +15745,7 @@ button .icon {
     gap: 12px;
   }
   .modal-shopping-cart .tf-mini-cart-item .tf-mini-cart-info > div {
-    gap: 6px;
+    gap: 3px;
     margin-bottom: 6px;
   }
   .modal-shopping-cart .tf-mini-cart-tool {

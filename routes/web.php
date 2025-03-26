@@ -212,6 +212,9 @@ Route::group(['prefix'=> '', 'middleware'=>[\App\Http\Middleware\PreventBackHist
     //===== Checkout Page
     Route::get('/checkout', [CheckoutController::class, 'checkout'])->name('checkout.details');
 
+    //===== Order confirmation
+    Route::get('/order-confirmation', [CheckoutController::class, 'order_confirmation']);
+
     //===== Registration Page
     Route::get('/registration', [RegistrationController::class, 'register'])->name('user.registration');
     Route::post('/registration', [RegistrationController::class, 'authenticate_register'])->name('registration.store');
@@ -302,6 +305,8 @@ Route::group(['prefix'=> '', 'middleware'=>[\App\Http\Middleware\PreventBackHist
 
     //===== For Collection Page Filter
     Route::get('/collection-changes/filters', [CollectionController::class, 'filter_collection_Products'])->name('changes.filter');
+
+
 
 
 
