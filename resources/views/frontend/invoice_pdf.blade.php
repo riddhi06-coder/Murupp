@@ -153,7 +153,7 @@
             bottom: 0;
             left: 0;
             right: 0;
-            background-color:rgb(102, 100, 100) !important;
+            background-color:rgb(95, 92, 92);
             padding: 10px;
             margin-top: 20px;
             text-align: center;
@@ -216,47 +216,47 @@
     </table><br>
  
     {{-- Table --}}
-    <table class="table text-center align-middle">
-    <thead class="table-light">
-        <tr>
-            <th>#</th>
-            <th class="text-start">Product Name</th>
-            <th>Qty</th>
-            <th>Size</th>
-            <th>Print</th>
-            <th class="text-end">Rate</th>
-            <th class="text-end">Amount</th>
-        </tr>
-    </thead>
-    <tbody>
-        @php
-            $items = json_decode(data_get($order, 'product_names', '[]'), true);
-            $quantities = json_decode(data_get($order, 'quantities', '[]'), true);
-            $prices = json_decode(data_get($order, 'prices', '[]'), true);
-            $prints = json_decode(data_get($order, 'prints', '[]'), true);
-            $sizes = json_decode(data_get($order, 'sizes', '[]'), true);
-        @endphp
-        @foreach($items as $index => $item)
+    <table class="table">
+        <thead>
             <tr>
-                <td>{{ $index + 1 }}</td>
-                <td class="text-start">{{ $item }}</td>
-                <td>{{ $quantities[$index] ?? '-' }}</td>
-                <td>{{ $sizes[$index] ?? '-' }}</td>
-                <td>{{ !empty($prints[$index]) ? $prints[$index] : '-' }}</td>
-                <td class="text-end">₹ {{ number_format($prices[$index] ?? 0, 2) }}</td>
-                <td class="text-end">₹ {{ number_format(($prices[$index] ?? 0) * ($quantities[$index] ?? 1), 2) }}</td>
+                <th>#</th>
+                <th>Product Name</th>
+                <th>Qty</th>
+                <th>Size</th>
+                <th>Print</th>
+                <th>Rate</th>
+                <th>Amount</th>
             </tr>
-        @endforeach
-    </tbody>
-    <tfoot>
-        <tr>
-            <td colspan="5" class="text-end"><b>Sub Total</b></td>
-            <td colspan="2" class="text-end">₹ {{ number_format(data_get($order, 'total_price', 0), 2) }}</td>
-        </tr>
-        <tr>
-            <td colspan="5" class="text-end"><b>Total</b></td>
-            <td colspan="2" class="text-end">₹ {{ number_format(data_get($order, 'total_price', 0), 2) }}</td>
-        </tr>
+        </thead>
+        <tbody>
+            @php
+                $items = json_decode(data_get($order, 'product_names', '[]'), true);
+                $quantities = json_decode(data_get($order, 'quantities', '[]'), true);
+                $prices = json_decode(data_get($order, 'prices', '[]'), true);
+                $prints = json_decode(data_get($order, 'prints', '[]'), true);
+                $sizes = json_decode(data_get($order, 'sizes', '[]'), true);
+            @endphp
+            @foreach($items as $index => $item)
+                <tr>
+                    <td>{{ $index + 1 }}</td>
+                    <td>{{ $item }}</td>
+                    <td>{{ $quantities[$index] ?? '-' }}</td>
+                    <td>{{ $sizes[$index] ?? '-' }}</td>
+                    <td>{{ !empty($prints[$index]) ? $prints[$index] : '-' }}</td>
+                    <td>₹ {{ number_format($prices[$index] ?? 0, 2) }}</td>
+                    <td>₹ {{ number_format(($prices[$index] ?? 0) * ($quantities[$index] ?? 1)) }}</td>
+                </tr>
+            @endforeach
+        </tbody>
+        <tfoot>
+            <tr>
+                <td colspan="6" style="text-align: right;"><b>Sub Total</b></td>
+                <td>₹ {{ number_format(data_get($order, 'total_price', 0)) }}</td>
+            </tr>
+            <tr>
+                <td colspan="6" style="text-align: right;"><b>Total (including Taxes)</b></td>
+                <td>₹ {{ number_format(data_get($order, 'total_price', 0)) }}</td>
+            </tr>
         </tfoot>
     </table>
 
