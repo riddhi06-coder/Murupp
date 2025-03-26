@@ -65,31 +65,32 @@
                             <a href="mailto:{{ $order->customer_email }}">{{ $order->customer_email }}</a>.
                         </p>
 
-                        <hr>
+                        <hr><br>
                         
-                        <!-- <h5 class="fw-5 mb_20">Customer Details</h5> -->
-                        <!-- <div class="tf-page-cart-checkout-1">
+                        <h5 class="fw-5 mb_20">Customer Details</h5>
+                        <div class="tf-page-cart-checkout-1">
                             <div class="d-flex align-items-center justify-content-between mb_15">
                                 <div class="fs-18">Name</div>
-                                <p>John Doe</p>
+                                <p>{{ $order->customer_name ?? 'N/A' }}</p>
                             </div>
                             <div class="d-flex align-items-center justify-content-between mb_15">
                                 <div class="fs-18">Email Id</div>
-                                <p>johndoe@example.com</p>
+                                <p>{{ $order->customer_email ?? 'N/A' }}</p>
                             </div>
                             <div class="d-flex align-items-center justify-content-between mb_15">
                                 <div class="fs-18">Number</div>
-                                <p>+1 234 567 890</p>
+                                <p>{{ $order->customer_phone ?? 'N/A' }}</p>
                             </div>
                             <div class="d-flex align-items-center justify-content-between mb_15">
                                 <div class="fs-18">Shipping Address</div>
-                                <p>1234 Elm Street, Springfield, USA</p>
+                                <p>{{ $order->shipping_address ?? 'N/A' }}</p>
                             </div>
                             <div class="d-flex align-items-center justify-content-between mb_15">
                                 <div class="fs-18">Billing Address</div>
-                                <p>5678 Oak Street, Springfield, USA</p>
+                                <p>{{ $order->billing_address ?? 'N/A' }}</p>
                             </div>
-                        </div> -->
+                        </div>
+
 
                         <h5 class="fw-5 mt_20 mb_20">Order Summary</h5>
                         @php
@@ -147,7 +148,7 @@
                                 <div class="fs-18">Total</div>
                                 <p>
                                     <i class="fa fa-inr" aria-hidden="true"></i> 
-                                    {{ number_format($order->total_price ?? 0, 2) }} INR
+                                    {{ number_format($order->total_price ?? '-') }} INR
                                 </p>
                                 
                             </div>  
