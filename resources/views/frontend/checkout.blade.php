@@ -40,7 +40,7 @@
                 <ul class="breadcrumbs d-flex align-items-center">
                     <li><a class="link" href="{{ route('frontend.index') }}">Home</a></li>
                     <li><i class="icon-arrRight"></i></li>
-                    <li><a class="link" href="shop-default-grid.html">Shop</a></li>
+                    <li><a class="link" href="#">Shop</a></li>
                     <li><i class="icon-arrRight"></i></li>
                     <li>View Cart</li>
                 </ul>
