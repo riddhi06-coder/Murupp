@@ -5,6 +5,26 @@
     @include('components.frontend.head')
     <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
     <meta name="csrf-token" content="{{ csrf_token() }}">
+
+    <!-- CSS for the spinner -->
+    <style>
+       .spinner {
+            width: 50px;
+            height: 50px;
+            border: 5px solid rgba(255, 255, 255, 0.2); 
+            border-top: 5px solid #ffffff; 
+            border-radius: 50%;
+            animation: spin 1.2s cubic-bezier(0.42, 0, 0.58, 1) infinite;
+            box-shadow: 0 0 10px rgba(255, 255, 255, 0.5); 
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+    </style>
+
 </head>
 	   
 
@@ -247,6 +267,14 @@
         </section>
         <!-- /Section checkout -->
 
+
+        <!-- Loader Overlay (Initially Hidden) -->
+        <div id="loading-overlay" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100vh; background: rgba(0, 0, 0, 0.5); color: black; display: flex; align-items: center; justify-content: center; font-size: 24px; z-index: 9999; flex-direction: column; gap: 20px;">
+            <div class="spinner"></div><br><br>
+            <!-- <div>Processing...</div> -->
+        </div>
+      
+
         @include('components.frontend.footer')
 
         @include('components.frontend.main-js')
@@ -288,13 +316,15 @@
         });
     </script>
 
+
     <!----- checkput and Payment form details and integration---->
     <script>
-        document.getElementById("payNowButton").addEventListener("click", function(e) {
+
+        document.getElementById("payNowButton").addEventListener("click", async function (e) {
             e.preventDefault();
 
             if (!validateForm()) {
-                return; 
+                return;
             }
 
             let orderData = {
@@ -305,84 +335,121 @@
                     phone: document.querySelector("input[placeholder='Phone Number*']").value,
 
                     street: document.querySelector("input[placeholder='Street*']").value,
-                    city: document.querySelector("input[placeholder='Town/City*']").value, 
+                    city: document.querySelector("input[placeholder='Town/City*']").value,
                     state: document.querySelector("input[placeholder='State*']").value,
                     postal_code: document.querySelector("input[placeholder='Postal Code*']").value,
-                    country: 'India',
-                    billing_address: document.querySelector("textarea#billing_address").value, 
-                    shipping_address: document.querySelector("textarea#shipping_address").value, 
-                    description: document.querySelector("textarea#note").value 
+                    country: "India",
+                    billing_address: document.querySelector("textarea#billing_address").value,
+                    shipping_address: document.querySelector("textarea#shipping_address").value,
+                    description: document.querySelector("textarea#note").value
                 },
                 cart_items: []
             };
 
-            document.querySelectorAll(".item-product").forEach(item => {
-                let productElement = item.querySelector(".name-product"); 
+            document.querySelectorAll(".item-product").forEach((item) => {
+                let productElement = item.querySelector(".name-product");
                 let quantityElement = item.querySelector(".quantity strong");
                 let imageElement = item.querySelector(".product-image");
                 let sizeElement = item.querySelector(".product-size");
                 let printElement = item.querySelector(".product-print");
 
                 orderData.cart_items.push({
-                    product_id: productElement.getAttribute("data-id"), 
+                    product_id: productElement.getAttribute("data-id"),
                     product_name: productElement.innerText,
                     quantity: quantityElement ? parseInt(quantityElement.innerText) : 1,
                     price: item.querySelector(".price").innerText.replace("₹", "").trim(),
-                    image: imageElement ? imageElement.getAttribute("src") : "", 
+                    image: imageElement ? imageElement.getAttribute("src") : "",
                     size: sizeElement ? sizeElement.innerText : "N/A",
                     print: printElement ? printElement.innerText.replace("Print: ", "").trim() : "N/A"
                 });
             });
 
-            fetch("{{ route('payment.process') }}", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                    "X-CSRF-TOKEN": document.querySelector("meta[name='csrf-token']").getAttribute("content")
-                },
-                body: JSON.stringify({
-                    amount: document.querySelector(".total-price-checkout").innerText.replace("₹", "").trim(),
-                    order_data: orderData
-                })
-            })
-            .then(response => response.json())
-            .then(data => {
+            showLoader();
+
+            try {
+                let response = await fetch("{{ route('payment.process') }}", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                        "X-CSRF-TOKEN": document.querySelector("meta[name='csrf-token']").getAttribute("content")
+                    },
+                    body: JSON.stringify({
+                        amount: document.querySelector(".total-price-checkout").innerText.replace("₹", "").trim(),
+                        order_data: orderData
+                    })
+                });
+
+                let data = await response.json();
+
                 if (data.order_id) {
-                    var options = {
-                        "key": data.razorpay_key,
-                        "amount": data.amount * 100,
-                        "currency": "INR",
-                        "order_id": data.order_id,
-                        "handler": function(response) {
-                            fetch("{{ route('payment.verify') }}", {
-                                method: "POST",
-                                headers: {
-                                    "Content-Type": "application/json",
-                                    "X-CSRF-TOKEN": document.querySelector("meta[name='csrf-token']").getAttribute("content")
-                                },
-                                body: JSON.stringify({
-                                    razorpay_order_id: response.razorpay_order_id,
-                                    razorpay_payment_id: response.razorpay_payment_id,
-                                    razorpay_signature: response.razorpay_signature,
-                                    order_data: orderData 
-                                })
-                            })
-                            .then(response => response.json())
-                            .then(data => {
-                                if (data.status === 1) {
+                    let options = {
+                        key: data.razorpay_key,
+                        amount: data.amount * 100,
+                        currency: "INR",
+                        order_id: data.order_id,
+                        handler: async function (response) {
+                            try {
+                                let verifyResponse = await fetch("{{ route('payment.verify') }}", {
+                                    method: "POST",
+                                    headers: {
+                                        "Content-Type": "application/json",
+                                        "X-CSRF-TOKEN": document.querySelector("meta[name='csrf-token']").getAttribute("content")
+                                    },
+                                    body: JSON.stringify({
+                                        razorpay_order_id: response.razorpay_order_id,
+                                        razorpay_payment_id: response.razorpay_payment_id,
+                                        razorpay_signature: response.razorpay_signature,
+                                        order_data: orderData
+                                    })
+                                });
+
+                                let verifyData = await verifyResponse.json();
+
+                                if (verifyData.status === 1) {
                                     window.location.href = "{{ route('thank.you') }}";
                                 } else {
                                     alert("Payment verification failed. Please try again.");
                                 }
-                            });
-
+                            } catch (error) {
+                                alert("Something went wrong. Please try again.");
+                            } finally {
+                                hideLoader();
+                            }
                         }
                     };
-                    var rzp1 = new Razorpay(options);
+
+                    let rzp1 = new Razorpay(options);
                     rzp1.open();
+
+                    // Hide loader if payment is failed or popup is closed
+                    rzp1.on("payment.failed", function () {
+                        hideLoader();
+                    });
+                } else {
+                    alert("Order creation failed. Please try again.");
+                    hideLoader();
                 }
-            });
+            } catch (error) {
+                alert("An error occurred while processing the payment.");
+                hideLoader();
+            }
         });
+
+        // Show Loader
+        function showLoader() {
+            document.getElementById("loading-overlay").style.display = "flex";
+        }
+
+        // Hide Loader
+        function hideLoader() {
+            document.getElementById("loading-overlay").style.display = "none";
+        }
+
+        // Ensure loader is hidden on page load
+        document.addEventListener("DOMContentLoaded", function () {
+            hideLoader();
+        });
+        
 
         // Form Validation Function
         function validateForm() {
