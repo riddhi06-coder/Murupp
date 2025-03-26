@@ -381,7 +381,11 @@
 
                 let data = await response.json();
 
+                let order_id = null;
+
                 if (data.order_id) {
+                    order_id = data.order_id;
+                    
                     let options = {
                         key: data.razorpay_key,
                         amount: data.amount * 100,
@@ -399,14 +403,24 @@
                                         razorpay_order_id: response.razorpay_order_id,
                                         razorpay_payment_id: response.razorpay_payment_id,
                                         razorpay_signature: response.razorpay_signature,
+                                        order_id: order_id,
                                         order_data: orderData
                                     })
                                 });
 
                                 let verifyData = await verifyResponse.json();
+                                console.log("Verify Data:", verifyData);
 
                                 if (verifyData.status === 1) {
-                                    window.location.href = "{{ route('thank.you') }}";
+                                    // window.location.href = "{{ route('thank.you') }}";
+
+                                    // Redirect to Order Confirmation with order data
+                                    console.log("Order ID:", order_id);
+                                    
+                                    let url = "{{ route('order.confirm') }}" + "?order_id=" + order_id;
+                                    
+                                    window.location.href = url;
+
                                 } else {
                                     alert("Payment verification failed. Please try again.");
                                 }

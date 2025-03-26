@@ -242,6 +242,7 @@ class PaymentController extends Controller
             return response()->json([
                 'status' => 'Payment Verification Error',
                 'error'  => $e->getMessage()
+
             ], 500);
         }
     }

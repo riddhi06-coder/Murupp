@@ -13,6 +13,7 @@ use Carbon\Carbon;
 use Illuminate\Support\Facades\Session;
 
 use App\Models\ProductDetails;
+use App\Models\OrderDetail;
 use App\Models\Carts;
 
 
@@ -47,7 +48,17 @@ class CheckoutController extends Controller
 
     public function order_confirmation(Request $request)
     {
-        return view('frontend.order-confirmation');
+        $orderId = $request->query('order_id'); 
+    
+        $order = OrderDetail::where('order_id', $orderId)->first(); 
+        // dd($order);
+    
+        if (!$order) {
+            return redirect()->route('frontend.index')->with('error', 'Order not found.');
+        }
+    
+        return view('frontend.order-confirmation', compact('order'));
     }
+    
     
 }

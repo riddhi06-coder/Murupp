@@ -213,7 +213,7 @@ Route::group(['prefix'=> '', 'middleware'=>[\App\Http\Middleware\PreventBackHist
     Route::get('/checkout', [CheckoutController::class, 'checkout'])->name('checkout.details');
 
     //===== Order confirmation
-    Route::get('/order-confirmation', [CheckoutController::class, 'order_confirmation']);
+    Route::get('/order-confirmation', [CheckoutController::class, 'order_confirmation'])->name('order.confirm');
 
     //===== Registration Page
     Route::get('/registration', [RegistrationController::class, 'register'])->name('user.registration');
