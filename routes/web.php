@@ -194,7 +194,7 @@ Route::get('/reports/{reportType}', [ReportsController::class, 'getReportData'])
 Route::group(['prefix'=> '', 'middleware'=>[\App\Http\Middleware\PreventBackHistoryMiddleware::class]],function(){
 
     // ==== Home
-    Route::get('/', [HomeController::class, 'home'])->name('frontend.index');
+    Route::get('/home', [HomeController::class, 'home'])->name('frontend.index');
 
     // ==== About Us
     Route::get('/about-us', [HomeController::class, 'about_us'])->name('frontend.about.us');
