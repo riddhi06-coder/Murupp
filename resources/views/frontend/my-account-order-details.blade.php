@@ -158,6 +158,9 @@
                                             <li class="item-title">
                                                 <span class="inner">Receiver</span>
                                             </li>
+                                            <li class="item-title">
+                                                <span class="inner">Invoice</span>
+                                            </li>
                                         </ul>
                                         <div class="widget-content-tab">
                                             <div class="widget-content-inner active">
@@ -273,11 +276,18 @@
                                                     <li>Payment Method: <span class="fw-7"> Online Payment</span></li>
                                                 </ul>
                                             </div>
+                                            
+                                            <!-- Add Invoice PDF Here -->
+                                            <div class="widget-content-inner">
+                                                <p>Click the link below to view or download the invoice:</p><br>
+                                                <a href="{{ asset('murupp/invoices/invoice_' . $order->invoice_id . '.pdf') }}" target="_blank" class="btn btn-dark">
+                                                    View Invoice
+                                                </a>
+                                            </div>
 
-    
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
                         </div>
                     </div>
                 </div>
