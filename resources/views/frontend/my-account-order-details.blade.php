@@ -219,6 +219,7 @@
                                                 $quantities = json_decode($order->quantities, true) ?? [];
                                                 $prices = json_decode($order->prices, true) ?? [];
                                                 $size = json_decode($order->sizes, true) ?? [];
+                                                $print = json_decode($order->prints, true) ?? [];
 
                                                 // Ensure all arrays have the same length
                                                 $totalItems = count($productNames);
@@ -234,6 +235,9 @@
                                                         <div class="text-2 fw-6">{{ $productNames[$i] }}</div>
                                                         <div class="mt_4"><span class="fw-6">Price :</span> <i class="fa fa-inr" aria-hidden="true"></i> {{ number_format_indian($prices[$i] ?? 0) }}</div>
                                                         <div class="mt_4"><span class="fw-6">Size :</span> {{ $size[$i] ?? '' }}</div>
+                                                        @if(!empty($print[$i]))
+                                                            <div class="mt_4"><span class="fw-6">Print :</span> {{ $print[$i] }}</div>
+                                                        @endif
                                                         <div class="mt_4"><span class="fw-6">Quantity :</span> {{ $quantities[$i] ?? '' }}</div>
                                                     </div>
                                                 </div>
@@ -276,7 +280,7 @@
                                                     <li>Payment Method: <span class="fw-7"> Online Payment</span></li>
                                                 </ul>
                                             </div>
-                                            
+
                                             <!-- Add Invoice PDF Here -->
                                             <div class="widget-content-inner">
                                                 <p>Click the link below to view or download the invoice:</p><br>
