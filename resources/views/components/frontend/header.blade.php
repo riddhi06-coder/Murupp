@@ -276,8 +276,16 @@
                                                         </div>
                                                     </div>
                                                         <div class="d-flex align-items-center justify-content-between flex-wrap gap-12">
-                                                            <div class="text-secondary-2">
-                                                                {{ $cartItem->size }}{{ $cartItem->colors ? ' / ' . $cartItem->colors : '' }}
+                                                            <div class="d-flex flex-column">
+                                                                <div class="text-secondary-2">
+                                                                    {{ $cartItem->size }}{{ $cartItem->colors ? ' / ' . $cartItem->colors : '' }}
+                                                                </div>
+
+                                                                @if(!empty($cartItem->print))
+                                                                    <div class="text-secondary-2 mt-1">
+                                                                        Print: {{ $cartItem->print }}
+                                                                    </div>
+                                                                @endif
                                                             </div>
 
                                                             <div class="wg-quantity mx-md-auto">

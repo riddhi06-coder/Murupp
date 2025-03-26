@@ -166,13 +166,14 @@
 <body>
     <table width="100%">
         <tr>
-            <td width="50%" style="text-align: left;">
+            <td width="80%" style="text-align: left;">
                 <img src="{{ asset('frontend/assets/images/logo/logo.webp') }}" alt="Logo" style="width: 150px;">
             </td>
             <td width="50%" style="text-align: right;">
-                <h1>INVOICE</h1>
-                <p># {{ data_get($order, 'invoice_id', 'N/A') }}</p>
+                <h1 style="margin-bottom: 0;">INVOICE</h1>
+                <p style="margin-top: 0;"># {{ data_get($order, 'invoice_id', '-') }}</p>
             </td>
+
         </tr>
     </table>
  
@@ -182,7 +183,7 @@
             <td width="50%" style="vertical-align: top;">
                 <h2>Billing Address :</h2>
                 <p>
-                    @foreach(explode(',', data_get($order, 'billing_address', 'N/A')) as $part)
+                    @foreach(explode(',', data_get($order, 'billing_address', '-')) as $part)
                         {{ trim($part) }}<br>
                     @endforeach
                 </p>
@@ -192,7 +193,7 @@
             <td width="50%" style="vertical-align: top; text-align: right;">
                 <h2>Shipping Address :</h2>
                 <p>
-                    @foreach(explode(',', data_get($order, 'shipping_address', 'N/A')) as $part)
+                    @foreach(explode(',', data_get($order, 'shipping_address', '-')) as $part)
                         {{ trim($part) }}<br>
                     @endforeach
                 </p>
@@ -206,9 +207,9 @@
             <td width="50%" style="vertical-align: top;">
                 <h2>Customer Details :</h2>
                 <p>
-                    Customer Name: {{ data_get($order, 'customer_name', 'N/A') }}<br>
-                    Email: {{ data_get($order, 'customer_email', 'N/A') }}<br>
-                    Phone: +91 {{ data_get($order, 'customer_phone', 'N/A') }}<br>
+                    Customer Name: {{ data_get($order, 'customer_name', '-') }}<br>
+                    Email: {{ data_get($order, 'customer_email', '-') }}<br>
+                    Phone: +91 {{ data_get($order, 'customer_phone', '-') }}<br>
                 </p>
             </td>
         </tr>
@@ -221,6 +222,7 @@
                 <th>#</th>
                 <th>Product Name</th>
                 <th>Qty</th>
+                <th>Print</th>
                 <th>Rate</th>
                 <th>Amount</th>
             </tr>
@@ -230,25 +232,27 @@
                 $items = json_decode(data_get($order, 'product_names', '[]'), true);
                 $quantities = json_decode(data_get($order, 'quantities', '[]'), true);
                 $prices = json_decode(data_get($order, 'prices', '[]'), true);
+                $prints = json_decode(data_get($order, 'prints', '[]'), true);
             @endphp
             @foreach($items as $index => $item)
                 <tr>
                     <td>{{ $index + 1 }}</td>
                     <td>{{ $item }}</td>
-                    <td>{{ $quantities[$index] ?? 'N/A' }}</td>
-                    <td>₹ {{ number_format($prices[$index] ?? 0) }}</td>
-                    <td>₹ {{ number_format(($prices[$index] ?? 0) * ($quantities[$index] ?? 1)) }}</td>
+                    <td>{{ $quantities[$index] ?? '-' }}</td>
+                    <td>{{ !empty($prints[$index]) ? $prints[$index] : '-' }}</td>
+                    <td>₹ {{ number_format($prices[$index] ?? 0, 2) }}</td>
+                    <td>₹ {{ number_format(($prices[$index] ?? 0) * ($quantities[$index] ?? 1), 2) }}</td>
                 </tr>
             @endforeach
         </tbody>
         <tfoot>
             <tr>
-                <td colspan="4" style="text-align: right;"><b>Sub Total</b></td>
-                <td>₹ {{ number_format(data_get($order, 'total_price', 0)) }}</td>
+                <td colspan="5" style="text-align: right;"><b>Sub Total</b></td>
+                <td>₹ {{ number_format(data_get($order, 'total_price', 0), 2) }}</td>
             </tr>
             <tr>
-                <td colspan="4" style="text-align: right;"><b>Total</b></td>
-                <td>₹ {{ number_format(data_get($order, 'total_price', 0)) }}</td>
+                <td colspan="5" style="text-align: right;"><b>Total</b></td>
+                <td>₹ {{ number_format(data_get($order, 'total_price', 0), 2) }}</td>
             </tr>
         </tfoot>
     </table>

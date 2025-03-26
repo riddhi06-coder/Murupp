@@ -22,6 +22,7 @@ class OrderDetail extends Model
         'customer_phone',
         'images',
         'sizes',
+        'prints',
         'street',
         'city',
         'state',

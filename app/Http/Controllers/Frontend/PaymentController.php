@@ -102,6 +102,7 @@ class PaymentController extends Controller
                 $prices       = [];
                 $images       = [];
                 $sizes        = [];
+                $prints        = [];
             
                 foreach ($orderData['cart_items'] as $cartItem) {
                     $productIds[]   = (int) ($cartItem['product_id'] ?? 0);
@@ -110,6 +111,7 @@ class PaymentController extends Controller
                     $prices[]       = (int) str_replace(',', '', $cartItem['price']); 
                     $images[]       = $cartItem['image'] ?? null;
                     $sizes[]        = $cartItem['size'] ?? "";
+                    $prints[]        = $cartItem['print'] ?? "";
                 }
             
                 // Debugging Log to check data before inserting
@@ -120,6 +122,7 @@ class PaymentController extends Controller
                     'prices' => json_encode($prices),
                     'images'        => json_encode($images),
                     'sizes'         => json_encode($sizes),
+                    'print'         => json_encode($prints),
                 ]);
             
                 try {
@@ -146,6 +149,7 @@ class PaymentController extends Controller
                         'prices'         => json_encode($prices, JSON_UNESCAPED_UNICODE),
                         'images'         => json_encode($images, JSON_UNESCAPED_UNICODE),
                         'sizes'          => json_encode($sizes, JSON_UNESCAPED_UNICODE),
+                        'prints'          => json_encode($prints, JSON_UNESCAPED_UNICODE),
                         'created_at'     => Carbon::now(),
                         'created_by'     => Auth::check() ? Auth::id() : null,
                     ]);

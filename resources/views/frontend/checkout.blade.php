@@ -192,6 +192,11 @@
                                                             / <span class="color">{{ $cartItem->colors }}</span>
                                                         @endif
                                                     </div>
+                                                    <div class="variant text-caption-1 text-secondary mt-1">
+                                                        @if ($cartItem->print)
+                                                        <span class="product-print print">Print: {{ $cartItem->print }}</span>
+                                                        @endif
+                                                    </div>
                                                     <div class="quantity text-caption-1 text-secondary mt-1">
                                                         Quantity: <strong>{{ $cartItem->quantity }}</strong>
                                                     </div>
@@ -316,6 +321,7 @@
                 let quantityElement = item.querySelector(".quantity strong");
                 let imageElement = item.querySelector(".product-image");
                 let sizeElement = item.querySelector(".product-size");
+                let printElement = item.querySelector(".product-print");
 
                 orderData.cart_items.push({
                     product_id: productElement.getAttribute("data-id"), 
@@ -323,7 +329,8 @@
                     quantity: quantityElement ? parseInt(quantityElement.innerText) : 1,
                     price: item.querySelector(".price").innerText.replace("₹", "").trim(),
                     image: imageElement ? imageElement.getAttribute("src") : "", 
-                    size: sizeElement ? sizeElement.innerText : "N/A"
+                    size: sizeElement ? sizeElement.innerText : "N/A",
+                    print: printElement ? printElement.innerText.replace("Print: ", "").trim() : "N/A"
                 });
             });
 

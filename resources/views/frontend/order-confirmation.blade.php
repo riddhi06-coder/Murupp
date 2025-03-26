@@ -51,6 +51,7 @@
                         <h3 class="heading text-center">Thank You for Your Purchase!</h3>
                         <p class="text-center">Your order has been successfully placed. A confirmation email has been sent to <a href="mailto:johndoe@example.com">johndoe@example.com.</a></p>
                         <hr>
+                        
                         <!-- <h5 class="fw-5 mb_20">Customer Details</h5> -->
                         <!-- <div class="tf-page-cart-checkout-1">
                             <div class="d-flex align-items-center justify-content-between mb_15">
