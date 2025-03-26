@@ -167,7 +167,7 @@
     <table width="100%">
         <tr>
             <td width="80%" style="text-align: left;">
-                <img src="{{ asset('frontend/assets/images/logo/logo.webp') }}" alt="Logo" style="width: 150px;">
+                <img src="{{ asset('public/frontend/assets/images/logo/logo.webp') }}" alt="Logo" style="width: 150px;">
             </td>
             <td width="50%" style="text-align: right;">
                 <h1 style="margin-bottom: 0;">INVOICE</h1>
