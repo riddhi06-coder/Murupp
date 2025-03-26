@@ -224,11 +224,11 @@
                     <!-- Image Section -->
                     <div class="col-lg-5 col-md-6">
                     <div class="about-us-features wow fadeInLeft">
-                        <img class="lazyload"
+                        <img class=""
                             data-src="{{ asset('murupp/home/collection-details/' . $collectionDetail->image) }}"
                             src="{{ asset('murupp/home/collection-details/default-placeholder.jpg') }}" 
                             alt="{{ $collectionDetail->heading }}" 
-                            loading="lazy">
+                            >
                     </div>
 
                     </div>
