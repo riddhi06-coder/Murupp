@@ -172,7 +172,7 @@
                       <div class="col-xl-7 col-sm-6">
                           <div class="card height-equal">
                               <div class="card-header pb-0 total-revenue card-no-border"> 
-                                  <h4>Sale History</h4><a href="index.html">View All</a>
+                                  <h4>Sale History</h4>
                               </div>
                               <div class="card-body"> 
                                 <ul>
