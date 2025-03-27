@@ -181,7 +181,7 @@
         <tr>
             <!-- Left Column: Bill To -->
             <td width="50%" style="vertical-align: top;">
-                <h2>Billing Address :</h2>
+                <h3>Billing Address :</h3>
                 <p>
                     @foreach(explode(',', data_get($order, 'billing_address', '-')) as $part)
                         {{ trim($part) }}<br>
@@ -191,7 +191,7 @@
  
             <!-- Right Column: From -->
             <td width="50%" style="vertical-align: top; text-align: right;">
-                <h2>Shipping Address :</h2>
+                <h3>Shipping Address :</h3>
                 <p>
                     @foreach(explode(',', data_get($order, 'shipping_address', '-')) as $part)
                         {{ trim($part) }}<br>
@@ -205,7 +205,7 @@
         <tr>
             <!-- Left Column: Bill To -->
             <td width="50%" style="vertical-align: top;">
-                <h2>Customer Details :</h2>
+                <h3>Customer Details :</h3>
                 <p>
                     Customer Name: {{ data_get($order, 'customer_name', '-') }}<br>
                     Email: {{ data_get($order, 'customer_email', '-') }}<br>
