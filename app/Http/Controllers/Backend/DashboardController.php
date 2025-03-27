@@ -198,15 +198,17 @@ class DashboardController extends Controller
                     ->limit(5) // Fetch Top 5 Products
                     ->get()
                     ->map(function ($order) {
-                        $product = ProductDetails::find($order->product_id);
+                        $product = ProductDetails::select('product_name', 'slug')->find($order->product_id);
                         return [
-                            'product_name' => $product ? $product->product_name : 'Unknown Product',
+                            'product_name'  => $product ? $product->product_name : 'Unknown Product',
+                            'slug'          => $product ? $product->slug : null,
                             'total_revenue' => $order->total_revenue
                         ];
                     });
 
 
-        $productNames = collect($topProducts)->pluck('product_name')->toArray();
+
+        $productNames = collect($topProducts)->pluck('product_name','slug')->toArray();
         $revenuesByProduct = collect($topProducts)->pluck('total_revenue')->toArray();
                         
 

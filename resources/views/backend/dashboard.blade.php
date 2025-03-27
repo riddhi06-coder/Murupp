@@ -175,20 +175,25 @@
                                   <h4>Sale History</h4><a href="index.html">View All</a>
                               </div>
                               <div class="card-body"> 
-                                  <ul>
-                                      @foreach($productNames as $index => $product)
-                                      <li class="sale-history-card">
-                                          <div class="history-price">
-                                              <a class="f-w-500 f-14 mb-0" href="product/{{ $product }}">{{ $product }}</a>
-                                              <span class="mb-0 txt-primary f-w-600 f-16">₹{{ number_format($revenuesByProduct[$index], 2) }}</span>
-                                          </div>
-                                          <div class="state-time">
-                                              <span class="f-w-500 f-14 f-light mb-0">Revenue from {{ $product }}</span>
-                                              <span class="f-w-400 f-14 f-light">Last Month</span>
-                                          </div>
-                                      </li>
-                                      @endforeach
-                                  </ul>
+                                <ul>
+                                    @foreach($productNames as $slug => $product)
+                                        <li class="sale-history-card">
+                                            <div class="history-price">
+                                                <a class="f-w-500 f-14 mb-0" href="{{ url('product-detail/' . $slug) }}">
+                                                    {{ $product }}
+                                                </a>
+                                                <span class="mb-0 txt-primary f-w-600 f-16">
+                                                    ₹{{ number_format($revenuesByProduct[$loop->index] ?? 0, 2) }}
+                                                </span>
+                                            </div>
+                                            <div class="state-time">
+                                                <span class="f-w-500 f-14 f-light mb-0">Revenue from {{ $product }}</span>
+                                                <!-- <span class="f-w-400 f-14 f-light">Last Month</span> -->
+                                            </div>
+                                        </li>
+                                    @endforeach
+                                </ul>
+
                               </div>
                           </div>
                       </div>
