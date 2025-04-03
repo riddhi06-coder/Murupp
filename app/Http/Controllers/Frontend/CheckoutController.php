@@ -77,8 +77,7 @@ class CheckoutController extends Controller
 
         Otp::updateOrCreate(
             ['mobile_no' => $mobile],
-            ['otp' => $otp],
-            ['inserted_at' => Carbon::now()]
+            ['otp' => $otp, 'created_at' => Carbon::now()]
         );
 
         // API Credentials
@@ -116,25 +115,36 @@ class CheckoutController extends Controller
     {
         $mobile = $request->mobile;
         $enteredOtp = $request->otp;
-
+    
         $otpRecord = Otp::where('mobile_no', $mobile)->first();
-
-        if ($otpRecord && $otpRecord->otp == $enteredOtp) {
-            $otpRecord->delete();
-
+    
+        if (!$otpRecord) {
+            return response()->json(['success' => false, 'message' => 'Invalid OTP.']);
+        }
+    
+        // Check if OTP is expired (older than 5 minutes)
+        if (Carbon::parse($otpRecord->created_at)->addMinutes(5)->isPast()) {
+            $otpRecord->delete(); // Delete expired OTP
+            return response()->json(['success' => false, 'message' => 'OTP expired. Please request a new one.']);
+        }
+    
+        // If OTP matches
+        if ($otpRecord->otp == $enteredOtp) {
+            $otpRecord->delete(); 
+    
+            // Check if user already exists
             if (User::where('mobile', $mobile)->exists()) {
                 return response()->json(['success' => false, 'message' => 'This mobile number is already registered. Please Login to proceed']);
             }
-
-            User::create([
-                'mobile' => $mobile
-            ]);
-
+    
+            User::create(['mobile' => $mobile]);
+    
             return response()->json(['success' => true, 'message' => 'OTP Verified Successfully!']);
         } else {
             return response()->json(['success' => false, 'message' => 'Invalid OTP.']);
         }
     }
+    
 
 
 
