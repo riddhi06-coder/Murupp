@@ -72,16 +72,16 @@ Route::get('/register', [LoginController::class, 'register'])->name('admin.regis
 Route::post('/register', [LoginController::class, 'authenticate_register'])->name('admin.register.authenticate');
     
 // // Admin Routes with Middleware
-// Route::group(['middleware' => ['auth:web', \App\Http\Middleware\PreventBackHistoryMiddleware::class]], function () {
-//         Route::get('/dashboard', function () {
-//             return view('backend.dashboard'); 
-//         })->name('admin.dashboard');
-// });
-
-
 Route::group(['middleware' => ['auth:web', \App\Http\Middleware\PreventBackHistoryMiddleware::class]], function () {
-    Route::get('/dashboard', [DashboardController::class, 'dashboard'])->name('admin.dashboard');
+        Route::get('/dashboard', function () {
+            return view('backend.dashboard'); 
+        })->name('admin.dashboard');
 });
+
+
+// Route::group(['middleware' => ['auth:web', \App\Http\Middleware\PreventBackHistoryMiddleware::class]], function () {
+//     Route::get('/dashboard', [DashboardController::class, 'dashboard'])->name('admin.dashboard');
+// });
 
 // ==== Manage User List in User Management
 Route::resource('user-list', UserDetailsController::class);
