@@ -85,7 +85,7 @@
 
                                     <form id="otpForm" class="login-box">
                                         @csrf
-                                        <div class="grid-1">
+                                        <div id="otpContainer" class="grid-1">
                                             <input type="tel" name="mobile" id="mobile" placeholder="Enter Mobile Number" required><br><br>
                                             <button type="button" id="sendOtpBtn" class="tf-btn">
                                                 <span class="text">Send OTP</span>
@@ -93,7 +93,7 @@
                                         </div>
 
                                         <div id="otpSection" style="display: none;">
-                                            <input type="text" name="otp" id="otp" placeholder="Enter OTP" required>
+                                            <input type="text" name="otp" id="otp" placeholder="Enter OTP" required><br><br>
                                             <button class="tf-btn" type="submit">
                                                 <span class="text">Verify OTP</span>
                                             </button>
@@ -103,6 +103,7 @@
                                     <div id="otpMessage"></div>
                                 </div>
                             @endif
+
 
 
                             @php
@@ -675,18 +676,22 @@
                 })
                 .then(response => response.json())
                 .then(data => {
+                    document.getElementById('otpMessage').innerHTML = `<p style="color: ${data.success ? 'green' : 'red'};">${data.message}</p>`;
+
                     if (data.success) {
                         document.getElementById('otpSection').style.display = 'block';
-                        document.getElementById('otpMessage').innerHTML = '<p style="color: green;">OTP sent successfully!</p>';
-                    } else {
-                        document.getElementById('otpMessage').innerHTML = '<p style="color: red;">' + data.message + '</p>';
+                        document.getElementById('otpContainer').style.display = 'none'; 
                     }
                 })
-                .catch(error => console.error('Error:', error));
+                .catch(error => {
+                    console.error('Error:', error);
+                    document.getElementById('otpMessage').innerHTML = '<p style="color: red;">An error occurred while sending OTP. Please try again.</p>';
+                });
             } else {
                 document.getElementById('otpMessage').innerHTML = '<p style="color: red;">Enter a valid mobile number</p>';
             }
         });
+
 
         document.getElementById('otpForm').addEventListener('submit', function (event) {
             event.preventDefault();
