@@ -17,7 +17,6 @@
                 <li class="back-btn"><a href="{{ route('admin.dashboard') }}"><img class="img-fluid" src="{{ asset('admin/assets/images/logo/logo-icon.png') }}" alt=""></a>
                   <div class="mobile-back text-end"> <span>Back </span><i class="fa fa-angle-right ps-2" aria-hidden="true"></i></div>
                 </li>
-
              
                 <li class="sidebar-list {{ request()->routeIs('admin.dashboard') ? 'active' : '' }}">
                   <i class="fa fa-thumb-tack"> </i>
@@ -32,33 +31,32 @@
                   </a>
                 </li>
 
-
-                
                 <li class="sidebar-list {{ request()->routeIs('user-list.index', 'user-permissions.index') ? 'active' : '' }}">
-                  <a class="sidebar-link sidebar-title {{ request()->routeIs('user-list.index', 'user-permissions.index') ? 'active' : '' }}" href="#">
-                      <svg class="stroke-icon">
-                          <use href="{{ asset('admin/assets/svg/icon-sprite.svg#stroke-user') }}"></use>
-                      </svg>
-                      <svg class="fill-icon">
-                          <use href="{{ asset('admin/assets/svg/icon-sprite.svg#fill-user') }}"></use>
-                      </svg>
-                      <span>User Management</span>
-                  </a>
-                  <ul class="sidebar-submenu">
-                      <li>
-                          <a href="{{ route('user-list.index') }}" class="sidebar-link {{ request()->routeIs('user-list.index') ? 'active' : '' }}">
-                              New User
-                          </a>
-                      </li>
-                      <li>
-                          <a href="{{ route('user-permissions.index') }}" class="sidebar-link {{ request()->routeIs('user-permissions.index') ? 'active' : '' }}">
-                              User Permissions
-                          </a>
-                      </li>
-                  </ul>
-              </li>
+                  <i class="fa fa-thumb-tack"></i>
+                    <a class="sidebar-link sidebar-title {{ request()->routeIs('user-list.index', 'user-permissions.index') ? 'active' : '' }}" href="#">
+                        <svg class="stroke-icon">
+                            <use href="{{ asset('admin/assets/svg/icon-sprite.svg#stroke-user') }}"></use>
+                        </svg>
+                        <svg class="fill-icon">
+                            <use href="{{ asset('admin/assets/svg/icon-sprite.svg#fill-user') }}"></use>
+                        </svg>
+                        <span>User Management</span>
+                    </a>
+                    <ul class="sidebar-submenu">
+                        <li>
+                            <a href="{{ route('user-list.index') }}" class="sidebar-link {{ request()->routeIs('user-list.index') ? 'active' : '' }}">
+                                New User
+                            </a>
+                        </li>
+                        <li>
+                            <a href="{{ route('user-permissions.index') }}" class="sidebar-link {{ request()->routeIs('user-permissions.index') ? 'active' : '' }}">
+                                User Permissions
+                            </a>
+                        </li>
+                    </ul>
+                </li>
 
-              <li class="sidebar-list {{ request()->routeIs('about.index') ? 'active' : '' }}">
+                <li class="sidebar-list {{ request()->routeIs('about.index') ? 'active' : '' }}">
                     <i class="fa fa-thumb-tack"></i>
                     <a class="sidebar-link" href="{{ route('about.index') }}">
                         <svg class="stroke-icon"> 
@@ -245,10 +243,6 @@
                     @else
                     @endif
                 </li>
-
-             
-
-
               </ul>
               <div class="right-arrow" id="right-arrow"><i data-feather="arrow-right"></i></div>
             </div>

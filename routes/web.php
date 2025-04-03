@@ -194,7 +194,7 @@ Route::get('/reports/{reportType}', [ReportsController::class, 'getReportData'])
 Route::group(['prefix'=> '', 'middleware'=>[\App\Http\Middleware\PreventBackHistoryMiddleware::class]],function(){
 
     // ==== Home
-    Route::get('/home', [HomeController::class, 'home'])->name('frontend.index');
+    Route::get('/', [HomeController::class, 'home'])->name('frontend.index');
 
     // ==== About Us
     Route::get('/about-us', [HomeController::class, 'about_us'])->name('frontend.about.us');
@@ -306,6 +306,9 @@ Route::group(['prefix'=> '', 'middleware'=>[\App\Http\Middleware\PreventBackHist
     //===== For Collection Page Filter
     Route::get('/collection-changes/filters', [CollectionController::class, 'filter_collection_Products'])->name('changes.filter');
 
+    //======== Send OTP
+    Route::post('/send-otp', [CheckoutController::class, 'sendOtp'])->name('send.otp');
+    Route::post('/verify-otp', [CheckoutController::class, 'verifyOtp'])->name('verify.otp');
 
 
 

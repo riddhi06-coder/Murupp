@@ -55,7 +55,7 @@
                 <div class="row">
                     <div class="col-xl-6">
                         <div class="flat-spacing tf-page-checkout">
-                            @if(!Auth::check())
+                            <!-- @if(!Auth::check())
                                 <div class="wrap">
                                     <div class="title-login">
                                         <p>Already have an account?</p>
@@ -73,10 +73,10 @@
                                     <div id="loginMessage"></div>
                             
                                 </div>
-                            @endif
+                            @endif -->
 
 
-                            <!-- @if(!Auth::check())
+                            @if(!Auth::check())
                                 <div class="wrap">
                                     <div class="title-login">
                                         <p>Already have an account?</p>
@@ -102,7 +102,7 @@
 
                                     <div id="otpMessage"></div>
                                 </div>
-                            @endif -->
+                            @endif
 
 
                             @php
@@ -657,6 +657,60 @@
                 shippingAddress.readOnly = false;
             }
         });
+    </script>
+
+
+    <script>
+        document.getElementById('sendOtpBtn').addEventListener('click', function () {
+            let mobile = document.getElementById('mobile').value;
+
+            if (mobile.length === 10) {
+                fetch("{{ route('send.otp') }}", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                        "X-CSRF-TOKEN": document.querySelector('meta[name="csrf-token"]').content
+                    },
+                    body: JSON.stringify({ mobile: mobile })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        document.getElementById('otpSection').style.display = 'block';
+                        document.getElementById('otpMessage').innerHTML = '<p style="color: green;">OTP sent successfully!</p>';
+                    } else {
+                        document.getElementById('otpMessage').innerHTML = '<p style="color: red;">' + data.message + '</p>';
+                    }
+                })
+                .catch(error => console.error('Error:', error));
+            } else {
+                document.getElementById('otpMessage').innerHTML = '<p style="color: red;">Enter a valid mobile number</p>';
+            }
+        });
+
+        document.getElementById('otpForm').addEventListener('submit', function (event) {
+            event.preventDefault();
+
+            let otp = document.getElementById('otp').value;
+
+            fetch("{{ route('verify.otp') }}", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    "X-CSRF-TOKEN": document.querySelector('meta[name="csrf-token"]').content
+                },
+                body: JSON.stringify({ otp: otp })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    document.getElementById('otpMessage').innerHTML = '<p style="color: green;">OTP Verified Successfully!</p>';
+                } else {
+                    document.getElementById('otpMessage').innerHTML = '<p style="color: red;">' + data.message + '</p>';
+                }
+            });
+        });
+
     </script>
 
 
