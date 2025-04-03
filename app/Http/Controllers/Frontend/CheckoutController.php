@@ -16,6 +16,8 @@ use Illuminate\Support\Facades\Session;
 use App\Models\ProductDetails;
 use App\Models\OrderDetail;
 use App\Models\Carts;
+use App\Models\Otp;
+use App\Models\User;
 
 
 class CheckoutController extends Controller
@@ -66,39 +68,40 @@ class CheckoutController extends Controller
     public function sendOtp(Request $request)
     {
         $mobile = $request->mobile;
-    
+
         // Validate mobile number (Indian format)
         if (!preg_match('/^[6-9]\d{9}$/', $mobile)) {
             return response()->json(['success' => false, 'message' => 'Invalid mobile number']);
         }
-    
+
         // Generate a 6-digit OTP
         $otp = rand(100000, 999999);
-    
-        // Store OTP in session
-        Session::put('otp', $otp);
-        Session::put('mobile', $mobile);
-    
-        // API Credentials (Ensure they match Postman)
-        $accountId = env('SMSCOUNTRY_API_KEY'); // Same as Postman
-        $apiToken = env('SMSCOUNTRY_API_TOKEN'); // Ensure this is correct
+
+        // Store OTP in the database (Update if already exists)
+        Otp::updateOrCreate(
+            ['mobile_no' => $mobile],
+            ['otp' => $otp],
+            ['inserted_at' => Carbon::now()]
+        );
+
+        // API Credentials
+        $accountId = env('SMSCOUNTRY_API_KEY'); 
+        $apiToken = env('SMSCOUNTRY_API_TOKEN'); 
         $apiUrl = "https://restapi.smscountry.com/v0.1/Accounts/$accountId/SMSes";
         $senderID = env('SMSCOUNTRY_SENDER_ID');
-    
-        // Use Laravel's built-in basic auth
+
+        // Send OTP via API
         $response = Http::withBasicAuth($accountId, $apiToken)
-            ->withHeaders([
-                'Content-Type' => 'application/json'
-            ])
+            ->withHeaders(['Content-Type' => 'application/json'])
             ->post($apiUrl, [
                 "Text" => "$otp is your Murupp verification code. - Murupp",
                 "Number" => $mobile,
                 "SenderId" => $senderID,
                 "Tool" => "API"
             ]);
-    
+
         $responseData = $response->json();
-    
+
         if (isset($responseData['Success']) && strtolower($responseData['Success']) === "true") {
             return response()->json(['success' => true, 'message' => 'OTP sent successfully!']);
         } else {
@@ -108,21 +111,39 @@ class CheckoutController extends Controller
                 'error' => $responseData
             ]);
         }
-        
     }
+
+
 
     public function verifyOtp(Request $request)
     {
+        $mobile = $request->mobile;
         $enteredOtp = $request->otp;
-        $storedOtp = Session::get('otp');
 
-        if ($enteredOtp == $storedOtp) {
-            Session::forget('otp'); 
+        // Retrieve the OTP from the database
+        $otpRecord = Otp::where('mobile_no', $mobile)->first();
+
+        if ($otpRecord && $otpRecord->otp == $enteredOtp) {
+            // Delete the OTP entry
+            $otpRecord->delete();
+
+            // Check if mobile is already registered
+            if (User::where('mobile', $mobile)->exists()) {
+                return response()->json(['success' => false, 'message' => 'This mobile number is already registered. Please Login to proceed']);
+            }
+
+            // Create a new user
+            User::create([
+                'mobile' => $mobile
+            ]);
+
             return response()->json(['success' => true, 'message' => 'OTP Verified Successfully!']);
         } else {
             return response()->json(['success' => false, 'message' => 'Invalid OTP.']);
         }
     }
+
+
 
 
 }

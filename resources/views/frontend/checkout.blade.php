@@ -23,6 +23,7 @@
             100% { transform: rotate(360deg); }
         }
 
+        
     </style>
 
 </head>
@@ -88,7 +89,7 @@
                                         <div id="otpContainer" class="grid-1">
                                             <input type="tel" name="mobile" id="mobile" placeholder="Enter Mobile Number" required><br><br>
                                             <button type="button" id="sendOtpBtn" class="tf-btn">
-                                                <span class="text">Send OTP</span>
+                                                <span id="btnText">Send OTP</span>
                                             </button>
                                         </div>
 
@@ -97,15 +98,18 @@
                                             <button class="tf-btn" type="submit">
                                                 <span class="text">Verify OTP</span>
                                             </button>
+                                            <button type="button" id="resendOtpBtn" class="tf-btn" style="display: none;">
+                                                <span id="resendBtnText">Resend OTP</span>
+                                            </button>
                                         </div>
                                     </form>
 
                                     <div id="otpMessage"></div>
                                 </div>
                             @endif
+                            
 
-
-
+                            
                             @php
                                 use App\Models\OrderDetail;
 
@@ -662,8 +666,22 @@
 
 
     <script>
+
         document.getElementById('sendOtpBtn').addEventListener('click', function () {
+            sendOtp();
+        });
+
+        document.getElementById('resendOtpBtn').addEventListener('click', function () {
+            resetForm(); 
+        });
+
+        function sendOtp() {
             let mobile = document.getElementById('mobile').value;
+            let sendOtpBtn = document.getElementById('sendOtpBtn');
+            let btnText = document.getElementById('btnText');
+            let mobileInput = document.getElementById('mobile');
+            let otpSection = document.getElementById('otpSection');
+            let resendOtpBtn = document.getElementById('resendOtpBtn');
 
             if (mobile.length === 10) {
                 fetch("{{ route('send.otp') }}", {
@@ -679,8 +697,12 @@
                     document.getElementById('otpMessage').innerHTML = `<p style="color: ${data.success ? 'green' : 'red'};">${data.message}</p>`;
 
                     if (data.success) {
-                        document.getElementById('otpSection').style.display = 'block';
-                        document.getElementById('otpContainer').style.display = 'none'; 
+                        otpSection.style.display = 'block';   // Show OTP input & verify button
+                        sendOtpBtn.style.display = 'none';    // Hide "Send OTP" button
+                        mobileInput.style.display = 'none';   // Hide mobile number input
+                        resendOtpBtn.style.display = 'inline-block'; // Show "Resend OTP" button
+
+                        startTimer(120, resendOtpBtn, document.getElementById('resendBtnText')); // Start countdown
                     }
                 })
                 .catch(error => {
@@ -690,7 +712,49 @@
             } else {
                 document.getElementById('otpMessage').innerHTML = '<p style="color: red;">Enter a valid mobile number</p>';
             }
-        });
+        }
+
+        function resetForm() {
+            let mobileInput = document.getElementById('mobile');
+            let sendOtpBtn = document.getElementById('sendOtpBtn');
+            let resendOtpBtn = document.getElementById('resendOtpBtn');
+            let otpSection = document.getElementById('otpSection');
+            let otpInput = document.getElementById('otp');
+            
+            // Reset fields
+            mobileInput.style.display = 'block';  // Show mobile input
+            mobileInput.value = '';  // Clear mobile number field
+            sendOtpBtn.style.display = 'inline-block'; // Show "Send OTP" button
+            resendOtpBtn.style.display = 'none'; // Hide "Resend OTP" button
+            otpSection.style.display = 'none';   // Hide OTP input & Verify button
+            otpInput.value = ''; // Clear OTP input field
+            document.getElementById('otpMessage').innerHTML = ''; // Clear message
+        }
+
+        function startTimer(duration, button, btnText) {
+            let timeLeft = duration;
+            button.disabled = true; // Disable button
+
+            function updateTimer() {
+                let minutes = Math.floor(timeLeft / 60);
+                let seconds = timeLeft % 60;
+                let formattedTime = `Resend OTP in <b>${minutes}:${seconds < 10 ? "0" : ""}${seconds}s</b>`;
+
+                console.log(formattedTime); // Debugging log
+                btnText.innerHTML = formattedTime;
+
+                if (timeLeft > 0) {
+                    timeLeft--;
+                    setTimeout(updateTimer, 1000); // Continue updating
+                } else {
+                    button.disabled = false;
+                    btnText.innerHTML = 'Resend OTP';
+                }
+            }
+
+            updateTimer();
+        }
+
 
 
         document.getElementById('otpForm').addEventListener('submit', function (event) {
