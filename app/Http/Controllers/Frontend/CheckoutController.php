@@ -69,15 +69,12 @@ class CheckoutController extends Controller
     {
         $mobile = $request->mobile;
 
-        // Validate mobile number (Indian format)
         if (!preg_match('/^[6-9]\d{9}$/', $mobile)) {
             return response()->json(['success' => false, 'message' => 'Invalid mobile number']);
         }
 
-        // Generate a 6-digit OTP
         $otp = rand(100000, 999999);
 
-        // Store OTP in the database (Update if already exists)
         Otp::updateOrCreate(
             ['mobile_no' => $mobile],
             ['otp' => $otp],
@@ -120,19 +117,15 @@ class CheckoutController extends Controller
         $mobile = $request->mobile;
         $enteredOtp = $request->otp;
 
-        // Retrieve the OTP from the database
         $otpRecord = Otp::where('mobile_no', $mobile)->first();
 
         if ($otpRecord && $otpRecord->otp == $enteredOtp) {
-            // Delete the OTP entry
             $otpRecord->delete();
 
-            // Check if mobile is already registered
             if (User::where('mobile', $mobile)->exists()) {
                 return response()->json(['success' => false, 'message' => 'This mobile number is already registered. Please Login to proceed']);
             }
 
-            // Create a new user
             User::create([
                 'mobile' => $mobile
             ]);
