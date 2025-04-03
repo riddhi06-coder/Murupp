@@ -757,29 +757,6 @@
 
 
 
-        // document.getElementById('otpForm').addEventListener('submit', function (event) {
-        //     event.preventDefault();
-
-        //     let otp = document.getElementById('otp').value;
-
-        //     fetch("{{ route('verify.otp') }}", {
-        //         method: "POST",
-        //         headers: {
-        //             "Content-Type": "application/json",
-        //             "X-CSRF-TOKEN": document.querySelector('meta[name="csrf-token"]').content
-        //         },
-        //         body: JSON.stringify({ otp: otp })
-        //     })
-        //     .then(response => response.json())
-        //     .then(data => {
-        //         if (data.success) {
-        //             document.getElementById('otpMessage').innerHTML = '<p style="color: green;">OTP Verified Successfully!</p>';
-        //         } else {
-        //             document.getElementById('otpMessage').innerHTML = '<p style="color: red;">' + data.message + '</p>';
-        //         }
-        //     });
-        // });
-
         document.getElementById('otpForm').addEventListener('submit', function (e) {
             e.preventDefault();
 
