@@ -78,11 +78,6 @@ Route::group(['middleware' => ['auth:web', \App\Http\Middleware\PreventBackHisto
         })->name('admin.dashboard');
 });
 
-
-// Route::group(['middleware' => ['auth:web', \App\Http\Middleware\PreventBackHistoryMiddleware::class]], function () {
-//     Route::get('/dashboard', [DashboardController::class, 'dashboard'])->name('admin.dashboard');
-// });
-
 // ==== Manage User List in User Management
 Route::resource('user-list', UserDetailsController::class);
 Route::post('/update-status', [UserDetailsController::class, 'updateStatus'])->name('update.status');

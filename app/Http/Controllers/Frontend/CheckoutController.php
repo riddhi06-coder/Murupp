@@ -61,7 +61,7 @@ class CheckoutController extends Controller
         return view('frontend.order-confirmation', compact('order'));
     }
     
-    
+
 
     public function sendOtp(Request $request)
     {
@@ -74,37 +74,42 @@ class CheckoutController extends Controller
     
         // Generate a 6-digit OTP
         $otp = rand(100000, 999999);
-        
+    
         // Store OTP in session
         Session::put('otp', $otp);
         Session::put('mobile', $mobile);
     
-        // SMS Country API credentials from .env
-        $apiUrl = env('SMSCOUNTRY_API_URL');
-        $apiKey = env('SMSCOUNTRY_API_KEY');
-        $apiToken = env('SMSCOUNTRY_API_TOKEN');
+        // API Credentials (Ensure they match Postman)
+        $accountId = env('SMSCOUNTRY_API_KEY'); // Same as Postman
+        $apiToken = env('SMSCOUNTRY_API_TOKEN'); // Ensure this is correct
+        $apiUrl = "https://restapi.smscountry.com/v0.1/Accounts/$accountId/SMSes";
         $senderID = env('SMSCOUNTRY_SENDER_ID');
     
-        // SMS template with dynamic OTP
-        $message = "{$otp} is your Murupp verification code. - Murupp";
+        // Use Laravel's built-in basic auth
+        $response = Http::withBasicAuth($accountId, $apiToken)
+            ->withHeaders([
+                'Content-Type' => 'application/json'
+            ])
+            ->post($apiUrl, [
+                "Text" => "$otp is your Murupp verification code. - Murupp",
+                "Number" => $mobile,
+                "SenderId" => $senderID,
+                "Tool" => "API"
+            ]);
     
-        // API request
-        $response = Http::withHeaders([
-            "Authorization" => "Bearer $apiToken",
-            "Content-Type" => "application/json"
-        ])->post($apiUrl, [
-            "Number" => $mobile,
-            "Text" => $message,
-            "SenderId" => $senderID
-        ]);
+        $responseData = $response->json();
     
-        if ($response->successful()) {
+        if (isset($responseData['Success']) && strtolower($responseData['Success']) === "true") {
             return response()->json(['success' => true, 'message' => 'OTP sent successfully!']);
         } else {
-            return response()->json(['success' => false, 'message' => 'Failed to send OTP.']);
+            return response()->json([
+                'success' => false,
+                'message' => 'Failed to send OTP.',
+                'error' => $responseData
+            ]);
         }
+        
     }
-
 
     public function verifyOtp(Request $request)
     {
