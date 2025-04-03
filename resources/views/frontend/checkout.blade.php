@@ -664,7 +664,7 @@
         });
     </script>
 
-
+    <!----- OTP Sending verifying with timer---->  
     <script>
 
         document.getElementById('sendOtpBtn').addEventListener('click', function () {
