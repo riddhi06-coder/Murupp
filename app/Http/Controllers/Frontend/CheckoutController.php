@@ -13,6 +13,7 @@ use Illuminate\Support\Facades\Http;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Session;
 
+use App\Http\Controllers\Frontend\CartController;
 use App\Models\ProductDetails;
 use App\Models\OrderDetail;
 use App\Models\Carts;
@@ -110,7 +111,6 @@ class CheckoutController extends Controller
     }
 
 
-
     public function verifyOtp(Request $request)
     {
         $mobile = $request->mobile;
@@ -124,29 +124,38 @@ class CheckoutController extends Controller
     
         // Check if OTP is expired (older than 5 minutes)
         if (Carbon::parse($otpRecord->created_at)->addMinutes(5)->isPast()) {
-            $otpRecord->delete(); // Delete expired OTP
             return response()->json(['success' => false, 'message' => 'OTP expired. Please request a new one.']);
         }
     
         // If OTP matches
         if ($otpRecord->otp == $enteredOtp) {
-            $otpRecord->delete(); 
     
             // Check if user already exists
-            if (User::where('mobile', $mobile)->exists()) {
-                return response()->json(['success' => false, 'message' => 'This mobile number is already registered. Please Login to proceed']);
+            $user = User::where('phone', $mobile)->first();
+            
+            if (!$user) {
+                $user = User::create(['phone' => $mobile]);
             }
     
-            User::create(['mobile' => $mobile]);
+            // Log in the user
+            Auth::login($user);
     
-            return response()->json(['success' => true, 'message' => 'OTP Verified Successfully!']);
+            // Delete OTP record after successful verification
+            $otpRecord->delete(); 
+    
+            return response()->json([
+                'success' => true,
+                'message' => 'OTP Verified Successfully!',
+                'redirect' => url()->current() // Redirect to the same page
+            ]);
         } else {
             return response()->json(['success' => false, 'message' => 'Invalid OTP.']);
         }
     }
+
+
     
-
-
+    
 
 
 }

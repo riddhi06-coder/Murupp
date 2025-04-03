@@ -149,9 +149,8 @@
                                         <!-- If user is logged in -->
                                         <div class="sub-top">
                                             <p class="text-center text-secondary-2" style="font-size: 18px; font-weight: bold;">
-                                                Welcome, <strong>{{ Auth::user()->name }}</strong>
+                                                Welcome, <strong>{{ Auth::user()->name ?? Auth::user()->phone }}</strong>
                                             </p>
-
 
                                             <a href="{{ route('my.account') }}" class="tf-btn btn-reset btn-small">My Account</a>
                                             <a href="{{ route('user.forgotpassword') }}" class="tf-btn btn-reset btn-small">Forgot Password?</a>

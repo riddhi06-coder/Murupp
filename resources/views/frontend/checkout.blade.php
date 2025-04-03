@@ -757,9 +757,33 @@
 
 
 
-        document.getElementById('otpForm').addEventListener('submit', function (event) {
-            event.preventDefault();
+        // document.getElementById('otpForm').addEventListener('submit', function (event) {
+        //     event.preventDefault();
 
+        //     let otp = document.getElementById('otp').value;
+
+        //     fetch("{{ route('verify.otp') }}", {
+        //         method: "POST",
+        //         headers: {
+        //             "Content-Type": "application/json",
+        //             "X-CSRF-TOKEN": document.querySelector('meta[name="csrf-token"]').content
+        //         },
+        //         body: JSON.stringify({ otp: otp })
+        //     })
+        //     .then(response => response.json())
+        //     .then(data => {
+        //         if (data.success) {
+        //             document.getElementById('otpMessage').innerHTML = '<p style="color: green;">OTP Verified Successfully!</p>';
+        //         } else {
+        //             document.getElementById('otpMessage').innerHTML = '<p style="color: red;">' + data.message + '</p>';
+        //         }
+        //     });
+        // });
+
+        document.getElementById('otpForm').addEventListener('submit', function (e) {
+            e.preventDefault();
+
+            let mobile = document.getElementById('mobile').value;
             let otp = document.getElementById('otp').value;
 
             fetch("{{ route('verify.otp') }}", {
@@ -768,17 +792,22 @@
                     "Content-Type": "application/json",
                     "X-CSRF-TOKEN": document.querySelector('meta[name="csrf-token"]').content
                 },
-                body: JSON.stringify({ otp: otp })
+                body: JSON.stringify({ mobile: mobile, otp: otp })
             })
             .then(response => response.json())
             .then(data => {
-                if (data.success) {
-                    document.getElementById('otpMessage').innerHTML = '<p style="color: green;">OTP Verified Successfully!</p>';
-                } else {
-                    document.getElementById('otpMessage').innerHTML = '<p style="color: red;">' + data.message + '</p>';
-                }
+                document.getElementById('otpMessage').innerHTML = `<p style="color: ${data.success ? 'green' : 'red'};">${data.message}</p>`;
+                // if (data.success) {
+                //     // Reload the page on successful OTP verification
+                //     location.reload();
+                // }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                document.getElementById('otpMessage').innerHTML = '<p style="color: red;">An error occurred while verifying OTP. Please try again.</p>';
             });
         });
+
 
     </script>
 
