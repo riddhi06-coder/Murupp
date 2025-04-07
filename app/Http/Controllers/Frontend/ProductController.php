@@ -114,8 +114,14 @@ class ProductController extends Controller
                     ->subject($subject);
         });
     
-        
-        return back()->with('message', 'Your message has been sent successfully!');
+        // Send confirmation to user with CC
+        Mail::send('frontend.contact-confirmation', ['emailData' => $emailData], function ($message) use ($emailData) {
+            $message->to($emailData['email'])
+                    ->cc('shweta@matrixbricks.com')
+                    ->subject('Contact Confirmation');
+        });
+                
+        return back()->with('message', 'Enquiry submitted successfully!');
     }
     
     // Wishlist Pages
