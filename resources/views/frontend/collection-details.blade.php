@@ -472,6 +472,7 @@
                 success: function (response) {
 
                     let assetBaseUrl = "{{ rtrim(asset(''), '/') }}"; 
+                    let baseUrl = "{{ url('/') }}";
                     
                     let filteredProductsHTML = '';
 
@@ -484,7 +485,7 @@
                             filteredProductsHTML += `
                                 <div class="card-product grid">
                                     <div class="card-product-wrapper">
-                                        <a href="/product-detail/${product.slug}" class="product-img">
+                                        <a href="${baseUrl}/product-detail/${product.slug}" class="product-img">
                                             <img class="img-product" src="${imgSrc1}" alt="image-product">
                                             <img class="img-hover" src="${imgSrc2}" alt="image-product">
                                         </a>
@@ -496,7 +497,7 @@
                                         </div>
                                     </div>
                                     <div class="card-product-info">
-                                        <a href="${assetBaseUrl}/product-detail/${product.slug}" class="title link">${product.product_name}</a>
+                                        <a href="${baseUrl}/product-detail/${product.slug}" class="title link">${product.product_name}</a>
                                         <span class="price current-price"><i class="fa fa-inr" aria-hidden="true"></i> INR ${product.product_price}</span>
                                     </div>
                                 </div>
