@@ -120,6 +120,7 @@ class HomeController extends Controller
         Mail::send('frontend.contact-us-mail', ['emailData' => $emailData], function ($message) use ($request, $emailData) {
             $subject = "Contact Details " . ($emailData['name'] ?? 'name');
             $message->to('riddhi@matrixbricks.com')
+                    ->cc('shweta@matrixbricks.com')
                     ->subject($subject);
         });
     

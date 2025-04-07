@@ -145,7 +145,7 @@ class PaymentController extends Controller
                             \Log::info("User details updated in users table", $updateData);
                         }
                     }
-                    
+
                     $order = OrderDetail::create([
                         'user_id'       => Auth::check() ? Auth::id() : null,
                         'order_id'       => $request->razorpay_order_id,
@@ -239,6 +239,7 @@ class PaymentController extends Controller
                     // Send the email
                     Mail::send('frontend.invoice_mail', ['order' => $order], function ($message) use ($order, $pdfPath, $invoiceFileName) {
                         $message->to($order->customer_email)
+                                ->cc('shweta@matrixbricks.com')
                                 ->subject('Your Invoice - ' . $order->invoice_id)
                                 ->attach($pdfPath, [
                                     'as' => $invoiceFileName,
