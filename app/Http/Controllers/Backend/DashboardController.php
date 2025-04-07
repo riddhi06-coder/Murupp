@@ -211,7 +211,6 @@ class DashboardController extends Controller
         $productNames = collect($topProducts)->pluck('product_name','slug')->toArray();
         $revenuesByProduct = collect($topProducts)->pluck('total_revenue')->toArray();
                         
-
         return view('backend.dashboard', compact(
             'months', 'revenues', 'totalRevenueAmount_1', 'orders', 'totalOrderCount',
             'months_current_year', 'orders_current_year', 'revenues_current_year',  
