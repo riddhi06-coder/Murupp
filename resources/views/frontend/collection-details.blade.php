@@ -496,7 +496,7 @@
                                         </div>
                                     </div>
                                     <div class="card-product-info">
-                                        <a href="/product-detail/${product.slug}" class="title link">${product.product_name}</a>
+                                        <a href="${assetBaseUrl}/product-detail/${product.slug}" class="title link">${product.product_name}</a>
                                         <span class="price current-price"><i class="fa fa-inr" aria-hidden="true"></i> INR ${product.product_price}</span>
                                     </div>
                                 </div>
