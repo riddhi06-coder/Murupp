@@ -25,6 +25,7 @@ class PaymentController extends Controller
 {
 
     public function processPayment(Request $request) {
+        // dd($request);
 
         $api = new Api(config('services.razorpay.key'), config('services.razorpay.secret'));
 
@@ -126,6 +127,25 @@ class PaymentController extends Controller
                 ]);
             
                 try {
+
+                    if (Auth::check()) {
+                        $user = Auth::user();
+                        $updateData = [];
+                    
+                        if (empty($user->phone) && !empty($orderData['customer_info']['phone'])) {
+                            $updateData['phone'] = $orderData['customer_info']['phone'];
+                        }
+                    
+                        if (empty($user->last_name) && !empty($orderData['customer_info']['last_name'])) {
+                            $updateData['last_name'] = $orderData['customer_info']['last_name'];
+                        }
+                    
+                        if (!empty($updateData)) {
+                            $user->update($updateData);
+                            \Log::info("User details updated in users table", $updateData);
+                        }
+                    }
+                    
                     $order = OrderDetail::create([
                         'user_id'       => Auth::check() ? Auth::id() : null,
                         'order_id'       => $request->razorpay_order_id,
@@ -164,6 +184,7 @@ class PaymentController extends Controller
                         'status_updated_at' => Carbon::now(),
                         'status_updated_by' => Auth::check() ? Auth::id() : null,
                     ]);
+
 
                     // Reduce available_quantity in product_details table
                     foreach ($productIds as $index => $productId) {

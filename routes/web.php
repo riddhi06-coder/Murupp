@@ -276,7 +276,18 @@ Route::group(['prefix'=> '', 'middleware'=>[\App\Http\Middleware\PreventBackHist
     Route::get('/product-detail/{slug}', [ProductController::class, 'show'])->name('product.show');
 
     //==== Wishlist Functionality
-    Route::post('/wishlist/add/{id}', [WishlistController::class, 'add'])->name('wishlist.add');
+    Route::get('/wishlist/add/{id}', [WishlistController::class, 'add'])->name('wishlist.add');
+
+    Route::get('/wishlist/count', function () {
+        if (Auth::check()) {
+            $count = \App\Models\Wishlist::where('user_id', Auth::id())->whereNull('deleted_by')->count();
+        } else {
+            $count = \App\Models\Wishlist::where('session_id', Session::getId())->whereNull('deleted_by')->count();
+        }
+        return response()->json(['count' => $count]);
+    });
+    
+
     Route::post('/wishlist/delete', [WishlistController::class, 'delete'])->name('wishlist.delete');
 
     //==== Cart Functionality    

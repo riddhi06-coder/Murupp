@@ -3,6 +3,8 @@
     
 <head>
     @include('components.frontend.head')
+    <meta name="csrf-token" content="{{ csrf_token() }}">
+
 </head>
 	   
 
@@ -561,8 +563,38 @@
         <script type="module" src="{{ asset('frontend/assets/js/model-viewer.min.js') }}"></script>
         <script type="module" src="{{ asset('frontend/assets/js/zoom.js') }}"></script>
 
-        
+  
+<!--- Wishlist COunt dynamic update--->
+<script>
+    function addToWishlist(productId, element) {
+        fetch(`/wishlist/add/${productId}`, {
+            method: 'GET',
+            headers: {
+                'X-Requested-With': 'XMLHttpRequest',
+                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+            }
+        })
+        .then(response => response.json())
+        .then(data => {
+            console.log('Wishlist response:', data); // 🔍 Check what's coming back
 
+            if (data.success) {
+                notyf.open({
+                    type: 'custom-success',
+                    message: data.message || 'Added to wishlist!'
+                });
+                updateWishlistCount(); // Refresh the count
+            } else {
+                notyf.error(data.message || 'Something went wrong');
+            }
+        })
+        .catch(error => {
+            console.error('Error in fetch:', error);
+            notyf.error('Fetch failed.');
+        });
+    }
+
+</script>
 
 <!--- for form validation--->
 <script>

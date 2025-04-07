@@ -4,6 +4,7 @@
 <head>
     @include('components.frontend.head')
     <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
     <!-- CSS for the spinner -->
@@ -56,8 +57,8 @@
                 <div class="row">
                     <div class="col-xl-6">
                         <div class="flat-spacing tf-page-checkout">
-                            <!-- @if(!Auth::check())
-                                <div class="wrap">
+                            @if(!Auth::check())
+                                <div class="wrap" id="auth-section">
                                     <div class="title-login">
                                         <p>Already have an account?</p>
                                         <a href="{{ route('user.login') }}" class="text-button">Login here</a>
@@ -74,11 +75,11 @@
                                     <div id="loginMessage"></div>
                             
                                 </div>
-                            @endif -->
+                            @endif
 
 
-                            @if(!Auth::check())
-                                <div class="wrap">
+                            <!-- @if(!Auth::check())
+                                <div class="wrap otp">
                                     <div class="title-login">
                                         <p>Already have an account?</p>
                                         <a href="{{ route('user.login') }}" class="text-button">Login here</a>
@@ -106,7 +107,7 @@
 
                                     <div id="otpMessage"></div>
                                 </div>
-                            @endif
+                            @endif -->
                             
 
                             
@@ -119,6 +120,7 @@
                             <div class="wrap">
                                 <h5 class="title">Information:</h5>
                                 <form class="info-box">
+                                    @csrf 
                                     <div class="grid-2">
                                         <input type="hidden" id="full-address" value="{{ $order->address ?? '' }}">
 
@@ -322,18 +324,20 @@
     <!----- Guest User Login AJax---->
     <script>
         $(document).ready(function () {
+
             $("#loginForm").submit(function (event) {
                 event.preventDefault(); // Prevent page reload
 
                 $.ajax({
-                    url: "{{ route('login.authenticate') }}", // Adjust route accordingly
+                    url: "{{ route('login.authenticate') }}", 
                     method: "POST",
                     data: $(this).serialize(),
                     dataType: "json",
                     success: function (response) {
                         if (response.success) {
                             $("#loginMessage").html("<p style='color: green;'>" + response.message + "</p>");
-                            window.location.href = response.redirect; 
+                            $("#auth-section").hide(); 
+
                         } else {
                             $("#loginMessage").html("<p style='color: red;'>" + response.message + "</p>");
                         }
@@ -774,10 +778,10 @@
             .then(response => response.json())
             .then(data => {
                 document.getElementById('otpMessage').innerHTML = `<p style="color: ${data.success ? 'green' : 'red'};">${data.message}</p>`;
-                // if (data.success) {
-                //     // Reload the page on successful OTP verification
-                //     location.reload();
-                // }
+                    if (data.success) {
+                        // Hide the OTP section immediately after successful OTP verification
+                        document.querySelector('.wrap.otp').style.display = 'none';
+                    }
             })
             .catch(error => {
                 console.error('Error:', error);
