@@ -115,7 +115,7 @@ class ProductController extends Controller
         });
     
         
-        return back()->with('success', 'Your message has been sent successfully!');
+        return back()->with('message', 'Your message has been sent successfully!');
     }
     
     // Wishlist Pages
