@@ -172,7 +172,7 @@
                                 </div>
                             </li>
 
-<!-- 
+                            <!-- 
                             @php
                                 use App\Models\Wishlist;
 
@@ -510,8 +510,9 @@
                                         Welcome, <strong>{{ Auth::user()->name }}</strong>
                                     </p>
                                     <a href="{{ route('my.account') }}" class="dropdown-item">My Account</a>
+                                    <a href="{{ route('my.account.orders') }}" class="dropdown-item">My Orders</a>
                                     <a href="{{ route('user.forgotpassword') }}" class="dropdown-item">Forgot Password?</a>
-                                    <a href="#" class="dropdown-item">Support</a>
+                                    <!-- <a href="#" class="dropdown-item">Support</a> -->
                                     <a href="{{ route('user.logout') }}" class="dropdown-item">Logout</a>
                                 @else
                                     <a href="{{ route('user.login') }}" class="dropdown-item">Login</a>
