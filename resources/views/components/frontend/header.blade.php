@@ -434,7 +434,7 @@
                         <ul class="nav-ul-mb" id="wrapper-menu-navigation">
 
                             <li class="nav-mb-item">
-                                <a href="#" class="mb-menu-link">About Us</a>
+                                <a href="{{ route('frontend.about.us') }}" class="mb-menu-link">About Us</a>
                             </li>
                             @php
                                 $collections = DB::table('master_collections')->whereNull('deleted_by')->orderBy('id', 'asc')->get();
