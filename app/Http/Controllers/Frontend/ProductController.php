@@ -124,6 +124,7 @@ class ProductController extends Controller
         return back()->with('message', 'Enquiry submitted successfully!');
     }
     
+    
     // Wishlist Pages
     public function wish_list(Request $request)
     {

@@ -118,7 +118,7 @@
                             </div>
                         </div>
 
-                        <!-- <div class="col-lg-4">
+                        <div class="col-lg-4">
                             <div class="footer-col-block">
                                 <div class="footer-heading text-button footer-heading-mobile">
                                     Newsletter
@@ -153,7 +153,7 @@
                                     </div>
                                 </div>
                             </div>
-                        </div> -->
+                        </div>
                         
                     </div>
                 </div>
