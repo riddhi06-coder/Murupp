@@ -38,6 +38,7 @@
     .nav-wishlist {
         display: inline-block !important; /* Ensure it's visible */
         position: relative; /* Adjust as needed */
+        margin-top: 10px;
     }
 
 }
